@@ -1,0 +1,21 @@
+jobs:
+  - job: BuildArtifactsFrontend
+    displayName: "Build infrastructure Frontend"
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: AzureCLI@2  
+        displayName: 'build base bicep artifact' 
+        inputs: 
+          azureSubscription: ${{parameters.svcPrincipal}} 
+          scriptType: 'pscore'
+          scriptLocation: 'inlineScript'  
+          inlineScript: |
+            az bicep build --file Infrastructure/Frontend/infrastructurefe.bicep
+
+      - task: PublishBuildArtifacts@1 
+        displayName: 'Publish bicep artifact' 
+        inputs: 
+          PathtoPublish: '$(Build.SourcesDirectory)/Infrastructure/Frontend'
+          ArtifactName: 'infrastructureFrontendDrop'  
+          publishLocation: 'Container' 

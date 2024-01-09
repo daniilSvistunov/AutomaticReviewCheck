@@ -1,0 +1,31 @@
+jobs:
+  - deployment: DeployApp
+    displayName: 'Deploy App'
+    environment: 'okbuchhaltung-${{parameters.environment}}'
+    pool:
+      vmImage: windows-latest
+    variables:
+      storageAccountName: 'stokbuchhaltung${{parameters.environmentShort}}'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+            - task: AzureCLI@2
+              displayName: 'Drop blob storage contents'
+              inputs:
+                azureSubscription: ${{parameters.svcPrincipal}}
+                scriptType: 'pscore'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  'az storage blob delete-batch --s `$web --account-name $(storageAccountName) --auth-mode login'
+            - task: AzureFileCopy@4
+              displayName: 'AzureBlob File Copy'
+              inputs:
+                # The following sourcePath uses the artifact, such as WebApp-dev, produced in build.yaml.
+                sourcePath: |
+                  $(Pipeline.Workspace)/WebApp-${{parameters.environment}}/*
+                azureSubscription: ${{parameters.svcPrincipal}}
+                destination: AzureBlob
+                storage: $(storageAccountName)
+                containerName: '$web'

@@ -1,0 +1,82 @@
+jobs:
+  - job: BuildBackend
+    displayName: "Build .NET Web Api"
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      buildConfiguration: "Release"
+    steps:      
+      - task: UseDotNet@2
+        displayName: "Use .NET Core 7.0 SDK"
+        inputs:
+          packageType: "sdk"
+          version: "7.0.x"
+          includePreviewVersions: true
+      - task: SonarQubePrepare@4
+        displayName: Prepare analysis on SonarQube
+        inputs:
+          SonarQube: "ok-sonarqube"
+          projectKey: "OKPlattform_OKOrder"
+          extraProperties: |
+            sonar.projectBaseDir=$(Build.SourcesDirectory)/Backend
+            sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/**/coverage.opencover.xml
+      - task: DotNetCoreCLI@2
+        displayName: "DotNet restore"
+        inputs:
+          command: "restore"
+          projects: "**/**/*.csproj"
+          feedsToUse: "config"
+          nugetConfigPath: "$(Build.SourcesDirectory)/Backend/nuget.config"
+      - task: DotNetCoreCLI@2
+        displayName: "DotNet build"
+        inputs:
+          command: "build"
+          projects: "**/**/*.csproj"
+          arguments: "--configuration $(BuildConfiguration)"
+      - task: DotNetCoreCLI@2
+        displayName: "Run tests"
+        inputs:
+          command: test
+          projects: "**/**/Backend/*[Tt]ests.csproj"
+          arguments: --configuration $(BuildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover
+
+      - task: DotNetCoreCLI@2
+        displayName: Install ReportGenerator Global Tool
+        inputs:
+          command: custom
+          custom: tool
+          arguments: 'install dotnet-reportgenerator-globaltool -g --configfile $(Build.SourcesDirectory)/Backend/nuget_org.config'
+
+      - script: echo "##vso[task.prependpath]$HOME/.dotnet/tools"
+        displayName: "Update PATH"
+
+      - script: reportgenerator "-reports:$(Agent.TempDirectory)/Backend/coverage.cobertura.xml" "-targetdir:$(Build.SourcesDirectory)/Backend/coverlet/reports" -reporttypes:Cobertura -classfilters:"-*.Migrations.*"
+        displayName: Generate code coverage report
+        continueOnError: true
+
+      - task: PublishCodeCoverageResults@1
+        displayName: "Publish code coverage"
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: "$(Build.SourcesDirectory)/Backend/coverlet/reports/Cobertura.xml"
+
+      # Run Code Analysis task
+      - task: SonarQubeAnalyze@4
+        displayName: Run Code Analysis
+      # Publish Quality Gate Result task
+      - task: SonarQubePublish@4
+        displayName: Publish Quality Gate Result
+        inputs:
+          pollingTimeoutSec: "300"
+      - task: DotNetCoreCLI@2
+        displayName: "API - DotNet publish"
+        inputs:
+          command: "publish"
+          publishWebProjects: false
+          projects: "**/**/*OKOrder.Api.csproj"
+          arguments: "--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)"
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Build Artifacts"
+        inputs:
+          PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+          ArtifactName: 'Backend'

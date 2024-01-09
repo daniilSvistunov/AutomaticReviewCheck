@@ -1,0 +1,16 @@
+﻿*.woff
+*.scss
+*.json
+*.html
+
+#ignore none src folders
+node_modules
+dist
+automation
+.vscode
+coverage
+reports
+
+#ginore sonarqube files
+.scannerwork
+sonar.js

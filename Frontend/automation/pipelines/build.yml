@@ -1,0 +1,36 @@
+jobs:
+  - job: BuildApp
+    displayName: 'Build React App'
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: Npm@1
+        inputs:
+          command: 'install'
+      - task: SonarQubePrepare@5
+        inputs:
+          SonarQube: 'ok-sonarqube'
+          scannerMode: 'CLI'
+          configMode: 'manual'
+          cliProjectKey: 'ok-objektkultur_OKPlattform_OKBuchhaltung-Frontend'
+        displayName: 'Prepare SonarQube'
+      - script: |
+          npm run lint:report
+        displayName: 'Run linter'
+      - script: |
+          npm run build:${{parameters.environment}}
+        displayName: 'Run build'
+      - script: |
+          npm run test:coverage
+        displayName: 'Run test with coverage'
+      # Run Code Analysis task
+      - task: SonarQubeAnalyze@5
+        displayName: 'Analyse with SonarQube'
+      # Publish Quality Gate Result task
+      - task: SonarQubePublish@5
+        displayName: Publish Quality Gate Result
+        inputs:
+          pollingTimeoutSec: '300'
+      - publish: '$(System.DefaultWorkingDirectory)/build'
+        displayName: 'Publish Build Artifacts'
+        artifact: WebApp-${{parameters.environment}}

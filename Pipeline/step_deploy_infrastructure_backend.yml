@@ -1,0 +1,19 @@
+jobs:
+  - deployment: DeploySolution
+    displayName: "Deploy infrastructure"
+    environment: "${{parameters.environment}}"
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps: 
+            - task: AzureCLI@2
+              displayName: "Deploy infrastructure"
+              inputs:
+                azureSubscription: ${{parameters.svcPrincipal}}
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  ls
+                  az deployment group create --name okp-okorder-be --resource-group 'rg-okp-backends-${{parameters.envshort}}' --template-file '$(Agent.BuildDirectory)/infrastructureBackendDrop/infrastructurebe.bicep' --parameters '$(Agent.BuildDirectory)/infrastructureBackendDrop/infrastructurebe.parameter.${{parameters.envshort}}.json'

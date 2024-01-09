@@ -1,0 +1,227 @@
+schedules:
+  - cron: "0 16 * * Mon-Fri"
+    displayName: "StageRelease"
+    branches:
+      include:
+        - main
+  - cron: "0 9 * * Fri"
+    displayName: "ProdRelease"
+    branches:
+      include:
+        - main
+
+trigger:
+  - main
+
+parameters:
+  - name: StageHotfix
+    displayName: "Deploy stage environment (Hotfix)"
+    type: boolean
+    default: false
+  - name: ProdHotfix
+    displayName: "Deploy prod environment (Hotfix)"
+    type: boolean
+    default: false
+  - name: HotfixVersion
+    displayName: "Version of hotfix (of current day)"
+    type: string
+    default: 1
+
+variables:
+  - name: buildEnvironementVariable
+    ${{ if or(and(and(eq(variables['Build.SourceBranchName'], 'main'), eq(variables['Build.Reason'], 'Schedule')), eq(variables['Build.CronSchedule.DisplayName'], 'ProdRelease')), eq(parameters.ProdHotfix, true)) }}:
+      value: prod
+    ${{ elseif or(and(and(eq(variables['Build.SourceBranchName'], 'main'), eq(variables['Build.Reason'], 'Schedule')), eq(variables['Build.CronSchedule.DisplayName'], 'StageRelease')), eq(parameters.StageHotfix, true)) }}:
+      value: stage
+    ${{ elseif or(and(eq(variables['Build.SourceBranchName'], 'main'), ne(variables['Build.Reason'], 'Schedule')), and(and(eq(parameters.StageHotfix, false), eq(parameters.ProdHotfix, false)), eq(variables['Build.Reason'], 'Manual'))) }}:
+      value: dev
+    ${{ else }}:
+      value: local
+  - name: env
+    ${{ if or(and(and(eq(variables['Build.SourceBranchName'], 'main'), eq(variables['Build.Reason'], 'Schedule')), eq(variables['Build.CronSchedule.DisplayName'], 'ProdRelease')), eq(parameters.ProdHotfix, true)) }}:
+      value: p
+    ${{ elseif or(and(and(eq(variables['Build.SourceBranchName'], 'main'), eq(variables['Build.Reason'], 'Schedule')), eq(variables['Build.CronSchedule.DisplayName'], 'StageRelease')), eq(parameters.StageHotfix, true)) }}:
+      value: s
+    ${{ elseif or(and(eq(variables['Build.SourceBranchName'], 'main'), ne(variables['Build.Reason'], 'Schedule')), and(and(eq(parameters.StageHotfix, false), eq(parameters.ProdHotfix, false)), eq(variables['Build.Reason'], 'Manual'))) }}:
+      value: d
+    ${{ else }}:
+      value: d
+  - name: releaseTagYear
+    value: $[format('{0:yyyy}', pipeline.startTime)]
+  - name: releaseTagMonth
+    value: $[format('{0:MM}', pipeline.startTime)]
+  - name: releaseTagDay
+    value: $[format('{0:dd}', pipeline.startTime)]
+  - name: releaseTagType
+    ${{ if or(eq(parameters.ProdHotfix, true), eq(parameters.StageHotfix, true)) }}:
+      value: hotfix
+    ${{ else }}:
+      value: release
+  - name: releaseTagSuffix
+    ${{ if or(eq(parameters.ProdHotfix, true), eq(parameters.StageHotfix, true)) }}:
+      value: "-V${{parameters.HotfixVersion}}"
+    ${{ else }}:
+      value: ""
+
+stages:
+  - stage: Build
+    displayName: "Build"
+    jobs:
+      - template: step_build_infrastructure_backend.yml
+        parameters:
+          svcPrincipal: "okplattform-iac-$(env)"
+      - template: step_build_infrastructure_frontend.yml
+        parameters:
+          svcPrincipal: "okplattform-iac-$(env)"
+      - template: step_build_backend.yml
+      - template: step_build_frontend.yml
+        parameters:
+          environment: $(buildEnvironementVariable)
+
+  - stage: DevInfraBackend
+    displayName: "[DEV] Deploy infrastructure backend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'dev'))
+    dependsOn: Build
+    jobs:
+      - template: step_deploy_infrastructure_backend.yml
+        parameters:
+          envshort: "d"
+          environment: "okplattform-iac-d"
+          svcPrincipal: "okplattform-iac-d"
+
+  - stage: DevInfraFrontend
+    displayName: "[DEV] Deploy infrastructure frontend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'dev'))
+    dependsOn: Build
+    jobs:
+      - template: step_deploy_infrastructure_frontend.yml
+        parameters:
+          envshort: "d"
+          environment: "okplattform-iac-d"
+          svcPrincipal: "okplattform-iac-d"
+
+  - stage: DevBackend
+    displayName: "[DEV] Deploy backend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'dev'))
+    dependsOn:
+      - Build
+      - DevInfraBackend
+    jobs:
+      - template: step_deploy_backend.yml
+        parameters:
+          environment: "dev"
+          environmentShort: "d"
+          svcPrincipal: "okplattform-backends-d"
+
+  - stage: DevFrontend
+    displayName: "[DEV] Deploy frontend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'dev'))
+    dependsOn:
+      - Build
+      - DevInfraFrontend
+    jobs:
+      - template: step_deploy_frontend.yml
+        parameters:
+          environment: "dev"
+          environmentShort: "d"
+          svcPrincipal: "okplattform-frontends-d"
+
+  - stage: StageInfraBackend
+    displayName: "[STAGE] Deploy infrastructure backend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'stage'))
+    dependsOn: Build
+    jobs:
+      - template: step_deploy_infrastructure_backend.yml
+        parameters:
+          envshort: "s"
+          environment: "okplattform-iac-s"
+          svcPrincipal: "okplattform-iac-s"
+
+  - stage: StageInfraFrontend
+    displayName: "[STAGE] Deploy infrastructure frontend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'stage'))
+    dependsOn: Build
+    jobs:
+      - template: step_deploy_infrastructure_frontend.yml
+        parameters:
+          envshort: "s"
+          environment: "okplattform-iac-s"
+          svcPrincipal: "okplattform-iac-s"
+
+  - stage: StageBackend
+    displayName: "[STAGE] Deploy backend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'stage'))
+    dependsOn:
+      - Build
+      - StageInfraBackend
+    jobs:
+      - template: step_deploy_backend.yml
+        parameters:
+          environment: "stage"
+          environmentShort: "s"
+          svcPrincipal: "okplattform-backends-s"
+          releaseTag: $(buildEnvironementVariable)-$(releaseTagType)-$(releaseTagYear)-$(releaseTagMonth)-$(releaseTagDay)$(releaseTagSuffix)
+
+  - stage: STAGEFrontend
+    displayName: "[STAGE] Deploy frontend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'stage'))
+    dependsOn:
+      - Build
+      - StageInfraFrontend
+    jobs:
+      - template: step_deploy_frontend.yml
+        parameters:
+          environment: "stage"
+          environmentShort: "s"
+          svcPrincipal: "okplattform-frontends-s"
+          releaseTag: $(buildEnvironementVariable)-$(releaseTagType)-$(releaseTagYear)-$(releaseTagMonth)-$(releaseTagDay)$(releaseTagSuffix)
+
+  - stage: ProdInfraBackend
+    displayName: "[PROD] Deploy infrastructure backend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'prod'))
+    dependsOn: Build
+    jobs:
+      - template: step_deploy_infrastructure_backend.yml
+        parameters:
+          envshort: "p"
+          environment: "okplattform-iac-p"
+          svcPrincipal: "okplattform-iac-p"
+
+  - stage: ProdInfraFrontend
+    displayName: "[PROD] Deploy infrastructure frontend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'prod'))
+    dependsOn: Build
+    jobs:
+      - template: step_deploy_infrastructure_frontend.yml
+        parameters:
+          envshort: "p"
+          environment: "okplattform-iac-p"
+          svcPrincipal: "okplattform-iac-p"
+
+  - stage: ProdBackend
+    displayName: "[PROD] Deploy backend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'prod'))
+    dependsOn:
+      - Build
+      - ProdInfraBackend
+    jobs:
+      - template: step_deploy_backend.yml
+        parameters:
+          environment: "prod"
+          environmentShort: "p"
+          svcPrincipal: "okplattform-backends-p"
+          releaseTag: $(buildEnvironementVariable)-$(releaseTagType)-$(releaseTagYear)-$(releaseTagMonth)-$(releaseTagDay)$(releaseTagSuffix)
+
+  - stage: ProdFrontend
+    displayName: "[PROD] Deploy frontend"
+    condition: and(succeeded(), eq(variables.buildEnvironementVariable, 'prod'))
+    dependsOn:
+      - Build
+      - ProdInfraFrontend
+    jobs:
+      - template: step_deploy_frontend.yml
+        parameters:
+          environment: "prod"
+          environmentShort: "p"
+          svcPrincipal: "okplattform-frontends-p"
+          releaseTag: $(buildEnvironementVariable)-$(releaseTagType)-$(releaseTagYear)-$(releaseTagMonth)-$(releaseTagDay)$(releaseTagSuffix)

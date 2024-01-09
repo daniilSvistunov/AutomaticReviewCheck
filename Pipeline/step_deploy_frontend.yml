@@ -1,0 +1,51 @@
+parameters: # defaults
+  environment: 'dev'
+jobs:
+  - deployment: DeployApp
+    displayName: 'Deploy App'
+    environment: 'okp-okorder-${{parameters.environment}}'
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      storageAccountName: stokpokorder${{parameters.environmentShort}}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadBuildArtifacts@0
+              displayName: 'Download the build artifacts'
+              inputs:
+                buildType: 'current'
+                downloadType: 'single'
+                artifactName: 'frontend'
+                downloadPath: '$(Build.ArtifactStagingDirectory)'
+            - task: AzureCLI@2
+              displayName: 'Drop blob storage contents'
+              inputs:
+                azureSubscription: ${{parameters.svcPrincipal}}
+                scriptType: 'pscore'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  'az storage blob delete-batch --s `$web --account-name $(storageAccountName) --auth-mode login'
+            - task: AzureCLI@1
+              displayName: Az File Copy to Storage
+              inputs:
+                azureSubscription: ${{parameters.svcPrincipal}}
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az storage blob upload-batch --overwrite \
+                    --destination \$web \
+                    --account-name "$(storageAccountName)" \
+                    --source "$(Build.ArtifactStagingDirectory)/Frontend/" \
+                    --auth-mode login
+            - checkout: self
+              displayName: "Checkout Branch"
+              condition: ne('${{parameters.environment}}', 'dev')
+              persistCredentials: true
+            - script: | # user data is needed to create a tag
+                  git config --global user.name "BuildService"
+                  git config --global user.email "OKPlattformDeveloper@Objektkultur365.onmicrosoft.com"
+                  git tag -a '${{parameters.releaseTag}}' -m 'Release ${{parameters.environment}} environment'
+                  git push origin '${{parameters.releaseTag}}'
+              displayName: "Create release tag for Deployment"
+              condition: ne('${{parameters.environment}}', 'dev')

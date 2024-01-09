@@ -1,0 +1,41 @@
+parameters: # defaults
+    environment: "dev"
+    environmentShort: "d"
+    azureSubscription: "okorder-d"
+    releaseTag: "release"
+jobs:
+    - deployment: DeployAPI
+      displayName: "Deploy API"
+      environment: "okp-okorder-${{parameters.environment}}"
+      pool:
+          vmImage: ubuntu-latest
+      variables:
+          webAppName: app-okp-okorder-${{parameters.environmentShort}}
+      strategy:
+          runOnce:
+              deploy:
+                  steps:
+                      - task: DownloadBuildArtifacts@0
+                        displayName: "Download the build artifacts"
+                        inputs:
+                            buildType: "current"
+                            downloadType: "single"
+                            artifactName: "backend"
+                      - task: AzureRmWebAppDeployment@4
+                        displayName: "Deploy Azure App Service"
+                        inputs:
+                            azureSubscription: ${{parameters.svcPrincipal}}
+                            appType: webApp
+                            WebAppName: $(webAppName)
+                            Package: $(System.ArtifactsDirectory)/Backend/OKOrder.Api.zip
+                      - checkout: self
+                        displayName: "Checkout Branch"
+                        condition: ne('${{parameters.environment}}', 'dev')
+                        persistCredentials: true
+                      - script: | # user data is needed to create a tag
+                            git config --global user.name "BuildService"
+                            git config --global user.email "OKPlattformDeveloper@Objektkultur365.onmicrosoft.com"
+                            git tag -a '${{parameters.releaseTag}}' -m 'Release ${{parameters.environment}} environment'
+                            git push origin '${{parameters.releaseTag}}'
+                        displayName: "Create release tag for Deployment"
+                        condition: ne('${{parameters.environment}}', 'dev')

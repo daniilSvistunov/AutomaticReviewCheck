@@ -1,0 +1,61 @@
+trigger:
+  - dev
+  - stage
+  - main
+
+stages:
+  - stage: BuildDev
+    displayName: 'BuildDev'
+    jobs:
+      - template: build.yml
+        parameters:
+          environment: 'dev'
+
+  - stage: DeployDev
+    displayName: 'Deployment Dev'
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranchName'], 'dev'), eq(variables['Build.Reason'], 'Manual')))
+    dependsOn: BuildDev
+    jobs:
+      - template: deploy.yml
+        parameters:
+          environment: 'dev'
+          environmentShort: 'd'
+          svcPrincipal: 'okbuchhaltung-d'
+
+  - stage: BuildStage
+    displayName: 'BuildStage'
+    condition: eq(variables['Build.SourceBranchName'], 'stage')
+    jobs:
+      - template: build.yml
+        parameters:
+          environment: 'stage'
+
+  - stage: DeployStage
+    displayName: 'Deployment Stage'
+    condition: and(succeeded('BuildStage'), eq(variables['Build.SourceBranchName'], 'stage'))
+    dependsOn: BuildStage
+    jobs:
+      - template: deploy.yml
+        parameters:
+          environment: 'stage'
+          environmentShort: 's'
+          svcPrincipal: 'okbuchhaltung-s'
+
+  - stage: BuildProd
+    displayName: 'BuildProd'
+    condition: eq(variables['Build.SourceBranchName'], 'main')
+    jobs:
+      - template: build.yml
+        parameters:
+          environment: 'prod'
+
+  - stage: DeployProd
+    displayName: 'Deployment Prod'
+    condition: and(succeeded('BuildProd'), eq(variables['Build.SourceBranchName'], 'main'))
+    dependsOn: BuildProd
+    jobs:
+      - template: deploy.yml
+        parameters:
+          environment: 'prod'
+          environmentShort: 'p'
+          svcPrincipal: 'okbuchhaltung-p'

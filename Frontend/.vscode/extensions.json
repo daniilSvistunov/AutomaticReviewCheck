@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "aaron-bond.better-comments",
+    "usernamehw.errorlens",
+    "dbaeumer.vscode-eslint",
+    "waderyan.gitblame",
+    "mhutchie.git-graph",
+    "ms-vsliveshare.vsliveshare",
+    "christian-kohler.npm-intellisense",
+    "esbenp.prettier-vscode",
+    "sonarsource.sonarlint-vscode",
+    "gruntfuggly.todo-tree",
+    "antiantisepticeye.vscode-color-picker"
+  ]
+}

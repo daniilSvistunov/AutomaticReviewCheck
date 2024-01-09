@@ -1,0 +1,92 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "plugins": ["@typescript-eslint", "simple-import-sort", "react-hooks"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  },
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+    "react/no-multi-comp": [
+      "warn",
+      {
+        "ignoreStateless": false
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["@material-ui/*/*/*", "!@material-ui/core/test-utils/*"]
+      }
+    ],
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "no-empty": "warn", // TODO: delete this line eventually (make it an error again).
+    "@typescript-eslint/no-empty-interface": "warn",
+    "curly": "error",
+
+    "react/jsx-no-useless-fragment": [
+      1,
+      {
+        "allowExpressions": true
+      }
+    ],
+    "prefer-destructuring": [
+      1,
+      {
+        "object": true,
+        "array": false
+      }
+    ],
+    "react/no-unstable-nested-components": [
+      1,
+      {
+        "allowAsProps": true
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      1,
+      {
+        "args": "none"
+      }
+    ],
+    "react/jsx-no-duplicate-props": [
+      1,
+      {
+        "ignoreCase": false
+      }
+    ]
+  }
+}

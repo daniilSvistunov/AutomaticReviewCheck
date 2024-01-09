@@ -1,0 +1,36 @@
+jobs:
+  - job: BuildFrontend
+    displayName: 'Build React App using vite'
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: NodeTool@0
+        displayName: 'Install Node.js'
+        inputs:
+          versionSpec: '16.x'
+      - script: |
+          npm install
+        workingDirectory: 'Frontend/'
+        displayName: 'npm install'
+      - task: SonarQubePrepare@5
+        inputs:
+          SonarQube: 'ok-sonarqube'
+          scannerMode: 'CLI'
+          configMode: 'manual'
+          cliProjectKey: 'ok-objektkultur_OKOrder_OKOrder-Frontend'
+        displayName: 'Prepare SonarQube'
+      - script: |
+          npm run build:${{parameters.environment}}
+        workingDirectory: 'Frontend/'
+        displayName: 'npm build'
+      # Run Code Analysis task
+      - task: SonarQubeAnalyze@5
+      # Publish Quality Gate Result task
+      - task: SonarQubePublish@5
+        inputs:
+          pollingTimeoutSec: '300'
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Build Artifacts'
+        inputs:
+          PathtoPublish: '$(System.DefaultWorkingDirectory)/Frontend/build'
+          ArtifactName: 'Frontend'

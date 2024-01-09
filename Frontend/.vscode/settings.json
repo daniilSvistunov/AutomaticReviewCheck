@@ -1,0 +1,42 @@
+{
+  "workbench.startupEditor": "none",
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "git.autofetch": true,
+  "git.suggestSmartCommit": false,
+  "files.autoSave": "onFocusChange",
+  "files.eol": "\n",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnType": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true,
+    "source.removeUnusedImports": true
+  },
+
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "relative",
+
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "eslint.lintTask.enable": true,
+  "gitlens.views.commitDetails.files.layout": "tree",
+  "prettier.singleQuote": true,
+  "sonarlint.disableTelemetry": true,
+  "todo-tree.general.showActivityBarBadge": true,
+  "vscode-color-picker.languages": ["python", "javascript", "typescript", "typescriptreact"]
+}
