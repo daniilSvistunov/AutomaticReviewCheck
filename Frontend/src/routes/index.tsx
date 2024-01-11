@@ -1,4 +1,5 @@
 import { LoadingScreenContainer } from '@components/loading-screen';
+import RootDataWrapper from '@layouts/RootDataWrapper';
 import { ElementType, lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { matchRoutes, RouteObject, useLocation, useRoutes } from 'react-router-dom';
@@ -26,7 +27,9 @@ const routes: RouteObject[] = [
     path: '/',
     element: (
       <AuthGuard>
-        <Outlet />
+        <RootDataWrapper>
+          <Outlet />
+        </RootDataWrapper>
       </AuthGuard>
     ),
     children: [
@@ -34,6 +37,7 @@ const routes: RouteObject[] = [
         path: '',
         element: <SamplePage />,
       },
+      // TODO: further paths can be added here
     ],
   },
 ];

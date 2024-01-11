@@ -49,7 +49,6 @@ export default defineConfig(
     envDir: './src/env',
     server: {
       open: true,
-      https: true,
       host: 'localhost',
       port: 3005,
     },
@@ -59,6 +58,15 @@ export default defineConfig(
       cssCodeSplit: false,
       minify: false,
       modulePreload: false,
+    },
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./tests/setup.ts'],
+  
+      globals: true,
+      coverage: {
+        reporter: ['text', 'json', 'html'],
+      },
     },
     define: {
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
