@@ -5,4 +5,4 @@ import { mock } from './mockAdapter';
 // Also erst die spezifischen Mocks, dann die allgemeinen.
 
 // GET
-mock.onGet((`${import.meta.env.VITE_ENDPOINT_APPLICATION}/application-pages/`)).reply(200); // TODO return
+mock.onGet((`${import.meta.env.VITE_ENDPOINT_APPLICATION}/application-pages/`)).reply(200);

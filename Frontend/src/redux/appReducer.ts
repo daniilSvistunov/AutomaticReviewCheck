@@ -19,7 +19,7 @@ const appReducer = combineReducers({
   //?: persistReducer(?PersistConfig, ?) // Example for persisted slice
   global,
   application,
-  // advancedFilterInvoice: invoiceReducer,
+  // TODO: add slices here
 });
 
 export { appReducer };

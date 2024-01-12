@@ -50,7 +50,7 @@ export default defineConfig(
     server: {
       open: true,
       host: 'localhost',
-      port: 3005,
+      port: 3005, // TODO: needs to be changed for new application
     },
     build: {
       outDir: './build',
