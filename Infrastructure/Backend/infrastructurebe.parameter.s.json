@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "env": {
+      "value": "s"
+    },
+    "locationName": {
+      "value": "germanywestcentral"
+    },
+    "azureAdClientId": {
+      "value": "6291c371-7d60-46d2-9301-e6fce31de7fe"
+    },
+    "abrechnungAPIClientScopes": {
+      "value": "api://7eed3908-c966-4075-af54-3a6b356be5f8/.default"
+    },
+    "capacityAPIClientScopes": {
+      "value": "api://fac12651-0dc6-4c63-bbe0-62cbabf2c9c4/.default"
+    },
+    "aadLoginUrl": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "teamserviceAPIClientScopes": {
+      "value": "api://30c68745-b1e5-498e-b69a-e38f50363918/.default"
+    },
+    "plattformUri": {
+      "value": "https://plattform-stage.objektkultur.de"
+    }
+  }
+}

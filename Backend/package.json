@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@pulumi/azure": "^5.16.0"
+  }
+}
