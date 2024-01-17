@@ -1,4 +1,4 @@
-#defining the parameters from infrastructurebe.bicep for the enviroments dev, stage, prod
+#TODO defining the parameters from infrastructurebe.bicep for the enviroments dev, stage, prod
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
