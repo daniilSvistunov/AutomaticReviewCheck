@@ -16,7 +16,7 @@ jobs:
         displayName: Prepare analysis on SonarQube
         inputs:
           SonarQube: "ok-sonarqube"
-          projectKey: "OKPlattform_OKOrder" #TODO Project
+          projectKey: "$name$" #TODO Project
           extraProperties: |
             sonar.projectBaseDir=$(Build.SourcesDirectory)/Backend
             sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/**/coverage.opencover.xml
