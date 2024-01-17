@@ -1,3 +1,4 @@
+#TODO inlineScript: --name $backend-name$
 jobs:
   - deployment: DeploySolution
     displayName: "Deploy infrastructure"
@@ -15,5 +16,5 @@ jobs:
                 scriptType: bash
                 scriptLocation: inlineScript
                 inlineScript: |
-                  ls
+                  ls 
                   az deployment group create --name okp-okorder-be --resource-group 'rg-okp-backends-${{parameters.envshort}}' --template-file '$(Agent.BuildDirectory)/infrastructureBackendDrop/infrastructurebe.bicep' --parameters '$(Agent.BuildDirectory)/infrastructureBackendDrop/infrastructurebe.parameter.${{parameters.envshort}}.json'
