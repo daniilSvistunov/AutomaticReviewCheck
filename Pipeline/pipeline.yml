@@ -1,3 +1,4 @@
+#Pipeline Template for both Frontend and Backend
 #Timer Trigger for Pipeline if necessary
 schedules:
   - cron: "0 16 * * Mon-Fri"
