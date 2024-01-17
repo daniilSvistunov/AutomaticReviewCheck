@@ -1,3 +1,4 @@
+#TODO inlineScript: --name $frontend-name$
 jobs:
   - deployment: DeploySolution
     displayName: "Deploy infrastructure"
