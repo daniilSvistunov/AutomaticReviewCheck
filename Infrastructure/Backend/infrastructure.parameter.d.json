@@ -1,0 +1,31 @@
+#defining the parameter from infrastructurebe.bicep for the enviroments dev, stage, prod
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "env": {
+      "value": "d"
+    },
+    "locationName" : {
+      "value": "germanywestcentral"
+    },
+    "azureAdClientId": {
+      "value": "d4ca20b1-fed4-45c9-8750-98b15d22a0fe"
+    },
+    "aadLoginUrl": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "dbConnectionString": {
+      "value": "Server=tcp:sql-okabrechnung-d.database.windows.net,1433;Initial Catalog=sqldb-okabrechnung-d;Persist Security Info=False;Authentication=Active Directory Managed Identity;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    },
+    "teamserviceAPIClientScopes": {
+      "value": "api://45ee9230-434a-41b8-a6d1-8eb95a329909/access_as_user"
+    },
+    "applicationServiceApiClientScopes": {
+      "value": "api://cff41b78-2ef8-42fb-8db6-7f96867f0412/access_as_user"
+    },
+    "salesAPIClientScopes": {
+      "value": "api://60258315-a360-4530-bee7-53dfa25b3a77/access_as_user"
+    }
+  }
+}
