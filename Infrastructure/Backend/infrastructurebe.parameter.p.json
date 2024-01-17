@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "env": {
+      "value": "p"
+    },
+    "locationName": {
+      "value": "germanywestcentral"
+    },
+    "azureAdClientId": {
+      "value": "a3a2d7d1-6d87-4b9a-aaa8-f179da953d40"
+    },
+    "abrechnungAPIClientScopes": {
+      "value": "api://4d3bc005-2536-4da0-a2dc-a5fc35f66e49/.default"
+    },
+    "capacityAPIClientScopes": {
+      "value": "api://7766773a-40ce-4aca-8b30-8dffc36ccbc0/.default"
+    },
+    "aadLoginUrl": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "teamserviceAPIClientScopes": {
+      "value": "api://f6de2ddc-679d-4e80-b979-7f685a8fe389/.default"
+    },
+    "plattformUri": {
+      "value": "https://plattform.objektkultur.de"
+    }
+  }
+}
