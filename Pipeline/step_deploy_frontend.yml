@@ -3,11 +3,11 @@ parameters: # defaults
 jobs:
   - deployment: DeployApp
     displayName: 'Deploy App'
-    environment: 'okp-okorder-${{parameters.environment}}'
+    environment: 'okp-okorder-${{parameters.environment}}' #TODO env name -okorder-
     pool:
       vmImage: ubuntu-latest
     variables:
-      storageAccountName: stokpokorder${{parameters.environmentShort}}
+      storageAccountName: stokpokorder${{parameters.environmentShort}} #TODO  refers to infrastructure.bicep StorageAccountName
     strategy:
       runOnce:
         deploy:
