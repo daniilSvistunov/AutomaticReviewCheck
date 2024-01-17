@@ -73,7 +73,7 @@ jobs:
         inputs:
           command: "publish"
           publishWebProjects: false
-          projects: "**/**/*OKOrder.Api.csproj"
+          projects: "**/**/*OKOrder.Api.csproj" #TODO project
           arguments: "--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)"
       - task: PublishBuildArtifacts@1
         displayName: "Publish Build Artifacts"
