@@ -8,7 +8,7 @@ param keyVaultName string = 'kv-okp-back01-${env}' #TODO add client secret in KV
 param locationName string = 'germanywestcentral'
 param azureAdClientId string
 param aadLoginUrl string
-#Define dependent APIs 
+#Define dependent APIs -below are examples-
 param abrechnungAPIClientScopes string
 param capacityAPIClientScopes string
 param teamserviceAPIClientScopes string
