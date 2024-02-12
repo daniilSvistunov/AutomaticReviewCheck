@@ -35,14 +35,3 @@ Template für neue Projekte.
 - [ ]Pipeline starten 
 
 [(Leitfaden Erstellung neuer APIs)](https://objektkultur365.sharepoint.com/:w:/r/sites/OKPlattformDeveloper/_layouts/15/Doc.aspx?sourcedoc=%7BE0D7AE5F-2E73-4154-8FCE-70F3376CF628%7D&file=Leitfaden%20Erstellung%20neuer%20APIs.docx&wdOrigin=TEAMS-MAGLEV.p2p_ns.rwc&action=default&mobileredirect=true)
-
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
