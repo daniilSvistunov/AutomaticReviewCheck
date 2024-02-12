@@ -1,12 +1,38 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+Template für neue Projekte.
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+**1. Template-Repo kopieren und einrichten**
+- [ ]Inhalt von Repo „OKTemplateService“ in neues Repo übertragen 
+- [ ]Projekt-Ordner entsprechend dem neuen Namen umbenennen 
+- [ ]Projekt-Files (csproj) entsprechend den neuen Verzeichnisnamen umbenennen 
+- [ ]Projektmappenfile (sln) anpasseen an neuen Projektdateinamen und -verzeichnisse 
+- [ ]API-Projektdatei mit neuer UserSecretId versehen (neue Guid generieren) 
+- [ ]Wenn es sich um ein Backend (und keinen Service) handelt, DataLayer-Projekt samt Tests löschen 
+
+**2. App-Registration (API) einrichten (pro Stage)**
+- [ ]App-Registration im Azure EntraID anlegen (ClientId notieren) 
+- [ ]Authentication für SPA einrichten 
+- [ ]API-Permission einrichten (benötigte APIs verknüpfen) 
+- [ ]API veröffentlichen einrichten (API-ID festlegen und Scopes anlegen) 
+- [ ]App-Rollen konfigurieren 
+- [ ]ClientSecret anlegen und im KeyVault ablegen (Secret-Name notieren) 
+
+**3. Service-Principal anlegen**
+- [ ]App-Registration im Azure EntraID für Pipeline-Zugriff erstellen (1 pro Komponente) 
+- [ ]ClientSecret für Pipeline anlegen 
+- [ ]Service-Principal für Ressourcengruppen von allen Stages als Contributor berechtigen 
+- [ ]In DevOps ServiceConnection pro Stage anlegen mit Typ „Azure Ressource Manager” und dann “Service principal (manuell)” mit ClientId und Secret (Namen notieren) und SubscriptionId der Stage 
+
+**4. Pipeline erstellen**
+- [ ]In Bicep-Template benötigte APIs konfigurieren 
+- [ ]In Bicep-Template KeyVault-Secretnamen anpassen 
+- [ ]Parameter-File pro Umgebung anpassen 
+- [ ]ClientId einfügen 
+- [ ]Scopes für benötigte APIs hinzufügen 
+- [ ]ServiceConnections in Pipeline-yaml anpassen 
+- [ ]Pipeline erstellen (yaml referenzieren) 
+- [ ]Pipeline starten 
 
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 
