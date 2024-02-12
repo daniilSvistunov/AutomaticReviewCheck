@@ -3,12 +3,12 @@ import { isEmpty } from 'lodash';
 import { useState } from 'react';
 
 import { useLocales } from '../../locales';
+import Iconify from '../iconify';
+import MenuPopover from '../menu-popover';
 import {
   localizeTeamIterationFilter,
   TeamIterationFilter,
-} from '../../sections/orders/details/capacity/iteration-details/planned/utils';
-import Iconify from '../iconify';
-import MenuPopover from '../menu-popover';
+} from './types';
 import { CustomFilterProps } from './types';
 
 // ----------------------------------------------------------------------

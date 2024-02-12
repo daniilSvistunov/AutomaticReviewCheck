@@ -22,20 +22,20 @@ export default function Page403() {
   return (
     <>
       <Helmet>
-        <title>{`${translate('error.403.title')}`}</title>
+        <title>{`${translate('errorPages.403.title')}`}</title>
       </Helmet>
 
       <StyledContainer>
         <MotionContainer>
           <m.div variants={varBounce().in}>
             <Typography variant="h3" paragraph>
-              {`${translate('error.403.header')}`}
+              {`${translate('errorPages.403.header')}`}
             </Typography>
           </m.div>
 
           <m.div variants={varBounce().in}>
             <Typography sx={{ color: 'text.secondary' }}>
-              {`${translate('error.403.message')}`}
+              {`${translate('errorPages.403.message')}`}
             </Typography>
           </m.div>
 

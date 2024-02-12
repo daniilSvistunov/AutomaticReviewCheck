@@ -20,7 +20,7 @@
 - [ ] I wrote a description of requested changes
 - [ ] I performed a self-review of my own code (and followed code review checklist)
 
-## Checks to complete
+## Reviewer Checklist
 
 - [ ] Code is self-documenting and easy to understand
 - [ ] Tests are present

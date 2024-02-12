@@ -1,6 +1,5 @@
 import { StackProps } from '@mui/system';
-
-import { TeamIterationFilter } from '../../sections/orders/details/capacity/iteration-details/planned/utils';
+import i18n from 'src/locales/i18n';
 
 // ----------------------------------------------------------------------
 
@@ -14,4 +13,20 @@ export type CustomFilterProps = {
 export type FilterOptions = {
   label: string;
   value: TeamIterationFilter;
+};
+
+export enum TeamIterationFilter {
+  Past,
+  Current,
+  Upcoming,
+}
+
+export const localizeTeamIterationFilter = (filter: TeamIterationFilter) => {
+  const filterText = {
+    [TeamIterationFilter.Past]: i18n.t('orders.capacities.teamIterationFilter.past'),
+    [TeamIterationFilter.Current]: i18n.t('orders.capacities.teamIterationFilter.current'),
+    [TeamIterationFilter.Upcoming]: i18n.t('orders.capacities.teamIterationFilter.upcoming'),
+  };
+  
+  return filterText[filter];
 };
