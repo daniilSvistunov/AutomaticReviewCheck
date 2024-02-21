@@ -1,4 +1,8 @@
-﻿namespace ToDoList.BusinessLayer.Interfaces
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Graph;
+
+namespace ToDoList.BusinessLayer.Interfaces
 {
     public interface IGraphApiService
     {
