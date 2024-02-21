@@ -1,6 +1,6 @@
 # Introduction
 
-OKTemplate-Mono is a template for a SPA (single page application). It can be used to create new applications. The template uses vite v5.
+ToDoList-Mono is a template for a SPA (single page application). It can be used to create new applications. The template uses vite v5.
 
 # Getting Started
 

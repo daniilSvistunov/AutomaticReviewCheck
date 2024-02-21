@@ -3,7 +3,7 @@ Template für neue Projekte.
 
 # Getting Started
 **1. Template-Repo kopieren und einrichten**
-- [ ]Inhalt von Repo „OKTemplateService“ in neues Repo übertragen 
+- [ ]Inhalt von Repo „ToDoListService“ in neues Repo übertragen 
 - [ ]Projekt-Ordner entsprechend dem neuen Namen umbenennen 
 - [ ]Projekt-Files (csproj) entsprechend den neuen Verzeichnisnamen umbenennen 
 - [ ]Projektmappenfile (sln) anpasseen an neuen Projektdateinamen und -verzeichnisse 
