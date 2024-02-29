@@ -19,6 +19,7 @@ const Loadable = (Component: ElementType) => (props: any) =>
 // Lazy loaded pages
 // ----------------------------------------------------------------------------
 const SamplePage = Loadable(lazy(() => import('../pages/SamplePage')));
+const TodoApp = Loadable(lazy(() => import('../pages/TodoApp')));
 
 // Router
 // ----------------------------------------------------------------------------
@@ -38,6 +39,10 @@ const routes: RouteObject[] = [
         element: <SamplePage />,
       },
       // TODO: further paths can be added here
+      {
+        path: '/todo',
+        element: <TodoApp />,
+      },
     ],
   },
 ];
