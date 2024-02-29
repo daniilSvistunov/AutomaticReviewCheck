@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using Ardalis.Result.AspNetCore;
 using AutoMapper;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.NLogTarget;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +22,7 @@ using NLog.Config;
 using NLog.Targets;
 using ToDoList.Api.ErrorHandling;
 using ToDoList.Api.Mapping;
+using ToDoList.BusinessLayer.Data;
 using ToDoList.BusinessLayer.Interfaces;
 using ToDoList.BusinessLayer.Services;
 using ToDoList.Common.Logging;
@@ -68,6 +69,11 @@ namespace ToDoList.Api
                 options.SuppressAsyncSuffixInActionNames = false;
                 options.AddDefaultResultConvention();
             }).AddFluentValidation();
+
+            services.AddScoped<IToDoService, ToDoService>();
+
+            services.AddDbContext<ToDoContext>(opt =>
+                opt.UseInMemoryDatabase("ToDoList"));
 
             services.AddSwaggerGen(c =>
             {
