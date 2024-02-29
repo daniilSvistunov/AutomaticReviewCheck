@@ -185,6 +185,7 @@ namespace OKTemplate.Api
             services.AddSingleton<ILoggerManager, LoggerManager>();
 
             services.AddTransient<IGraphApiService, GraphApiService>();
+            services.AddTransient<IGraphApiService, GraphApiService>();
 
             services.AddLocalization(o => { o.ResourcesPath = "Resources"; });
         }

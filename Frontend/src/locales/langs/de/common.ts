@@ -5,10 +5,10 @@ const common = {
   isRequired: 'ist erforderlich',
   batchProcessing: 'Stapelverarbeitung',
   download: 'Download',
-  loadingData: 'Daten werden geladen.', 
+  loadingData: 'Daten werden geladen.',
   generated: 'Wird automatisch generiert',
 
-  
+
   required: 'Erforderlich',
   notRequired: 'Nicht erforderlich',
 

@@ -1,6 +1,7 @@
 import common from "./de/common";
 import errorPages from "./de/errorPages";
 import messages from "./de/messages";
+import tasks from "./de/tasks";
 import types from "./de/types";
 
 const de = {
@@ -11,8 +12,8 @@ const de = {
   messages: messages, // snackbar messages
 
 
-  // application specific translations
-  
+  // task specific translations
+  tasks: tasks,
 
 
   // Pilot message

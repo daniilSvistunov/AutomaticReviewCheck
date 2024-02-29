@@ -1,10 +1,12 @@
 import { LoadingScreenContainer } from '@components/loading-screen';
-import RootDataWrapper from '@layouts/RootDataWrapper';
+import TaskDataWrapper from '@layouts/tasks/TaskDataWrapper';
+import Page403 from '@pages/Page403';
 import { ElementType, lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { matchRoutes, RouteObject, useLocation, useRoutes } from 'react-router-dom';
 
 import AuthGuard from '../auth/AuthGuard';
+import { PATH_PAGE } from './paths';
 
 // ----------------------------------------------------------------------------
 
@@ -18,7 +20,8 @@ const Loadable = (Component: ElementType) => (props: any) =>
 
 // Lazy loaded pages
 // ----------------------------------------------------------------------------
-const SamplePage = Loadable(lazy(() => import('../pages/SamplePage')));
+const TasksPage = Loadable(lazy(() => import('../pages/tasks/TasksPage')));
+const TaskDetailPage = Loadable(lazy(() => import('../pages/tasks/TaskDetailPage')));
 
 // Router
 // ----------------------------------------------------------------------------
@@ -27,15 +30,25 @@ const routes: RouteObject[] = [
     path: '/',
     element: (
       <AuthGuard>
-        <RootDataWrapper>
+        <TaskDataWrapper>
           <Outlet />
-        </RootDataWrapper>
+        </TaskDataWrapper>
       </AuthGuard>
     ),
     children: [
       {
         path: '',
-        element: <SamplePage />,
+        element: <Navigate to={PATH_PAGE.tasks.root} />,
+      },
+      {
+        path: '/tasks',
+        element: <TasksPage />,
+        errorElement: <Page403 />,
+      },
+      {
+        path: '/tasks/:taskId',
+        element: <TaskDetailPage />,
+        errorElement: <Page403 />,
       },
       // TODO: further paths can be added here
     ],

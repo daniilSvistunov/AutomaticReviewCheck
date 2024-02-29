@@ -1,4 +1,5 @@
 import { Employee } from '@models/employee';
+import { Task } from '@models/task';
 
 import {
   mockEmployee1,
@@ -14,6 +15,20 @@ import {
   mockEmployee11,
   mockEmployee12,
 } from './employees';
+import {
+  mockTask1,
+  mockTask2,
+  mockTask3,
+  mockTask4,
+  mockTask5,
+  mockTask6,
+  mockTask7,
+  mockTask8,
+  mockTask9,
+  mockTask10,
+  mockTask11,
+  mockTask12,
+} from './tasks';
 
 // ----------------------------------------------------------------------
 
@@ -30,4 +45,19 @@ export const mockEmployees: Employee[] = [
   mockEmployee10,
   mockEmployee11,
   mockEmployee12,
+];
+
+export const mockTasks: Task[] = [
+  mockTask1,
+  mockTask2,
+  mockTask3,
+  mockTask4,
+  mockTask5,
+  mockTask6,
+  mockTask7,
+  mockTask8,
+  mockTask9,
+  mockTask10,
+  mockTask11,
+  mockTask12,
 ];
