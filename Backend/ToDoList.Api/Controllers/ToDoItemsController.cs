@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
@@ -22,7 +23,16 @@ namespace ToDoList.Api.Controllers
             _toDoService = toDoService;
         }
 
-        // GET: api/ToDoItems
+        /// <summary>
+        /// Gets all ToDoItems
+        /// </summary>
+        /// <returns>All TodoItems</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/ToDoItems
+        ///
+        /// </remarks>
         [HttpGet]
         [TranslateResultToActionResult]
         public async Task<Result<IEnumerable<ToDoItemDto>>> GetToDoItems()
@@ -30,7 +40,17 @@ namespace ToDoList.Api.Controllers
             return await _toDoService.GetAllItemsAsync();
         }
 
-        // GET: api/ToDoItems/5
+        /// <summary>
+        /// Gets a specific ToDoItem
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A specific ToDoItem</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/ToDoItems/5
+        ///
+        /// </remarks>
         [HttpGet("{id}")]
         [TranslateResultToActionResult]
         public async Task<Result<ToDoItemDto>> GetToDoItem(long id)
@@ -38,26 +58,65 @@ namespace ToDoList.Api.Controllers
             return await _toDoService.GetItemByIdAsync(id);
         }
 
-        // PUT: api/ToDoItems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Updates a ToDoItem with the given content in request body
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>No content</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT /api/ToDoItems/5
+        ///     {
+        ///        "id": 5,
+        ///        "task": "string",
+        ///        "isComplete": true,
+        ///        "dueDate": "2024-02-29T15:24"
+        ///     }
+        ///
+        /// </remarks>
         [HttpPut("{id}")]
         [TranslateResultToActionResult]
         public async Task<Result> PutToDoItem(long id, ToDoItemDto toDoItem)
         {
             if (!ModelState.IsValid)
             {
-                var response = ModelState.
+                string errorMessages = string.Join("; ", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+                return Result.BadRequest(title: "Validation error", details: errorMessages);
             }
 
             return await _toDoService.UpdateItemByIdAsync(id, toDoItem);
         }
 
-        // POST: api/ToDoItems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Creates a ToDoItem with the given content in request body
+        /// </summary>
+        /// <returns>The newly created ToDoItem</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/ToDoItems
+        ///     {
+        ///        "task": "string",
+        ///        "isComplete": true,
+        ///        "dueDate": "2024-02-29T15:24"
+        ///     }
+        ///
+        /// </remarks>
         [HttpPost]
         [TranslateResultToActionResult]
         public async Task<Result<ToDoItemDto>> PostToDoItem(ToDoItemDto toDoItem)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorMessages = string.Join("; ", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+                return Result.BadRequest(title: "Validation error", details: errorMessages);
+            }
+
             Hashtable urlArgs = new Hashtable();
             urlArgs.Add("protocol", this.Request.Scheme);
             urlArgs.Add("host", this.Request.Host);
@@ -66,7 +125,17 @@ namespace ToDoList.Api.Controllers
             return await _toDoService.CreateItemAsync(toDoItem, urlArgs);
         }
 
-        // DELETE: api/ToDoItems/5
+        /// <summary>
+        /// Deletes a specific ToDoItem
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>No content</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     DELETE /api/ToDoItems/5
+        ///
+        /// </remarks>
         [HttpDelete("{id}")]
         [TranslateResultToActionResult]
         public async Task<Result> DeleteToDoItem(long id)

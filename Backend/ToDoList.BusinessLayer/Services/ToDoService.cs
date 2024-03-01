@@ -55,8 +55,9 @@ namespace ToDoList.BusinessLayer.Services
             return Result<ToDoItemDto>.Success(toDoItemDto);
         }
 
-        public async Task<Result> UpdateItemByIdAsync(long id, ToDoItemDto newItem)
+        public async Task<Result> UpdateItemByIdAsync(long id, ToDoItemDto newItemDto)
         {
+            var newItem = _mapper.Map<ToDoItem>(newItemDto);
 
             if (id != newItem.id)
             {
@@ -84,19 +85,23 @@ namespace ToDoList.BusinessLayer.Services
             return Result.NoContent();
         }
 
-        public async Task<Result<ToDoItemDto>> CreateItemAsync(ToDoItemDto item, Hashtable urlArgs)
+        public async Task<Result<ToDoItemDto>> CreateItemAsync(ToDoItemDto itemDto, Hashtable urlArgs)
         {
             if (_context.ToDoItems == null)
             {
                 return Result.Error("Entity set 'ToDoContext.ToDoItems'  is null.");
             }
 
+            //ToDo: Check if provided id is already set.
+
+            var item = _mapper.Map<ToDoItem>(itemDto);
             _context.ToDoItems.Add(item);
             await _context.SaveChangesAsync();
+            itemDto = _mapper.Map<ToDoItemDto>(item);
 
             var resourceLocation = urlArgs["protocol"]!.ToString() + "://" + urlArgs["host"]!.ToString() + urlArgs["routeValue"]!.ToString() + "/" + item.id.ToString();
 
-            return Result<ToDoItem>.Created(item, resourceLocation);
+            return Result<ToDoItemDto>.Created(itemDto, resourceLocation);
         }
 
         public async Task<Result> DeleteItemByIdAsync(long id)
