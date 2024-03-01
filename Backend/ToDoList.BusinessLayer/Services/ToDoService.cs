@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ardalis.Result;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.BusinessLayer.Data;
+using ToDoList.BusinessLayer.Dtos;
 using ToDoList.BusinessLayer.Entities;
 using ToDoList.BusinessLayer.Interfaces;
 
@@ -13,41 +15,49 @@ namespace ToDoList.BusinessLayer.Services
     public class ToDoService : IToDoService
     {
         private readonly ToDoContext _context;
+        private readonly IMapper _mapper;
 
-        public ToDoService(ToDoContext context)
+        public ToDoService(ToDoContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<ToDoItem>>> GetAllItemsAsync()
+        public async Task<Result<IEnumerable<ToDoItemDto>>> GetAllItemsAsync()
         {
             if (_context.ToDoItems == null)
             {
-                return Result<IEnumerable<ToDoItem>>.NotFound();
+                return Result<IEnumerable<ToDoItemDto>>.NotFound();
             }
 
-            return Result<IEnumerable<ToDoItem>>.Success(await _context.ToDoItems.ToListAsync());
+            var toDoItems = await _context.ToDoItems.ToListAsync();
+            IEnumerable<ToDoItemDto> toDoItemDtos = _mapper.Map<List<ToDoItemDto>>(toDoItems);
+
+            return Result<IEnumerable<ToDoItemDto>>.Success(toDoItemDtos);
         }
 
-        public async Task<Result<ToDoItem>> GetItemByIdAsync(long id)
+        public async Task<Result<ToDoItemDto>> GetItemByIdAsync(long id)
         {
             if (_context.ToDoItems == null)
             {
-                return Result<ToDoItem>.NotFound();
+                return Result<ToDoItemDto>.NotFound();
             }
 
             var toDoItem = await _context.ToDoItems.FindAsync(id);
 
             if (toDoItem == null)
             {
-                return Result<ToDoItem>.NotFound();
+                return Result<ToDoItemDto>.NotFound();
             }
 
-            return Result<ToDoItem>.Success(toDoItem);
+            var toDoItemDto = _mapper.Map<ToDoItemDto>(toDoItem);
+
+            return Result<ToDoItemDto>.Success(toDoItemDto);
         }
 
-        public async Task<Result> UpdateItemByIdAsync(long id, ToDoItem newItem)
+        public async Task<Result> UpdateItemByIdAsync(long id, ToDoItemDto newItem)
         {
+
             if (id != newItem.id)
             {
                 return Result.BadRequest(title: "ID mismatch", details: "Parameter id and id of request body object have to be equal.");
@@ -74,7 +84,7 @@ namespace ToDoList.BusinessLayer.Services
             return Result.NoContent();
         }
 
-        public async Task<Result<ToDoItem>> CreateItemAsync(ToDoItem item, Hashtable urlArgs)
+        public async Task<Result<ToDoItemDto>> CreateItemAsync(ToDoItemDto item, Hashtable urlArgs)
         {
             if (_context.ToDoItems == null)
             {

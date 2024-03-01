@@ -1,6 +1,8 @@
-﻿namespace ToDoList.BusinessLayer.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ToDoList.BusinessLayer.Dtos
 {
-    internal class ToDoItemDto
+    public class ToDoItemDto
     {
         public long id { get; set; }
 

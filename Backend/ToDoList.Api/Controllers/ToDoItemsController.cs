@@ -5,7 +5,7 @@ using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ToDoList.BusinessLayer.Entities;
+using ToDoList.BusinessLayer.Dtos;
 using ToDoList.BusinessLayer.Interfaces;
 
 namespace ToDoList.Api.Controllers
@@ -25,7 +25,7 @@ namespace ToDoList.Api.Controllers
         // GET: api/ToDoItems
         [HttpGet]
         [TranslateResultToActionResult]
-        public async Task<Result<IEnumerable<ToDoItem>>> GetToDoItems()
+        public async Task<Result<IEnumerable<ToDoItemDto>>> GetToDoItems()
         {
             return await _toDoService.GetAllItemsAsync();
         }
@@ -33,7 +33,7 @@ namespace ToDoList.Api.Controllers
         // GET: api/ToDoItems/5
         [HttpGet("{id}")]
         [TranslateResultToActionResult]
-        public async Task<Result<ToDoItem>> GetToDoItem(long id)
+        public async Task<Result<ToDoItemDto>> GetToDoItem(long id)
         {
             return await _toDoService.GetItemByIdAsync(id);
         }
@@ -42,8 +42,13 @@ namespace ToDoList.Api.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [TranslateResultToActionResult]
-        public async Task<Result> PutToDoItem(long id, ToDoItem toDoItem)
+        public async Task<Result> PutToDoItem(long id, ToDoItemDto toDoItem)
         {
+            if (!ModelState.IsValid)
+            {
+                var response = ModelState.
+            }
+
             return await _toDoService.UpdateItemByIdAsync(id, toDoItem);
         }
 
@@ -51,7 +56,7 @@ namespace ToDoList.Api.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [TranslateResultToActionResult]
-        public async Task<Result<ToDoItem>> PostToDoItem(ToDoItem toDoItem)
+        public async Task<Result<ToDoItemDto>> PostToDoItem(ToDoItemDto toDoItem)
         {
             Hashtable urlArgs = new Hashtable();
             urlArgs.Add("protocol", this.Request.Scheme);

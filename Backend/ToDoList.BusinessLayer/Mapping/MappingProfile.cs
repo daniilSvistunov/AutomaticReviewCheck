@@ -17,3 +17,11 @@ namespace ToDoList.Api.Mapping
         }
     }
 }
+
+/*
+ *             CreateMap<ToDoItemDto, ToDoItem>()
+                .ForMember(model => model.id, dto => dto.MapFrom((d) => d.id))
+                .ForMember(model => model.task, dto => dto.MapFrom((d) => d.task))
+                .ForMember(model => model.isComplete, dto => dto.MapFrom((d) => d.isComplete))
+                .ForMember(model => model.dueDate, dto => dto.MapFrom((d) => d.dueDate));
+*/
