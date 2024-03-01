@@ -1,4 +1,4 @@
-import { Change, Task } from './types';
+import { Change, Task } from '../../../models/task';
 
 interface EditAction {
   type: 'edit';

@@ -1,12 +1,12 @@
-import '@sections/App.css';
+import '@sections/styles/App.css';
 
 import { MotionContainer, varBounce } from '@components/animate';
 import { Container, styled, Typography } from '@mui/material';
-import TasksProvider from '@sections/TasksProvider';
-import TodoAddBar from '@sections/TodoAddBar';
-import TodoTable from '@sections/TodoTable';
+import TaskDetails from '@sections/todo/details/TaskDetails';
+import TasksProvider from '@sections/todo/provider/TasksProvider';
 import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import { useParams } from 'react-router';
 
 // ----------------------------------------------------------------------
 
@@ -20,22 +20,22 @@ const StyledContainer = styled(Container)(() => ({
 }));
 
 export default function TodoApp() {
+  const { taskId } = useParams();
+
   return (
     <>
       <Helmet>
         <title>{`ToDo App`}</title>
-        <link
-          rel="icon"
-          type="image/svg+xml"
-          href="/assets/icons/setting/ic_exit_full_screen.svg"
-        />
+        <link rel="icon" type="image/svg+xml" href="/assets/icons/functions/check-solid.svg" />
       </Helmet>
-
       <TasksProvider>
-        <div className="container">
-          <TodoTable />
-          <TodoAddBar />
-        </div>
+        <StyledContainer>
+          <MotionContainer>
+            <m.div variants={varBounce().in}>
+              <TaskDetails taskId={Number(taskId)} />
+            </m.div>
+          </MotionContainer>
+        </StyledContainer>
       </TasksProvider>
     </>
   );

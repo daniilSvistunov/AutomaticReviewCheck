@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useTasksDispatch, useTasksId } from './TasksProviderFunctions';
+import { useTasksDispatch, useTasksId } from '../provider/tasksProviderFunctions';
 
 export default function TodoAddBar() {
   const [inputState, setInputState] = useState({
@@ -9,6 +9,7 @@ export default function TodoAddBar() {
   });
   const dispatch = useTasksDispatch();
   const tempId = useTasksId();
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     //TODO: Besser Mitteilung an den User
@@ -42,7 +43,6 @@ export default function TodoAddBar() {
             placeholder="Aufgabe"
             value={inputState.task}
             onChange={handleInput}
-            onInput={handleInput}
           />
         </div>
         <div>
@@ -52,7 +52,6 @@ export default function TodoAddBar() {
             title="date"
             value={inputState.date}
             onChange={handleInput}
-            onInput={handleInput}
           />
         </div>
         <button title="Hinzufügen" className="btn greenBG ">

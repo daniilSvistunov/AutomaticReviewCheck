@@ -1,18 +1,20 @@
 import SvgColor from '@components/svg-color/SvgColor';
-import { useRef, useState } from 'react';
+import { PATH_PAGE } from '@routes/paths';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
-import { useTasks, useTasksDispatch, useTasksId } from './TasksProviderFunctions';
+import { Task } from '../../../models/task';
+import { useTasksDispatch, useTasksId } from '../provider/tasksProviderFunctions';
 import TodoTableEditCell from './TodoTableEditCell';
-import { Task } from './types';
-
 type Props = {
   task: Task;
 };
 
-function TodoRow({ task }: Readonly<Props>) {
+export default function TodoRow({ task }: Readonly<Props>) {
   const [editable, setEditable] = useState(false);
   const dispatch = useTasksDispatch();
   const tempId = useTasksId();
+  const navigate = useNavigate();
   return (
     <tr>
       <td>
@@ -41,10 +43,19 @@ function TodoRow({ task }: Readonly<Props>) {
           onClick={() => setEditable((prevEdit) => !prevEdit)}
         >
           {editable ? (
-            <SvgColor src="/assets/icons/setting/ic_exit_full_screen.svg" />
+            <SvgColor src="/assets/icons/functions/floppy-disk-solid.svg" />
           ) : (
-            <SvgColor src="/assets/icons/setting/ic_exit_full_screen.svg" />
+            <SvgColor src="/assets/icons/functions/pen-to-square-solid.svg" />
           )}
+        </button>
+        <button
+          title="Details"
+          className="btn"
+          onClick={() => {
+            navigate(`${PATH_PAGE.todo.root}/${task.id}`);
+          }}
+        >
+          <SvgColor src="/assets/icons/functions/magnifying-glass-solid.svg" />
         </button>
         <button
           title="Duplizieren"
@@ -63,8 +74,9 @@ function TodoRow({ task }: Readonly<Props>) {
             }
           }}
         >
-          <SvgColor src="/assets/icons/setting/ic_setting.svg" />
+          <SvgColor src="/assets/icons/functions/copy-solid.svg" />
         </button>
+        {/*TODO: Bestätigung abfragen*/}
         <button
           title="Löschen"
           className="btn redBG"
@@ -77,70 +89,9 @@ function TodoRow({ task }: Readonly<Props>) {
             }
           }}
         >
-          <SvgColor src="/assets/icons/setting/ic_setting.svg" />
+          <SvgColor src="/assets/icons/functions/trash-solid.svg" />
         </button>
       </td>
     </tr>
-  );
-}
-
-function TodoHead() {
-  //TODO: Sortierung anzeigen
-  const orderRef = useRef(1);
-  const dispatch = useTasksDispatch();
-  return (
-    <thead>
-      <tr>
-        <th>Status</th>
-        <th>
-          <button
-            onClick={() => {
-              orderRef.current *= -1;
-              if (dispatch) {
-                dispatch({
-                  type: 'sort',
-                  column: 'task',
-                  order: orderRef.current,
-                });
-              }
-            }}
-          >
-            Aufgabe
-          </button>
-        </th>
-        <th>
-          <button
-            onClick={() => {
-              orderRef.current *= -1;
-              if (dispatch) {
-                dispatch({
-                  type: 'sort',
-                  column: 'date',
-                  order: orderRef.current,
-                });
-              }
-            }}
-          >
-            Datum
-          </button>
-        </th>
-        <th>Funktionen</th>
-      </tr>
-    </thead>
-  );
-}
-
-export default function TodoTable() {
-  const tasks = useTasks();
-
-  return (
-    <div id="todoTable">
-      <table>
-        <TodoHead />
-        <tbody>
-          {tasks ? tasks.toReversed().map((row) => <TodoRow key={row.id} task={row} />) : []}
-        </tbody>
-      </table>
-    </div>
   );
 }

@@ -1,7 +1,7 @@
 import { createContext, Dispatch, useEffect, useReducer } from 'react';
 
+import { Task } from '../../../models/task';
 import tasksReducer, { TaskAction } from './tasksReducer';
-import { Task } from './types';
 
 type Props = {
   children: React.ReactNode;

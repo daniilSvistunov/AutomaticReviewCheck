@@ -1,10 +1,17 @@
 import { LoadingScreenContainer } from '@components/loading-screen';
 import RootDataWrapper from '@layouts/RootDataWrapper';
 import { ElementType, lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
-import { matchRoutes, RouteObject, useLocation, useRoutes } from 'react-router-dom';
+import {
+  matchRoutes,
+  Navigate,
+  Outlet,
+  RouteObject,
+  useLocation,
+  useRoutes,
+} from 'react-router-dom';
 
 import AuthGuard from '../auth/AuthGuard';
+import { PATH_PAGE } from './paths';
 
 // ----------------------------------------------------------------------------
 
@@ -18,8 +25,8 @@ const Loadable = (Component: ElementType) => (props: any) =>
 
 // Lazy loaded pages
 // ----------------------------------------------------------------------------
-const SamplePage = Loadable(lazy(() => import('../pages/SamplePage')));
-const TodoApp = Loadable(lazy(() => import('../pages/TodoApp')));
+const TodoApp = Loadable(lazy(() => import('../pages/todo/TodoAppPage')));
+const TodoDetails = Loadable(lazy(() => import('../pages/todo/TodoDetailsPage')));
 
 // Router
 // ----------------------------------------------------------------------------
@@ -36,12 +43,15 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <SamplePage />,
+        element: <Navigate to={PATH_PAGE.todo.root} />,
       },
-      // TODO: further paths can be added here
       {
-        path: '/todo',
+        path: 'todo',
         element: <TodoApp />,
+      },
+      {
+        path: 'todo/:taskId',
+        element: <TodoDetails />,
       },
     ],
   },

@@ -102,7 +102,7 @@ tr td:last-child {
 }
 
 thead tr th,
-button[title="Hinzufügen"] {
+button[title='Hinzufügen'] {
   color: white;
   text-decoration: none;
   position: relative;
@@ -157,9 +157,9 @@ form label {
   padding-left: 5px;
 }
 
-input[type="date"],
-input[type="time"],
-table input[type="text"] {
+input[type='date'],
+input[type='time'],
+table input[type='text'] {
   text-align: center;
 }
 
@@ -167,7 +167,7 @@ input {
   width: 100%;
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   width: 25px;
   accent-color: DodgerBlue;
 }
@@ -176,13 +176,15 @@ input[type="checkbox"] {
   background-color: DodgerBlue;
   border: none;
   color: white;
-  padding: 16px 16px;
   font-size: 16px;
   width: 48px;
   height: 48px;
   cursor: pointer;
   border-radius: 0;
   transition: all 300ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn:hover {

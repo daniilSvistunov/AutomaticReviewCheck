@@ -1,5 +1,5 @@
-import { useTasksDispatch } from './TasksProviderFunctions';
-import { Task } from './types';
+import { Task } from '../../../models/task';
+import { useTasksDispatch } from '../provider/tasksProviderFunctions';
 
 type Props = {
   type: string;
