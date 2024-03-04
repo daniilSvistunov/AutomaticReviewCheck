@@ -10,9 +10,9 @@ namespace ToDoList.BusinessLayer.Dtos
         public string? task { get; set; }
 
         [Required(ErrorMessage = "A state is required")]
-        public bool isComplete { get; set; }
+        public bool state { get; set; }
 
         [RegularExpression(@"^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9])$")]
-        public string? dueDate { get; set; }
+        public string? date { get; set; }
     }
 }

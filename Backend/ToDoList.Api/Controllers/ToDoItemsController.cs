@@ -85,8 +85,8 @@ namespace ToDoList.Api.Controllers
         ///     {
         ///        "id": 5,
         ///        "task": "string",
-        ///        "isComplete": true,
-        ///        "dueDate": "2024-02-29T15:24"
+        ///        "state": true,
+        ///        "date": "2024-02-29T15:24"
         ///     }
         ///
         /// </remarks>
@@ -116,8 +116,8 @@ namespace ToDoList.Api.Controllers
         ///     {
         ///        [optional] "id": 5,
         ///        "task": "string",
-        ///        "isComplete": true,
-        ///        "dueDate": "2024-02-29T15:24"
+        ///        "state": true,
+        ///        "date": "2024-02-29T15:24"
         ///     }
         ///
         /// </remarks>

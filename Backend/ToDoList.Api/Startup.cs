@@ -21,9 +21,9 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using ToDoList.Api.ErrorHandling;
-using ToDoList.Api.Mapping;
 using ToDoList.BusinessLayer.Data;
 using ToDoList.BusinessLayer.Interfaces;
+using ToDoList.BusinessLayer.Mapping;
 using ToDoList.BusinessLayer.Services;
 using ToDoList.Common.Logging;
 
