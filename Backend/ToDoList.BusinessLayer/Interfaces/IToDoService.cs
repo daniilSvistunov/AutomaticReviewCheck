@@ -8,7 +8,7 @@ namespace ToDoList.BusinessLayer.Interfaces
 {
     public interface IToDoService
     {
-        Task<Result<IEnumerable<ToDoItemDto>>> GetAllItemsAsync();
+        Task<Result<IEnumerable<ToDoItemDto>>> GetAllItemsAsync(string searchString, string date);
         Task<Result<ToDoItemDto>> GetItemByIdAsync(long id);
         Task<Result> UpdateItemByIdAsync(long id, ToDoItemDto newItem);
         Task<Result<ToDoItemDto>> CreateItemAsync(ToDoItemDto item, Hashtable urlArgs);

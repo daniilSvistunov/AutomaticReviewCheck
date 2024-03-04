@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using AutoMapper;
@@ -23,7 +24,7 @@ namespace ToDoList.BusinessLayer.Services
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<ToDoItemDto>>> GetAllItemsAsync()
+        public async Task<Result<IEnumerable<ToDoItemDto>>> GetAllItemsAsync(string searchString, string date)
         {
             if (_context.ToDoItems == null)
             {
@@ -31,6 +32,23 @@ namespace ToDoList.BusinessLayer.Services
             }
 
             var toDoItems = await _context.ToDoItems.ToListAsync();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                toDoItems = toDoItems.Where(s => s.task!.Contains(searchString)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                if (!Regex.IsMatch(date, @"^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$"))
+                {
+                    return Result.BadRequest(title: "Wrong date format", details: "Search date must match the regular expression " +
+                        "'^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$'.");
+                }
+
+                toDoItems = toDoItems.Where(d => d.dueDate!.Contains(date)).ToList();
+            }
+
             IEnumerable<ToDoItemDto> toDoItemDtos = _mapper.Map<List<ToDoItemDto>>(toDoItems);
 
             return Result<IEnumerable<ToDoItemDto>>.Success(toDoItemDtos);

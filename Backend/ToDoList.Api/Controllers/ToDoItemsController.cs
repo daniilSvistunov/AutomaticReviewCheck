@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
@@ -24,20 +25,34 @@ namespace ToDoList.Api.Controllers
         }
 
         /// <summary>
-        /// Gets all ToDoItems
+        /// Gets all ToDoItems optionally filtered 
         /// </summary>
-        /// <returns>All TodoItems</returns>
+        /// <returns>All TodoItems optionally filtered </returns>
         /// <remarks>
         /// Sample request:
         ///
         ///     GET /api/ToDoItems
+        ///     
         ///
         /// </remarks>
         [HttpGet]
         [TranslateResultToActionResult]
-        public async Task<Result<IEnumerable<ToDoItemDto>>> GetToDoItems()
+        public async Task<Result<IEnumerable<ToDoItemDto>>> GetToDoItems(string? searchString = null, string? date = null)
         {
-            return await _toDoService.GetAllItemsAsync();
+            string? searchStringEncoded = null;
+            string? dateEncoded = null;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchStringEncoded = HtmlEncoder.Default.Encode(searchString);
+            }
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                dateEncoded = HtmlEncoder.Default.Encode(date);
+            }
+
+            return await _toDoService.GetAllItemsAsync(searchStringEncoded, dateEncoded);
         }
 
         /// <summary>
