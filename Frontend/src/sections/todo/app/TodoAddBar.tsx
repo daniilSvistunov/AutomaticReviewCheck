@@ -1,16 +1,14 @@
+import { addTodoTask } from '@redux/slices/todo';
+import { dispatch } from '@redux/store';
 import { useState } from 'react';
-
-import { useTasksDispatch, useTasksId } from '../provider/tasksProviderFunctions';
 
 export default function TodoAddBar() {
   const [inputState, setInputState] = useState({
     task: '',
     date: '',
   });
-  const dispatch = useTasksDispatch();
-  const tempId = useTasksId();
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     //TODO: Besser Mitteilung an den User
     for (const [key, value] of Object.entries(inputState)) {
@@ -19,11 +17,12 @@ export default function TodoAddBar() {
         return;
       }
     }
-    if (dispatch) {
-      dispatch({
-        type: 'add',
-        new: { ...inputState, state: false, id: tempId },
-      });
+    //TODO Add function
+    try {
+      await dispatch(addTodoTask({ ...inputState, state: false }));
+    } catch (error) {
+      //TODO error handling
+      console.log(error);
     }
     setInputState({ task: '', date: '' });
   }

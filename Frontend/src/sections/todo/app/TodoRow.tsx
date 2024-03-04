@@ -1,31 +1,85 @@
 import SvgColor from '@components/svg-color/SvgColor';
+import { addTodoTask, deleteTodoTask, updateTodoTask } from '@redux/slices/todo';
+import { dispatch } from '@redux/store';
 import { PATH_PAGE } from '@routes/paths';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { Task } from '../../../models/task';
-import { useTasksDispatch, useTasksId } from '../provider/tasksProviderFunctions';
-import TodoTableEditCell from './TodoTableEditCell';
 type Props = {
   task: Task;
 };
 
 export default function TodoRow({ task }: Readonly<Props>) {
   const [editable, setEditable] = useState(false);
-  const dispatch = useTasksDispatch();
-  const tempId = useTasksId();
+  const [tempInput, setTempInput] = useState<Task>(task);
   const navigate = useNavigate();
+
+  async function handleDelete(id: string) {
+    try {
+      await dispatch(deleteTodoTask(id));
+    } catch (error) {
+      //TODO error handling
+      console.log(error);
+    }
+  }
+
+  async function handleDupe(task: Task) {
+    delete task.id;
+    try {
+      await dispatch(addTodoTask(task));
+    } catch (error) {
+      //TODO error handling
+      console.log(error);
+    }
+  }
+
+  async function handleEdit(task: Task) {
+    try {
+      await dispatch(updateTodoTask(task));
+    } catch (error) {
+      //TODO error handling
+      console.log(error);
+    }
+  }
+
   return (
     <tr>
       <td>
-        <TodoTableEditCell type={'checkbox'} name={'state'} task={task} />
+        {editable ? (
+          <input
+            type="checkbox"
+            id={`state${task.id}`}
+            name={'state'}
+            checked={tempInput.state}
+            onChange={(e) => setTempInput({ ...tempInput, [e.target.name]: e.target.checked })}
+          />
+        ) : (
+          <input type="checkbox" checked={task.state} readOnly />
+        )}
       </td>
       <td className={task.state ? 'crossed' : ''}>
-        {editable ? <TodoTableEditCell type={'text'} name={'task'} task={task} /> : task.task}
+        {editable ? (
+          <input
+            type="text"
+            id={`task${task.id}`}
+            name={'task'}
+            value={tempInput.task}
+            onChange={(e) => setTempInput({ ...tempInput, [e.target.name]: e.target.value })}
+          />
+        ) : (
+          task.task
+        )}
       </td>
       <td className={new Date() > new Date(task.date) ? 'expired' : ''}>
         {editable ? (
-          <TodoTableEditCell type={'datetime-local'} name={'date'} task={task} />
+          <input
+            type="datetime-local"
+            id={`date${task.id}`}
+            name={'date'}
+            value={tempInput.date}
+            onChange={(e) => setTempInput({ ...tempInput, [e.target.name]: e.target.value })}
+          />
         ) : (
           new Date(task.date).toLocaleString([], {
             day: 'numeric',
@@ -39,8 +93,11 @@ export default function TodoRow({ task }: Readonly<Props>) {
       <td>
         <button
           title={editable ? 'Speichern' : 'Editieren'}
-          className={'btn' + (editable ? ' greenBG' : '')}
-          onClick={() => setEditable((prevEdit) => !prevEdit)}
+          className={`btn + ${editable ? ' greenBG' : ''}`}
+          onClick={() => {
+            editable && handleEdit({ ...tempInput, id: task.id });
+            setEditable((prevEdit) => !prevEdit);
+          }}
         >
           {editable ? (
             <SvgColor src="/assets/icons/functions/floppy-disk-solid.svg" />
@@ -57,37 +114,14 @@ export default function TodoRow({ task }: Readonly<Props>) {
         >
           <SvgColor src="/assets/icons/functions/magnifying-glass-solid.svg" />
         </button>
-        <button
-          title="Duplizieren"
-          className="btn"
-          onClick={() => {
-            if (dispatch) {
-              dispatch({
-                type: 'add',
-                new: {
-                  task: task.task,
-                  date: task.date,
-                  state: task.state,
-                  id: tempId,
-                },
-              });
-            }
-          }}
-        >
+        <button title="Duplizieren" className="btn" onClick={() => handleDupe({ ...task })}>
           <SvgColor src="/assets/icons/functions/copy-solid.svg" />
         </button>
         {/*TODO: Bestätigung abfragen*/}
         <button
           title="Löschen"
           className="btn redBG"
-          onClick={() => {
-            if (dispatch) {
-              dispatch({
-                type: 'delete',
-                id: task.id,
-              });
-            }
-          }}
+          onClick={() => task.id && handleDelete(task.id)}
         >
           <SvgColor src="/assets/icons/functions/trash-solid.svg" />
         </button>

@@ -4,7 +4,6 @@ import { MotionContainer, varBounce } from '@components/animate';
 import { Container, styled, Typography } from '@mui/material';
 import TodoAddBar from '@sections/todo/app/TodoAddBar';
 import TodoTable from '@sections/todo/app/TodoTable';
-import TasksProvider from '@sections/todo/provider/TasksProvider';
 import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 
@@ -27,12 +26,10 @@ export default function TodoApp() {
         <link rel="icon" type="image/svg+xml" href="/assets/icons/functions/check-solid.svg" />
       </Helmet>
 
-      <TasksProvider>
-        <div className="container">
-          <TodoTable />
-          <TodoAddBar />
-        </div>
-      </TasksProvider>
+      <div className="container">
+        <TodoTable />
+        <TodoAddBar />
+      </div>
     </>
   );
 }

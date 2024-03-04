@@ -2,11 +2,11 @@ import '@sections/styles/App.css';
 
 import { MotionContainer, varBounce } from '@components/animate';
 import { Container, styled, Typography } from '@mui/material';
+import { PATH_PAGE } from '@routes/paths';
 import TaskDetails from '@sections/todo/details/TaskDetails';
-import TasksProvider from '@sections/todo/provider/TasksProvider';
 import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 
 // ----------------------------------------------------------------------
 
@@ -28,15 +28,11 @@ export default function TodoApp() {
         <title>{`ToDo App`}</title>
         <link rel="icon" type="image/svg+xml" href="/assets/icons/functions/check-solid.svg" />
       </Helmet>
-      <TasksProvider>
-        <StyledContainer>
-          <MotionContainer>
-            <m.div variants={varBounce().in}>
-              <TaskDetails taskId={Number(taskId)} />
-            </m.div>
-          </MotionContainer>
-        </StyledContainer>
-      </TasksProvider>
+      <StyledContainer>
+        <MotionContainer>
+          {taskId ? <TaskDetails taskId={taskId} /> : <Navigate to={PATH_PAGE.todo.root} />}
+        </MotionContainer>
+      </StyledContainer>
     </>
   );
 }

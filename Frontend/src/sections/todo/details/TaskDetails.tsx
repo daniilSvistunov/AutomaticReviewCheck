@@ -1,17 +1,17 @@
+import { TasksContext } from '@layouts/RootDataWrapper';
 import { Typography } from '@mui/material';
 import { PATH_PAGE } from '@routes/paths';
+import { useContext } from 'react';
 import Countdown from 'react-countdown';
 import { useNavigate } from 'react-router';
 
-import { useTasks } from '../provider/tasksProviderFunctions';
-
 type Props = {
-  taskId: number;
+  taskId: string;
 };
 
 export default function TaskDetails({ taskId }: Readonly<Props>) {
-  const tasks = useTasks();
-  const currentTask = tasks?.find((task) => task.id === Number(taskId));
+  const tasks = useContext(TasksContext);
+  const currentTask = tasks?.find((task) => task.id === taskId);
   const navigate = useNavigate();
 
   const renderer = ({
