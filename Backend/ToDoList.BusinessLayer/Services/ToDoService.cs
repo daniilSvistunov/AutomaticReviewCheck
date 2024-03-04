@@ -92,9 +92,12 @@ namespace ToDoList.BusinessLayer.Services
                 return Result.Error("Entity set 'ToDoContext.ToDoItems'  is null.");
             }
 
-            //ToDo: Check if provided id is already set.
-
             var item = _mapper.Map<ToDoItem>(itemDto);
+            if (ToDoItemExists(item.id))
+            {
+                return Result.BadRequest(title: "ID overload", details: "Provided id is already used.");
+            }
+
             _context.ToDoItems.Add(item);
             await _context.SaveChangesAsync();
             itemDto = _mapper.Map<ToDoItemDto>(item);

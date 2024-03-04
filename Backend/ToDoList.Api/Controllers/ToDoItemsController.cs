@@ -99,6 +99,7 @@ namespace ToDoList.Api.Controllers
         ///
         ///     POST /api/ToDoItems
         ///     {
+        ///        [optional] "id": 5,
         ///        "task": "string",
         ///        "isComplete": true,
         ///        "dueDate": "2024-02-29T15:24"
