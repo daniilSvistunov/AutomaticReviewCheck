@@ -73,7 +73,7 @@ namespace ToDoList.BusinessLayer.Services
             return Result<ToDoItemDto>.Success(toDoItemDto);
         }
 
-        public async Task<Result> UpdateItemByIdAsync(long id, ToDoItemDto newItemDto)
+        public async Task<Result<ToDoItemDto>> UpdateItemByIdAsync(long id, ToDoItemDto newItemDto)
         {
             var newItem = _mapper.Map<ToDoItem>(newItemDto);
 
@@ -100,7 +100,9 @@ namespace ToDoList.BusinessLayer.Services
                 }
             }
 
-            return Result.NoContent();
+            newItemDto = _mapper.Map<ToDoItemDto>(newItem);
+
+            return Result<ToDoItemDto>.Created(newItemDto, "");
         }
 
         public async Task<Result<ToDoItemDto>> CreateItemAsync(ToDoItemDto itemDto, Hashtable urlArgs)

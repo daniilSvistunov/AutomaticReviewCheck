@@ -10,7 +10,7 @@ namespace ToDoList.BusinessLayer.Interfaces
     {
         Task<Result<IEnumerable<ToDoItemDto>>> GetAllItemsAsync(string searchString, string date);
         Task<Result<ToDoItemDto>> GetItemByIdAsync(long id);
-        Task<Result> UpdateItemByIdAsync(long id, ToDoItemDto newItem);
+        Task<Result<ToDoItemDto>> UpdateItemByIdAsync(long id, ToDoItemDto newItem);
         Task<Result<ToDoItemDto>> CreateItemAsync(ToDoItemDto item, Hashtable urlArgs);
         Task<Result> DeleteItemByIdAsync(long id);
     }

@@ -77,7 +77,7 @@ namespace ToDoList.Api.Controllers
         /// Updates a ToDoItem with the given content in request body
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>No content</returns>
+        /// <returns>The newly created ToDoItem</returns>
         /// <remarks>
         /// Sample request:
         ///
@@ -92,7 +92,7 @@ namespace ToDoList.Api.Controllers
         /// </remarks>
         [HttpPut("{id}")]
         [TranslateResultToActionResult]
-        public async Task<Result> PutToDoItem(long id, ToDoItemDto toDoItem)
+        public async Task<Result<ToDoItemDto>> PutToDoItem(long id, ToDoItemDto toDoItem)
         {
             if (!ModelState.IsValid)
             {
