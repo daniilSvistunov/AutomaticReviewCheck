@@ -32,7 +32,7 @@ html {
 }
 
 #todoTable {
-  height: calc(100vh - 48px);
+  height: calc(100vh - 96px);
 }
 
 table {

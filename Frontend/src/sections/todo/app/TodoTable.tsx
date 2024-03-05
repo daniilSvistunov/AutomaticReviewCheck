@@ -1,3 +1,5 @@
+import { Filter } from '@components/advanced-filter';
+import { applyAdvancedFilter } from '@components/advanced-filter/AdvancedFilter';
 import { Task } from '@models/task';
 import { SortTypes } from '@redux/slices/todo';
 import { useSelector } from '@redux/store';
@@ -9,7 +11,7 @@ import { sortByTaskType } from './types';
 
 export default function TodoTable() {
   const {
-    filter: { sort: sortingOrder },
+    filter: { sortingOrder, taskFilter, dateFilter },
     tasks,
   } = useSelector((state) => state.todo);
 
@@ -17,9 +19,19 @@ export default function TodoTable() {
     return <TodoHead />;
   }, []);
 
+  //Filter the tasks according to the filter values in the Redux Slice with the AdvancedFilter Component
+  const filteredTasks = useMemo(() => {
+    const filter: Filter<Task> = [
+      { label: 'task', type: 'text', value: taskFilter, key: 'task' },
+      { label: 'date', type: 'date', value: dateFilter, key: 'date' },
+    ];
+    return applyAdvancedFilter(tasks, filter);
+  }, [tasks, dateFilter, taskFilter]);
+
+  //Sort the filtered tasks according to the sortingOrder saved in the Redux Slice
   const sortedTasks = useMemo(() => {
-    return sortTasks({ tasks: tasks, sortingOrder });
-  }, [tasks, sortingOrder]);
+    return sortTasks({ tasks: filteredTasks, sortingOrder });
+  }, [filteredTasks, sortingOrder]);
 
   return (
     <div id="todoTable">

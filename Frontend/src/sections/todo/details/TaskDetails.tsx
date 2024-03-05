@@ -8,36 +8,36 @@ type Props = {
   taskId: string;
 };
 
+const renderer = ({
+  days,
+  hours,
+  minutes,
+  seconds,
+  completed,
+}: {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  completed: boolean;
+}) => {
+  if (completed) {
+    return <span>keine Zeit mehr</span>;
+  } else {
+    return (
+      <span>
+        {days > 0 ? `${days} Tage` : ''} {hours > 0 ? `${hours} Stunden` : ''}{' '}
+        {minutes > 0 ? `${minutes} Minuten und ` : ''}
+        {seconds > 0 ? `${seconds} Sekunden` : ''}
+      </span>
+    );
+  }
+};
+
 export default function TaskDetails({ taskId }: Readonly<Props>) {
   const tasks = useSelector((state) => state.todo.tasks);
   const currentTask = tasks?.find((task) => task.id === taskId);
   const navigate = useNavigate();
-
-  const renderer = ({
-    days,
-    hours,
-    minutes,
-    seconds,
-    completed,
-  }: {
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-    completed: boolean;
-  }) => {
-    if (completed) {
-      return <span>keine Zeit mehr</span>;
-    } else {
-      return (
-        <span>
-          {days > 0 ? `${days} Tage` : ''} {hours > 0 ? `${hours} Stunden` : ''}{' '}
-          {minutes > 0 ? `${minutes} Minuten und ` : ''}
-          {seconds > 0 ? `${seconds} Sekunden` : ''}
-        </span>
-      );
-    }
-  };
 
   //TODO: Aufbau provisorisch. Mit MaterialUI verbessern
   return currentTask ? (

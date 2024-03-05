@@ -1,7 +1,6 @@
-import { Task } from '@models/task';
 import { fetchTodoTasks } from '@redux/slices/todo';
 import { dispatch, useSelector } from '@redux/store';
-import { createContext, ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 type Props = { children: ReactNode };

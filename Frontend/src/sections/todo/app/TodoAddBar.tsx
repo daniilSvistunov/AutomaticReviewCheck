@@ -1,3 +1,4 @@
+import { useSnackbar } from '@components/snackbar';
 import { addTodoTask } from '@redux/slices/todo';
 import { dispatch } from '@redux/store';
 import { useState } from 'react';
@@ -7,6 +8,7 @@ export default function TodoAddBar() {
     task: '',
     date: '',
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -19,10 +21,9 @@ export default function TodoAddBar() {
     }
     try {
       await dispatch(addTodoTask({ ...inputState, state: false }));
+      enqueueSnackbar(`Das Hinzufügen der Aufgabe war erfolgreich`, { variant: 'success' });
     } catch (error) {
-      //TODO error handling
-      //enqueueSnackbar(`${translate('messages.error.ratings.new')}`, { variant: 'error' });
-      console.log(error);
+      enqueueSnackbar(`Fehler beim Hinzufügen der neuen Aufgabe`, { variant: 'error' });
     }
     setInputState({ task: '', date: '' });
   }

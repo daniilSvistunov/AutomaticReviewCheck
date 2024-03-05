@@ -1,6 +1,7 @@
+import { useSnackbar } from '@components/snackbar';
 import { Task } from '@models/task';
 import { ContentCopy, Delete, Edit, Info, Save } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+import { IconButton, useTheme } from '@mui/material';
 import { addTodoTask, deleteTodoTask, updateTodoTask } from '@redux/slices/todo';
 import { dispatch } from '@redux/store';
 import { PATH_PAGE } from '@routes/paths';
@@ -14,13 +15,15 @@ export default function TodoRow({ task }: Readonly<Props>) {
   const [editable, setEditable] = useState(false);
   const [tempInput, setTempInput] = useState<Task>(task);
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const theme = useTheme();
 
   async function handleDelete(id: string) {
     try {
       await dispatch(deleteTodoTask(id));
+      enqueueSnackbar(`Das Löschen der Aufgabe war erfolgreich`, { variant: 'success' });
     } catch (error) {
-      //TODO error handling
-      console.log(error);
+      enqueueSnackbar(`Fehler beim Löschen der Aufgabe "${task.task}"`, { variant: 'error' });
     }
   }
 
@@ -28,18 +31,18 @@ export default function TodoRow({ task }: Readonly<Props>) {
     delete task.id;
     try {
       await dispatch(addTodoTask(task));
+      enqueueSnackbar(`Das Duplizieren der Aufgabe war erfolgreich`, { variant: 'success' });
     } catch (error) {
-      //TODO error handling
-      console.log(error);
+      enqueueSnackbar(`Fehler beim Duplizieren der Aufgabe "${task.task}"`, { variant: 'error' });
     }
   }
 
   async function handleEdit(task: Task) {
     try {
       await dispatch(updateTodoTask(task));
+      enqueueSnackbar(`Das Editieren der Aufgabe war erfolgreich`, { variant: 'success' });
     } catch (error) {
-      //TODO error handling
-      console.log(error);
+      enqueueSnackbar(`Fehler beim Editieren der Aufgabe "${task.task}"`, { variant: 'error' });
     }
   }
 
@@ -92,6 +95,7 @@ export default function TodoRow({ task }: Readonly<Props>) {
       </td>
       <td>
         <IconButton
+          color="secondary"
           title={editable ? 'Speichern' : 'Editieren'}
           onClick={() => {
             editable && handleEdit({ ...tempInput, id: task.id });
@@ -101,6 +105,7 @@ export default function TodoRow({ task }: Readonly<Props>) {
           {editable ? <Save /> : <Edit />}
         </IconButton>
         <IconButton
+          color="secondary"
           title="Details"
           onClick={() => {
             navigate(`${PATH_PAGE.todo.root}/${task.id}`);
@@ -108,7 +113,7 @@ export default function TodoRow({ task }: Readonly<Props>) {
         >
           <Info />
         </IconButton>
-        <IconButton title="Duplizieren" onClick={() => handleDupe({ ...task })}>
+        <IconButton color="secondary" title="Duplizieren" onClick={() => handleDupe({ ...task })}>
           <ContentCopy />
         </IconButton>
         {/*TODO: Bestätigung abfragen*/}

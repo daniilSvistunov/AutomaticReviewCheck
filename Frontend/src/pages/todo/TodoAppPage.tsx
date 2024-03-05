@@ -3,6 +3,7 @@ import '@sections/styles/App.css';
 import { MotionContainer, varBounce } from '@components/animate';
 import { Container, styled, Typography } from '@mui/material';
 import TodoAddBar from '@sections/todo/app/TodoAddBar';
+import TodoFilterBar from '@sections/todo/app/TodoFilterBar';
 import TodoTable from '@sections/todo/app/TodoTable';
 import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
@@ -28,6 +29,7 @@ export default function TodoApp() {
 
       <div className="container">
         <TodoTable />
+        <TodoFilterBar />
         <TodoAddBar />
       </div>
     </>

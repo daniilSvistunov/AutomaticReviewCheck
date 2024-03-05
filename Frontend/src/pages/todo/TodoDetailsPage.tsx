@@ -1,10 +1,8 @@
 import '@sections/styles/App.css';
 
-import { MotionContainer, varBounce } from '@components/animate';
-import { Container, styled, Typography } from '@mui/material';
+import { Container, styled } from '@mui/material';
 import { PATH_PAGE } from '@routes/paths';
 import TaskDetails from '@sections/todo/details/TaskDetails';
-import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Navigate, useParams } from 'react-router';
 
@@ -28,9 +26,7 @@ export default function TodoDetails() {
         <link rel="icon" type="image/svg+xml" href="/assets/icons/functions/check-solid.svg" />
       </Helmet>
       <StyledContainer>
-        <MotionContainer>
-          {taskId ? <TaskDetails taskId={taskId} /> : <Navigate to={PATH_PAGE.todo.root} />}
-        </MotionContainer>
+        {taskId ? <TaskDetails taskId={taskId} /> : <Navigate to={PATH_PAGE.todo.root} />}
       </StyledContainer>
     </>
   );

@@ -4,7 +4,7 @@ import { SortTypes, todoSort } from '@redux/slices/todo';
 import { dispatch, useSelector } from '@redux/store';
 
 export default function TodoHead() {
-  const { sort } = useSelector((state) => state.todo.filter);
+  const { sortingOrder } = useSelector((state) => state.todo.filter);
 
   return (
     <thead>
@@ -15,7 +15,7 @@ export default function TodoHead() {
             onClick={() =>
               dispatch(
                 todoSort(
-                  sort === SortTypes.TaskAscending
+                  sortingOrder === SortTypes.TaskAscending
                     ? SortTypes.TaskDescending
                     : SortTypes.TaskAscending
                 )
@@ -24,15 +24,15 @@ export default function TodoHead() {
           >
             Aufgabe
           </button>
-          {sort === SortTypes.TaskAscending && <ArrowDropDownIcon />}
-          {sort === SortTypes.TaskDescending && <ArrowDropUpIcon />}
+          {sortingOrder === SortTypes.TaskAscending && <ArrowDropDownIcon />}
+          {sortingOrder === SortTypes.TaskDescending && <ArrowDropUpIcon />}
         </th>
         <th>
           <button
             onClick={() =>
               dispatch(
                 todoSort(
-                  sort === SortTypes.DateAscending
+                  sortingOrder === SortTypes.DateAscending
                     ? SortTypes.DateDescending
                     : SortTypes.DateAscending
                 )
@@ -41,8 +41,8 @@ export default function TodoHead() {
           >
             Datum
           </button>
-          {sort === SortTypes.DateAscending && <ArrowDropDownIcon />}
-          {sort === SortTypes.DateDescending && <ArrowDropUpIcon />}
+          {sortingOrder === SortTypes.DateAscending && <ArrowDropDownIcon />}
+          {sortingOrder === SortTypes.DateDescending && <ArrowDropUpIcon />}
         </th>
         <th>Funktionen</th>
       </tr>

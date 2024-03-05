@@ -31,7 +31,9 @@ export type TodoState = {
   };
 
   filter: {
-    sort: SortTypes;
+    sortingOrder: SortTypes;
+    taskFilter: string;
+    dateFilter: string;
   };
 
   tasks: Task[];
@@ -50,7 +52,9 @@ export const initialState: TodoState = {
     delete: null,
   },
   filter: {
-    sort: SortTypes.TaskAscending,
+    sortingOrder: SortTypes.TaskAscending,
+    taskFilter: '',
+    dateFilter: '',
   },
   tasks: [],
 };
@@ -108,14 +112,20 @@ const slice = createSlice({
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
     todoSort(state, action: PayloadAction<SortTypes>) {
-      state.filter = { ...state.filter, sort: action.payload };
+      state.filter = { ...state.filter, sortingOrder: action.payload };
+    },
+    todoFilterByTask(state, action: PayloadAction<string>) {
+      state.filter = { ...state.filter, taskFilter: action.payload };
+    },
+    todoFilterByDate(state, action: PayloadAction<string>) {
+      state.filter = { ...state.filter, dateFilter: action.payload };
     },
   },
 });
 
 export default slice.reducer;
 
-export const { todoSort } = slice.actions;
+export const { todoSort, todoFilterByTask, todoFilterByDate } = slice.actions;
 
 // Functions
 // ----------------------------------------------------------------------------
