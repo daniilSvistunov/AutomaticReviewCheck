@@ -10,18 +10,18 @@ export default function TodoAddBar() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    //TODO: Besser Mitteilung an den User
+    //TODO: Besser Mitteilung an den User (snackbar? oder Field error/rot)
     for (const [key, value] of Object.entries(inputState)) {
       if (value === '') {
         alert('Missing ' + key);
         return;
       }
     }
-    //TODO Add function
     try {
       await dispatch(addTodoTask({ ...inputState, state: false }));
     } catch (error) {
       //TODO error handling
+      //enqueueSnackbar(`${translate('messages.error.ratings.new')}`, { variant: 'error' });
       console.log(error);
     }
     setInputState({ task: '', date: '' });

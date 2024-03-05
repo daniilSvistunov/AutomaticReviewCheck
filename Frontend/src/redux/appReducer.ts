@@ -21,7 +21,6 @@ const appReducer = combineReducers({
   global,
   application,
   todo,
-  // TODO: add slices here
 });
 
 export { appReducer };

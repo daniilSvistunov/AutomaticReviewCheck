@@ -8,6 +8,13 @@ import { AppThunk } from '../store';
 // ----------------------------------------------------------------------------
 export type AsyncCallStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 
+export enum SortTypes {
+  TaskAscending = 'TaskAscending',
+  TaskDescending = 'TaskDescending',
+  DateAscending = 'DateAscending',
+  DateDescending = 'DateDescending',
+}
+
 export type TodoState = {
   status: {
     fetch: AsyncCallStatus;
@@ -23,9 +30,12 @@ export type TodoState = {
     delete: Error | string | null;
   };
 
+  filter: {
+    sort: SortTypes;
+  };
+
   tasks: Task[];
 };
-
 export const initialState: TodoState = {
   status: {
     fetch: 'idle',
@@ -38,6 +48,9 @@ export const initialState: TodoState = {
     update: null,
     add: null,
     delete: null,
+  },
+  filter: {
+    sort: SortTypes.TaskAscending,
   },
   tasks: [],
 };
@@ -94,10 +107,15 @@ const slice = createSlice({
       state.status.delete = 'succeeded';
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
+    todoSort(state, action: PayloadAction<SortTypes>) {
+      state.filter = { ...state.filter, sort: action.payload };
+    },
   },
 });
 
 export default slice.reducer;
+
+export const { todoSort } = slice.actions;
 
 // Functions
 // ----------------------------------------------------------------------------

@@ -1,11 +1,11 @@
-import SvgColor from '@components/svg-color/SvgColor';
+import { Task } from '@models/task';
+import { ContentCopy, Delete, Edit, Info, Save } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { addTodoTask, deleteTodoTask, updateTodoTask } from '@redux/slices/todo';
 import { dispatch } from '@redux/store';
 import { PATH_PAGE } from '@routes/paths';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-
-import { Task } from '../../../models/task';
 type Props = {
   task: Task;
 };
@@ -91,40 +91,30 @@ export default function TodoRow({ task }: Readonly<Props>) {
         )}
       </td>
       <td>
-        <button
+        <IconButton
           title={editable ? 'Speichern' : 'Editieren'}
-          className={`btn + ${editable ? ' greenBG' : ''}`}
           onClick={() => {
             editable && handleEdit({ ...tempInput, id: task.id });
             setEditable((prevEdit) => !prevEdit);
           }}
         >
-          {editable ? (
-            <SvgColor src="/assets/icons/functions/floppy-disk-solid.svg" />
-          ) : (
-            <SvgColor src="/assets/icons/functions/pen-to-square-solid.svg" />
-          )}
-        </button>
-        <button
+          {editable ? <Save /> : <Edit />}
+        </IconButton>
+        <IconButton
           title="Details"
-          className="btn"
           onClick={() => {
             navigate(`${PATH_PAGE.todo.root}/${task.id}`);
           }}
         >
-          <SvgColor src="/assets/icons/functions/magnifying-glass-solid.svg" />
-        </button>
-        <button title="Duplizieren" className="btn" onClick={() => handleDupe({ ...task })}>
-          <SvgColor src="/assets/icons/functions/copy-solid.svg" />
-        </button>
+          <Info />
+        </IconButton>
+        <IconButton title="Duplizieren" onClick={() => handleDupe({ ...task })}>
+          <ContentCopy />
+        </IconButton>
         {/*TODO: Bestätigung abfragen*/}
-        <button
-          title="Löschen"
-          className="btn redBG"
-          onClick={() => task.id && handleDelete(task.id)}
-        >
-          <SvgColor src="/assets/icons/functions/trash-solid.svg" />
-        </button>
+        <IconButton color="error" title="Löschen" onClick={() => task.id && handleDelete(task.id)}>
+          <Delete />
+        </IconButton>
       </td>
     </tr>
   );

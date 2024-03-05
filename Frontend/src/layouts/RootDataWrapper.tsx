@@ -6,9 +6,7 @@ import { createContext, ReactNode, useEffect } from 'react';
 // ----------------------------------------------------------------------
 type Props = { children: ReactNode };
 
-export const TasksContext = createContext<Task[]>([]);
-
-function RootDataWrapper({ children }: Props) {
+function RootDataWrapper({ children }: Readonly<Props>) {
   const {
     status: { fetch: fetchTodoTasksStatus },
     tasks,
@@ -18,9 +16,7 @@ function RootDataWrapper({ children }: Props) {
     fetchTodoTasksStatus === 'idle' && dispatch(fetchTodoTasks());
   }, [fetchTodoTasksStatus, tasks]);
 
-  //TODO sortieren
-
-  return <TasksContext.Provider value={tasks}>{children}</TasksContext.Provider>;
+  return <>{children}</>;
 }
 
 export default RootDataWrapper;

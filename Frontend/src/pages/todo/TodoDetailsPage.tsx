@@ -19,9 +19,8 @@ const StyledContainer = styled(Container)(() => ({
   margin: 'auto',
 }));
 
-export default function TodoApp() {
+export default function TodoDetails() {
   const { taskId } = useParams();
-
   return (
     <>
       <Helmet>

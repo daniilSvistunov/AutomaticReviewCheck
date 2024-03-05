@@ -1,7 +1,6 @@
-import { TasksContext } from '@layouts/RootDataWrapper';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+import { useSelector } from '@redux/store';
 import { PATH_PAGE } from '@routes/paths';
-import { useContext } from 'react';
 import Countdown from 'react-countdown';
 import { useNavigate } from 'react-router';
 
@@ -10,7 +9,7 @@ type Props = {
 };
 
 export default function TaskDetails({ taskId }: Readonly<Props>) {
-  const tasks = useContext(TasksContext);
+  const tasks = useSelector((state) => state.todo.tasks);
   const currentTask = tasks?.find((task) => task.id === taskId);
   const navigate = useNavigate();
 
@@ -52,7 +51,9 @@ export default function TaskDetails({ taskId }: Readonly<Props>) {
       {currentTask.state && <Typography variant="h3">ist abgeschlossen</Typography>}
       {!currentTask.state && <Typography variant="h3">abzuschließen</Typography>}
 
-      <button onClick={() => navigate(PATH_PAGE.todo.root)}>Zurück zur ToDo Liste</button>
+      <Button variant="contained" onClick={() => navigate(PATH_PAGE.todo.root)}>
+        Zurück zur ToDo Liste
+      </Button>
     </>
   ) : (
     <div>

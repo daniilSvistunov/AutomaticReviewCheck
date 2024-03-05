@@ -50,7 +50,7 @@ const routes: RouteObject[] = [
         element: <TodoApp />,
       },
       {
-        path: 'todo/:taskId',
+        path: 'todo/:taskId', 
         element: <TodoDetails />,
       },
     ],
