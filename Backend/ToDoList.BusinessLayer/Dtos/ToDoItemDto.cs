@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace ToDoList.BusinessLayer.Dtos
 {
@@ -14,5 +15,19 @@ namespace ToDoList.BusinessLayer.Dtos
 
         [RegularExpression(@"^([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9])$")]
         public string? date { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("{")
+                .Append($"'id': {id},")
+                .Append($"'task': {task},")
+                .Append($"'state': {state},")
+                .Append($"'date': {date}")
+                .Append("}");
+
+            return sb.ToString();
+        }
     }
 }

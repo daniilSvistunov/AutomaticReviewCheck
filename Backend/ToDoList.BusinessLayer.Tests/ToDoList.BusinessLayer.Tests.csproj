@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ToDoList.Api\ToDoList.Api.csproj" />
     <ProjectReference Include="..\ToDoList.BusinessLayer\ToDoList.BusinessLayer.csproj" />
   </ItemGroup>
 
