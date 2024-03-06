@@ -10,6 +10,6 @@ namespace ToDoList.BusinessLayer.Data
         {
         }
 
-        public DbSet<ToDoItem> ToDoItems { get; set; } = null!;
+        public virtual DbSet<ToDoItem> ToDoItems { get; set; } = null!;
     }
 }
