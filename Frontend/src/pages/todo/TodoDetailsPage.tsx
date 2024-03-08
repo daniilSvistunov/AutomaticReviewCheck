@@ -1,5 +1,3 @@
-import '@sections/styles/App.css';
-
 import { Container, styled } from '@mui/material';
 import { PATH_PAGE } from '@routes/paths';
 import TaskDetails from '@sections/todo/details/TaskDetails';

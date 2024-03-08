@@ -41,7 +41,7 @@ export default function TaskDetails({ taskId }: Readonly<Props>) {
 
   //TODO: Aufbau provisorisch. Mit MaterialUI verbessern
   return currentTask ? (
-    <>
+    <div>
       {!currentTask.state && (
         <Typography variant="h3">
           Du hast <Countdown date={currentTask.date} renderer={renderer} /> um
@@ -54,7 +54,7 @@ export default function TaskDetails({ taskId }: Readonly<Props>) {
       <Button variant="contained" onClick={() => navigate(PATH_PAGE.todo.root)}>
         Zurück zur ToDo Liste
       </Button>
-    </>
+    </div>
   ) : (
     <div>
       <Typography variant="h3" paragraph>
