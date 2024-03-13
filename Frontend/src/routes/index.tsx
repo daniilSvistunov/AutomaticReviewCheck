@@ -1,10 +1,7 @@
 import { LoadingScreenContainer } from '@components/loading-screen';
 import RootDataWrapper from '@layouts/RootDataWrapper';
 import { ElementType, lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
-import { matchRoutes, RouteObject, useLocation, useRoutes } from 'react-router-dom';
-
-import AuthGuard from '../auth/AuthGuard';
+import { matchRoutes, Outlet, RouteObject, useLocation, useRoutes } from 'react-router-dom';
 
 // ----------------------------------------------------------------------------
 
@@ -26,11 +23,9 @@ const routes: RouteObject[] = [
   {
     path: '/',
     element: (
-      <AuthGuard>
-        <RootDataWrapper>
-          <Outlet />
-        </RootDataWrapper>
-      </AuthGuard>
+      <RootDataWrapper>
+        <Outlet />
+      </RootDataWrapper>
     ),
     children: [
       {
