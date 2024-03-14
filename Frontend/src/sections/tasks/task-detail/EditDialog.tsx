@@ -1,7 +1,7 @@
 import { DevTool } from '@hookform/devtools';
 import { TasksContext } from '@layouts/tasks/TaskDataWrapper';
-import { useLocales } from '@locales';
 import { Task } from '@models/task';
+import { Alert, Snackbar } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,10 +14,11 @@ import { useDispatch } from '@redux/store';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-// TODO: selected ersetzen druch id
-export default function EditDialog({ selectedTaskId }: { selectedTaskId: string | undefined }) {
+import i18n from '../../../locales/i18n';
+
+export default function EditDialog({ selectedTaskId }: { selectedTaskId: string }) {
   const [open, setOpen] = useState<boolean>(false);
-  const { translate } = useLocales();
+  const [openedSnackbar, setIsOpenedSnackbar] = useState<boolean>(false);
   const dispatch = useDispatch();
   const { tasks } = useContext(TasksContext);
   const { register, control, handleSubmit } = useForm({
@@ -34,53 +35,56 @@ export default function EditDialog({ selectedTaskId }: { selectedTaskId: string 
     setOpen(false);
   };
 
-  const handleOnClickSave = async (data: any) => {
-    console.log(data);
-    // TODO: implemente logic of changing title and description (using redux)
+  const handleOnClickSave = async (data: Task) => {
     try {
       await dispatch(updateSelectedTaskByID(data));
+      setOpen(false);
+      setIsOpenedSnackbar(true);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // TODO: Define function to edit title
-
-  // TODO: Define function to edit description
-
   return (
     <>
       <Button variant="contained" color="primary" onClick={handleClickOpen}>
-        {`${translate('common.edit')}`}
+        {`${i18n.t('common.edit')}`}
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          component: 'form',
-          // onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-          //   event.preventDefault();
-          //   const formData = new FormData(event.currentTarget);
-
-          //   const formJson = Object.fromEntries((formData as any).entries()); // TODO: any muss weg!
-          //   const title = formJson.title;
-          //   const description = formJson.description;
-          //   console.log(title, description);
-          //   // TODO use RHF (React Hook Form)
-          //   // TODO: Write here logic for changing title and description
-
-          //   handleClose();
-          // },
-          onSubmit: handleSubmit((formData) =>
-            handleOnClickSave({ id: currentTask?.id, ...formData })
-          ),
-        }}
+      <Snackbar
+        open={openedSnackbar}
+        autoHideDuration={2500}
+        onClose={() => setIsOpenedSnackbar(false)}
       >
-        {currentTask ? (
+        <Alert
+          onClose={() => setIsOpenedSnackbar(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {`${i18n.t('tasks.snackbar.success')}`}
+        </Alert>
+      </Snackbar>
+      {currentTask ? (
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            component: 'form',
+            onSubmit: handleSubmit((formData) => {
+              const { title, description } = formData;
+              const updatedTask: Task = {
+                id: currentTask.id,
+                title,
+                description,
+              };
+              handleOnClickSave(updatedTask);
+            }),
+          }}
+        >
           <>
             <DialogTitle>{currentTask.title}</DialogTitle>
             <DialogContent>
-              <DialogContentText>{`${translate('tasks.dialog.contentText')}`}</DialogContentText>
+              <DialogContentText>{`${i18n.t('tasks.dialog.contentText')}`}</DialogContentText>
               <TextField
                 autoFocus
                 required
@@ -106,15 +110,22 @@ export default function EditDialog({ selectedTaskId }: { selectedTaskId: string 
               />
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose}>{`${translate('common.abort')}`}</Button>
-              <Button type="submit" onClick={handleOnClickSave}>
-                {`${translate('common.save')}`}
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                onClick={() => handleOnClickSave}
+              >
+                {`${i18n.t('common.save')}`}
               </Button>
+              <Button variant="contained" color="error" onClick={handleClose}>{`${i18n.t(
+                'common.abort'
+              )}`}</Button>
             </DialogActions>
             <DevTool control={control} />
           </>
-        ) : null}
-      </Dialog>
+        </Dialog>
+      ) : null}
     </>
   );
 }

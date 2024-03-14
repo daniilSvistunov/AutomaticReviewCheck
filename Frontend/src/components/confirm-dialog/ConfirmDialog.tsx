@@ -1,5 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
+import i18n from '../../locales/i18n';
 import { ConfirmDialogProps } from './types';
 
 // ----------------------------------------------------------------------
@@ -24,7 +25,7 @@ export default function ConfirmDialog({
         {actionComponent}
 
         <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancel
+          {`${i18n.t('common.abort')}`}
         </Button>
       </DialogActions>
     </Dialog>

@@ -1,27 +1,23 @@
+import ConfirmDialog from '@components/confirm-dialog/ConfirmDialog';
 import { TasksContext } from '@layouts/tasks/TaskDataWrapper';
-import { useLocales } from '@locales';
 import { Task } from '@models/task';
+import { Button, List } from '@mui/material';
 import { useContext, useState } from 'react';
 
+import i18n from '../../../locales/i18n';
 import TaskItem from '../task/TaskItem';
-import CustomDialog from './CustomConfirmDialog';
 
-const TaskList = ({
-  removeTask,
-  editTask,
-}: {
-  removeTask: (selectedTaskId: string | undefined) => void;
-  editTask: (selectedTaskId: string) => void;
-}) => {
+const TaskList = ({ removeTask }: { removeTask: (selectedTaskId: string | undefined) => void }) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string>();
-  const { translate } = useLocales();
   const { tasks } = useContext(TasksContext);
 
-  const handleConfirm = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const currentTask: Task | undefined = tasks.find((task: Task) => task.id === selectedTaskId);
+
+  const handleConfirm = () => {
     // Handle the confirm action here
     setIsDialogOpen(false);
-    event.target.innerHTML === 'Yes' && removeTask(selectedTaskId);
+    removeTask(selectedTaskId);
   };
 
   const handleCancel = () => {
@@ -31,30 +27,28 @@ const TaskList = ({
 
   const removeTaskChildComponent = (clickedTaskId: string | undefined) => {
     setIsDialogOpen(true);
-
     setSelectedTaskId(clickedTaskId);
   };
 
   return (
-    <ul id="myTasks" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-      <CustomDialog
-        isOpen={isDialogOpen}
-        title={`${translate('tasks.deleteTask')}`}
-        message={`${translate('tasks.confirmDeleteTask', {
-          taskTitle: selectedTaskId ?? '',
+    <List id="myTasks" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+      <ConfirmDialog
+        titleComponent={`${i18n.t('tasks.deleteTask')}`}
+        contentComponent={`${i18n.t('tasks.confirmDeleteTask', {
+          taskTitle: currentTask?.title ?? '',
         })}`}
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
+        actionComponent={
+          <Button variant="contained" color="error" onClick={handleConfirm}>
+            {`${i18n.t('common.remove')}`}
+          </Button>
+        }
+        open={isDialogOpen}
+        onClose={handleCancel}
       />
       {tasks.map((task: Task) => (
-        <TaskItem
-          taskId={task.id}
-          handleOpenDialog={removeTaskChildComponent}
-          handleEditTask={editTask}
-          key={task.id}
-        />
+        <TaskItem taskId={task.id} handleOpenDialog={removeTaskChildComponent} key={task.id} />
       ))}
-    </ul>
+    </List>
   );
 };
 

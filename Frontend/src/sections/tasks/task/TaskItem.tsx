@@ -1,30 +1,25 @@
 import { TasksContext } from '@layouts/tasks/TaskDataWrapper';
 import { Task } from '@models/task';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, ListItem, Stack } from '@mui/material';
+import { IconButton, ListItem, Stack, useTheme } from '@mui/material';
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import TaskDetail from '../task-detail';
 
 function TaskItem({
   taskId,
   handleOpenDialog,
-  handleEditTask,
-}: {
+}: Readonly<{
   taskId: string;
   handleOpenDialog: (selectedTask: string | undefined) => void;
-  handleEditTask: (selectedTask: string) => void;
-}) {
-  const navigate = useNavigate();
+}>) {
   const { tasks } = useContext(TasksContext);
+  const theme = useTheme();
 
   const currentTask: Task | undefined = tasks.find((task: Task) => task.id === taskId);
 
   const handleOpenDialogButtonClick = () => {
     handleOpenDialog(taskId);
-  };
-
-  const handleEditButtonClick = () => {
-    handleEditTask(taskId);
   };
 
   return (
@@ -33,22 +28,16 @@ function TaskItem({
         margin: '1px',
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'baseline',
+        alignItems: 'center',
       }}
     >
-      {/* TODO: use better HTML-Element for displaying task object -> Maybe not necessary cause of TaskDetailPage */}
-      {/* TODO: There is a better approach by using a modal */}
       {currentTask ? (
         <>
-          <ListItem>
-            <Button variant="soft" color="error" onClick={handleOpenDialogButtonClick}>
-              <DeleteIcon />
-            </Button>
-            {currentTask.title}
-          </ListItem>
-          <Button variant="outlined" onClick={() => navigate(`/tasks/${taskId}`)} type="button">
-            Details
-          </Button>
+          <TaskDetail taskId={currentTask.id} />
+          <ListItem>{currentTask.title}</ListItem>
+          <IconButton onClick={handleOpenDialogButtonClick}>
+            <DeleteIcon sx={{ color: theme.palette.error.main }} fontSize="small" />
+          </IconButton>
         </>
       ) : null}
     </Stack>

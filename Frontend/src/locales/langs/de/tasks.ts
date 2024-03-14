@@ -10,10 +10,12 @@ const tasks = {
     deleteTask: 'Aufgabe löschen',
     confirmDeleteTask: 'Bist Du Dir sicher, dass Du die Aufgabe \'{{taskTitle}}\' löschen möchtest?',
     cancel: 'Abbrechen',
-    comfirm: 'Bestätigen',
     addTask: 'Aufgabe hinzufügen',
     add: 'Hinzufügen',
-    sortTasks: 'Sortiere Aufgaben alphabetisch',
+    button: {
+        confirm: 'Bestätigen',
+        sort: 'Sortiere Aufgaben alphabetisch',
+    },
 
     placeholder: {
         input: 'Neue Aufgabe eingeben',
@@ -21,6 +23,10 @@ const tasks = {
 
     dialog: {
         contentText: 'Du kannst hier Änderungen an Deiner Aufgabe vornehmen.',
+    },
+    snackbar: {
+        success: 'Erfolgreich gespeichert',
+        error: 'Fehler beim Speichern der Aufgabe',
     },
 };
 

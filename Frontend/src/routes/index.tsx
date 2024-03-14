@@ -21,7 +21,6 @@ const Loadable = (Component: ElementType) => (props: any) =>
 // Lazy loaded pages
 // ----------------------------------------------------------------------------
 const TasksPage = Loadable(lazy(() => import('../pages/tasks/TasksPage')));
-const TaskDetailPage = Loadable(lazy(() => import('../pages/tasks/TaskDetailPage')));
 
 // Router
 // ----------------------------------------------------------------------------
@@ -45,12 +44,6 @@ const routes: RouteObject[] = [
         element: <TasksPage />,
         errorElement: <Page403 />,
       },
-      {
-        path: '/tasks/:taskId',
-        element: <TaskDetailPage />,
-        errorElement: <Page403 />,
-      },
-      // TODO: further paths can be added here
     ],
   },
 ];

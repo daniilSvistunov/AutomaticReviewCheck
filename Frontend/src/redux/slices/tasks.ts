@@ -8,6 +8,15 @@ import { AppThunk } from '../store';
 // ----------------------------------------------------------------------------
 export type AsyncCallStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 
+export type ThemeState = {
+  themeMode: string;
+  themeDirection?: string;
+  themeContrast?: string;
+  themeLayout?: string;
+  themeColorPresets?: string;
+  themeStretch?: boolean;
+};
+
 export type TaskState = {
   status: {
     fetch: AsyncCallStatus;
@@ -25,6 +34,7 @@ export type TaskState = {
   };
 
   tasks: Task[];
+  theme: ThemeState;
 };
 
 export const initialState: TaskState = {
@@ -42,6 +52,14 @@ export const initialState: TaskState = {
     remove: null,
   },
   tasks: [],
+  theme: {
+    themeMode: '',
+    themeDirection: 'ltr',
+    themeContrast: 'default',
+    themeLayout: 'vertical',
+    themeColorPresets: 'default',
+    themeStretch: true,
+  },
 };
 
 // ----------------------------------------------------------------------------
@@ -97,7 +115,6 @@ const slice = createSlice({
       state.status.update = 'failed';
       state.error.update = action.payload;
     },
-    // TODO: should i also receive here only the taskID?
     taskUpdateSucceeded(state, action: PayloadAction<Task>) {
       state.status.update = 'succeeded';
       state.tasks = state.tasks.map((task) => {
@@ -109,8 +126,17 @@ const slice = createSlice({
     },
     tasksSort(state, action: PayloadAction<Task[]>) {
       state.status.sort = 'sorting';
-      state.tasks.sort((a, b) => a.title.localeCompare(b.title)); // TODO: How to fix this ? -> Changing type would lead to other errors
-    }
+      state.tasks.sort((a, b) => a.title.localeCompare(b.title));
+    },
+    // themeChange(state, action: PayloadAction<ThemeState>) {
+    //   state.theme.themeMode = action.payload.themeMode;
+    // },
+    themeChange(state, action: PayloadAction<boolean>) {
+      state.theme.themeMode = action.payload ? 'light' : 'dark'; // Hier wird der Theme Mode im redux store umgeschaltet
+    },
+    themeFetch(state, action: PayloadAction<ThemeState>) {
+      state.theme.themeMode = action.payload.themeMode;
+    },
   },
 });
 
@@ -119,10 +145,36 @@ export default slice.reducer;
 // TODO: Ask whether this is best practice or not!
 export const {
   tasksSort,
+  themeChange,
+  themeFetch,
 } = slice.actions;
 
 // Functions
 // ----------------------------------------------------------------------------
+export const loadSettings = (): AppThunk<Promise<ThemeState>> => {
+  return (dispatch) => {
+    const currentSettings: string | null = localStorage.getItem('settings');
+    let parsedSettings: ThemeState = initialState.theme;
+    if (currentSettings) {
+      parsedSettings = JSON.parse(currentSettings);
+      dispatch(slice.actions.themeFetch(parsedSettings));
+    }
+    return Promise.resolve(parsedSettings);
+  };
+}
+
+// export const saveSettings = (isToggled: boolean): AppThunk<Promise<ThemeState>> => {
+//   return (dispatch) => {
+//     const { themeMode, ...rest } = initialState.theme;
+//     // localStorage.setItem('settings', JSON.stringify(settings));
+//     dispatch(slice.actions.themeChange(isToggled));
+//     const newSettings = {
+//       themeMode: isToggled ? 'light' : 'dark',
+//       ...rest,
+//     };
+//     return Promise.resolve(newSettings);
+//   };
+// }
 
 // Selectors
 // ----------------------------------------------------------------------------

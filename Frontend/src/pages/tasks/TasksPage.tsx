@@ -1,17 +1,23 @@
 import { MotionContainer, varBounce } from '@components/animate';
 import IconToggleButton from '@components/icon-toggle-button';
+import useLocalStorage from '@hooks/useLocalStorage';
 import { TasksContext } from '@layouts/tasks/TaskDataWrapper';
-import { useLocales } from '@locales';
 import Brightness6Icon from '@mui/icons-material/Brightness6';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { Button, Container, styled, Typography } from '@mui/material';
-import { removeSelectedTaskByID, tasksSort } from '@redux/slices/tasks';
+import {
+  removeSelectedTaskByID /* , saveSettings */,
+  tasksSort,
+  themeChange,
+} from '@redux/slices/tasks';
 import { useDispatch } from '@redux/store';
 import TaskInputForm from '@sections/tasks/task-input-form/TaskInputForm';
 import TaskList from '@sections/tasks/task-list';
 import { m } from 'framer-motion';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+
+import i18n from '../../locales/i18n';
 
 // ----------------------------------------------------------------------
 
@@ -25,10 +31,13 @@ const StyledContainer = styled(Container)(() => ({
 }));
 
 export default function TasksPage() {
-  const { tasks, sortTasks } = useContext(TasksContext);
-  const { translate } = useLocales();
+  const { tasks, /* sortTasks, */ theme } = useContext(TasksContext);
   const dispatch = useDispatch();
-  const [isToggled, setIsToggled] = useState<boolean>(false);
+  const [settings, setSettings] = useLocalStorage<string | null>('settings', null);
+  const [isToggled, setIsToggled] = useState<boolean>(
+    settings && settings.themeMode === 'dark' ? true : false
+  );
+  const { themeMode, ...rest } = theme;
 
   // Function that removes a task
   const removeTask = async (selectedTaskId: string | undefined) => {
@@ -44,49 +53,52 @@ export default function TasksPage() {
     }
   };
 
-  // Function that edits a task
-  const editTask = (selectedTaskId: string) => {
-    console.log('Clicked to edit');
-    // Here the implementation for editing a clicked task
-  };
-
   // Function that sorts a list alphabeticall
   const sortList = () => {
     dispatch(tasksSort(tasks));
     // sortTasks();
   };
 
-  // TODO: TBC
-  useEffect(() => {
-    const settings = localStorage.getItem('settings');
-    if (settings) {
-      const parsedSettings = JSON.parse(settings);
-      setIsToggled(parsedSettings.themeMode === 'dark');
-    }
-  }, [isToggled]);
+  // TODO: outsource logic to redux folder
+  // Function that toggles the theme
+  const handleThemeToggle = (isToggledChildComponent: boolean) => {
+    setIsToggled(isToggledChildComponent);
+    dispatch(themeChange(isToggled));
+    // dispatch(saveSettings(isToggled));
+
+    const newTheme = {
+      themeMode: isToggled ? 'light' : 'dark',
+      ...rest,
+    };
+    setSettings(newTheme);
+    window.location.reload(); // TODO: improve this line by using a better solution for changing themeMode without reloading the page
+  };
+
+  const title = i18n.t('tasks.title');
+  const overviewTitle = i18n.t('tasks.overview.title');
+  const overviewSubTitle = i18n.t('tasks.overview.subTitle');
+  const buttonSort = i18n.t('tasks.button.sort');
 
   return (
     <>
-      <Helmet>{`${translate('tasks.title')}`}</Helmet>
+      <Helmet>{title}</Helmet>
 
       <StyledContainer>
         <MotionContainer>
           <m.div variants={varBounce().in}>
             <Typography variant="h2" paragraph>
-              {`${translate('tasks.overview.title')}`}
+              {overviewTitle}
             </Typography>
             <Typography variant="h4" paragraph>
-              {`${translate('tasks.overview.subTitle')}`}
+              {overviewSubTitle}
             </Typography>
-            {/*  */}
             <IconToggleButton
-              // initialToggleState={true}
+              initialToggleState={isToggled}
+              changeToggleState={handleThemeToggle}
               IconComponent={{ initialIcon: Brightness6Icon, secondIcon: LightModeIcon }}
-              // IconComponent={{ Brightness6Icon, LightModeIcon }}
-              // IconComponent={ Brightness6Icon}
             />
-            <Button onClick={sortList}>{`${translate('tasks.sortTasks')}`}</Button>
-            <TaskList removeTask={removeTask} editTask={editTask} />
+            <Button onClick={sortList}>{buttonSort}</Button>
+            <TaskList removeTask={removeTask} />
             <TaskInputForm />
           </m.div>
         </MotionContainer>

@@ -1,13 +1,13 @@
-import { useLocales } from '@locales';
 import { Button, Input } from '@mui/material';
 import { createNewTask } from '@redux/slices/tasks';
 import { useDispatch } from '@redux/store';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+import i18n from '../../../locales/i18n';
+
 export default function TaskInputForm() {
   const [enteredValue, setEnteredValue] = useState('');
-  const { translate } = useLocales();
   const dispatch = useDispatch();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,12 +39,12 @@ export default function TaskInputForm() {
       <Input
         id="myInput"
         type="text"
-        placeholder={`${translate('tasks.placeholder.input')}`}
+        placeholder={`${i18n.t('tasks.placeholder.input')}`}
         value={enteredValue}
         onChange={handleInputChange}
       />
       <Button variant="contained" type="submit">
-        {`${translate('tasks.addTask')}`}
+        {`${i18n.t('tasks.addTask')}`}
       </Button>
     </form>
   );
