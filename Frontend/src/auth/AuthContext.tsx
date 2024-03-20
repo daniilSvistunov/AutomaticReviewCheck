@@ -19,7 +19,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 // ----------------------------------------------------------------------
 
 export const MsalAuth = ({ children }: AuthProviderProps) => {
-  const { instance, accounts } = useMsal();
+  const { instance, inProgress, accounts } = useMsal();
   const urlParamAccount = new URLSearchParams(window.location.search).get('account');
   const iframeAccount: AccountInfo = urlParamAccount ? JSON.parse(urlParamAccount) : undefined;
 
@@ -34,15 +34,9 @@ export const MsalAuth = ({ children }: AuthProviderProps) => {
 
   const [state, setState] = useState(initialState);
 
-  const getAccessToken = async () => {
-    if (!account) {
-      return;
-    }
-    const request = {
-      ...loginRequest,
-      account,
-    };
-    return instance.acquireTokenSilent(request).then((response) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getAccessToken = async (scopes: string[], account: AccountInfo) => {
+    return instance.acquireTokenSilent({ ...loginRequest, account }).then((response) => {
       setAccessToken(response.accessToken);
       // Set http client authorization header
       axiosInstance.interceptors.request.use(async (config) => {
@@ -53,16 +47,18 @@ export const MsalAuth = ({ children }: AuthProviderProps) => {
   };
 
   useEffect(() => {
-    getAccessToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [instance, account]);
+    if (!account) {
+      return;
+    }
+    getAccessToken(loginRequest.scopes, account);
+  }, [account, getAccessToken, instance]);
 
   useEffect(() => {
     setState({
       isAuthenticated: !!accessToken,
       account: account ?? undefined,
     });
-  }, [accessToken, account, instance]);
+  }, [accessToken, account, inProgress]);
 
   const memoizedValue = useMemo(
     () => ({
