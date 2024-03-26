@@ -6,6 +6,7 @@ import { AppThunk } from '../store';
 
 type GlobalState = {
   activeEntityId: string | null;
+  
 };
 
 const initialState: GlobalState = {

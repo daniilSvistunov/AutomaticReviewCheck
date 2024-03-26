@@ -34,6 +34,6 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "wdyr.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "wdyr.ts", "src/components/SimpleComponents/DataFieldComponent"],
   "exclude": ["node_modules"]
 }

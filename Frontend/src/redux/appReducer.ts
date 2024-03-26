@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import application from './slices/application';
 import global from './slices/global';
+import list from './slices/list';
 
 // Example for persisted slice
 //import { persistReducer } from 'redux-persist';
@@ -18,6 +19,7 @@ import global from './slices/global';
 const appReducer = combineReducers({
   //?: persistReducer(?PersistConfig, ?) // Example for persisted slice
   global,
+  list,
   application,
   // TODO: add slices here
 });

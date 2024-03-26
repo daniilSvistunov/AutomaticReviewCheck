@@ -1,11 +1,22 @@
-import { ReactNode } from 'react';
+import { fetchTasks, postTasks } from '@redux/slices/list';
+import { useDispatch, useSelector } from '@redux/store';
+import { ReactNode, useEffect } from 'react';
 
 // ----------------------------------------------------------------------
-type Props = { children: ReactNode };
-const RootDataWrapper = ({ children }: Props) => { 
-  // TODO: this can be usesd to fetch initial data that's used within the whole application
+type props = { children: ReactNode }
+
+const RootDataWrapper = ({children}:props) => { 
+  
+  const status = useSelector(state => state.list.state);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if( status === 'idle'){
+      console.log("re-render");
+      dispatch(fetchTasks())
+    }
+  }, [status, dispatch]);
+  
 
   return <>{children}</>;
 };
-
 export default RootDataWrapper;

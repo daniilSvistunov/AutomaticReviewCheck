@@ -50,3 +50,12 @@ export default function ThemeProvider({ children }: Props) {
     </StyledEngineProvider>
   );
 }
+
+ export const darkTheme = createTheme({
+  palette:{
+    mode: 'dark',
+  }
+}
+
+
+)

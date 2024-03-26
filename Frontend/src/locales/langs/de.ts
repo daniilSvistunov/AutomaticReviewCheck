@@ -1,6 +1,7 @@
 import common from "./de/common";
 import errorPages from "./de/errorPages";
 import messages from "./de/messages";
+import todoList from "./de/todoList";
 import types from "./de/types";
 
 const de = {
@@ -9,6 +10,7 @@ const de = {
   errorPages: errorPages, // error pages
   types: types, // types like 'suffix', 'prefix', 'currency
   messages: messages, // snackbar messages
+  todoList: todoList,
 
 
   // application specific translations

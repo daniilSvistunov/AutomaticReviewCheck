@@ -1,8 +1,10 @@
+
+
 import axios, { AxiosInstance } from 'axios';
 
 const axiosInstance: AxiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json' },
-  baseURL: `${import.meta.env.VITE_AZURE_BACKEND_API_URL}`,
+  baseURL: undefined,
 });
 
 axiosInstance.interceptors.response.use(

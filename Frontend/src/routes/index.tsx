@@ -1,7 +1,9 @@
 import { LoadingScreenContainer } from '@components/loading-screen';
 import RootDataWrapper from '@layouts/RootDataWrapper';
+import PopUPComponents from '@sections/TodoList/PopUPComponents';
 import { ElementType, lazy, Suspense } from 'react';
-import { matchRoutes, Outlet, RouteObject, useLocation, useRoutes } from 'react-router-dom';
+import { RouteObject } from 'react-router';
+import { matchRoutes, useLocation, useRoutes } from 'react-router-dom';
 
 // ----------------------------------------------------------------------------
 
@@ -15,24 +17,26 @@ const Loadable = (Component: ElementType) => (props: any) =>
 
 // Lazy loaded pages
 // ----------------------------------------------------------------------------
-const SamplePage = Loadable(lazy(() => import('../pages/SamplePage')));
+//const SamplePage = Loadable(lazy(() => import('../pages/SamplePage')));
 
 // Router
 // ----------------------------------------------------------------------------
+const App = Loadable(lazy(() => import('../pages/TodoListApp')));
 const routes: RouteObject[] = [
   {
     path: '/',
+
     element: (
       <RootDataWrapper>
-        <Outlet />
+        <App />
       </RootDataWrapper>
     ),
     children: [
       {
-        path: '',
-        element: <SamplePage />,
+        path: '/edit/:id',
+
+        element: <PopUPComponents />,
       },
-      // TODO: further paths can be added here
     ],
   },
 ];
@@ -48,7 +52,7 @@ export const useCurrentPathPattern = () => {
 
   return (
     matches
-      ?.map((match) => match.route.path)
+      ?.map((match: { route: { path: any } }) => match.route.path)
       .join('/')
       .replace('//', '/') || ''
   );

@@ -6,11 +6,13 @@ interface ImportMetaEnv {
   readonly VITE_OKTEAMS_ID: string;
 
   //urls
+
   readonly VITE_AZURE_BACKEND_API_URL: string;
   readonly VITE_REDIRECT_URI: string;
   readonly VITE_OKPLATTFORM_URL: string;
 
   //endpoints
+  readonly VITE_ENDPOINT_TASKS: string;
   readonly VITE_ENDPOINT_APPLICATION: string;
   readonly VITE_ENDPOINT_TEAMS: string;
   readonly VITE_ENDPOINT_INVOICES_INVOICEPDF: string;

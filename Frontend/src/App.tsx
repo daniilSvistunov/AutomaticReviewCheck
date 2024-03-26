@@ -19,7 +19,7 @@ import { useLocales } from './locales';
 import ThemeLocalization from './locales/ThemeLocalization';
 import { persistor, store } from './redux/store';
 import Router from './routes';
-import ThemeProvider from './theme';
+import ThemeProvider, { darkTheme } from './theme';
 import { AppConnectorGateway } from './utils/app-connector';
 import { isAppRunningInPlattform } from './utils/isAppRunningInPlattform';
 
