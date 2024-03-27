@@ -1,6 +1,6 @@
 import { getTasks,postTask } from "@api/tasks";
+import {Task} from "@models/interfaces";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {APITask,Task} from "@models/interfaces";
 
 export type ListeState ={
     importance_filter: number | undefined; 

@@ -13,29 +13,37 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import { removeTask } from '@redux/slices/list';
+import { removeTask, updateTask } from '@redux/slices/list';
 import { useDispatch } from '@redux/store';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 interface props {
   Task: Task;
+  index: number;
 }
 
-function TodoItem({ Task }: props) {
+function TodoItem({ Task, index }: props) {
   const [isChecked, setIsChecked] = useState(Task.Finished);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsChecked(Task.Finished);
+  }, [Task.Finished]);
+
   function DeleteTodo(itemDelete: Task) {
     dispatch(removeTask(itemDelete));
   }
-  function change() {
-    if (isChecked) {
-      return 'line-through';
-    }
-    return 'none';
+
+  function check() {
+    const updatedTask = { ...Task, Finished: !isChecked };
+    dispatch(updateTask({ index: Task.id, task: updatedTask }));
+    setIsChecked(!isChecked);
   }
+
   function chooseIcon(task: Task) {
     switch (task.importance) {
       case 1:
@@ -68,9 +76,13 @@ function TodoItem({ Task }: props) {
   }
   return (
     <Stack direction={'row'} sx={{ marginRight: '1rem' }}>
-      <ListItemButton onClick={() => setIsChecked(!isChecked)}>
-        <Checkbox onChange={() => setIsChecked(!isChecked)} size="large" checked={isChecked} />
-        <ListItemText primary={Task.todo} secondary={Task.Date} sx={{ textDecoration: change() }} />
+      <ListItemButton onClick={check}>
+        <Checkbox onChange={check} size="large" checked={isChecked} />
+        <ListItemText
+          primary={Task.todo}
+          secondary={Task.Date}
+          sx={{ textDecoration: isChecked ? 'line-through' : 'none' }}
+        />
         <ListItemSecondaryAction> {chooseIcon(Task)} </ListItemSecondaryAction>
       </ListItemButton>
 
@@ -79,7 +91,7 @@ function TodoItem({ Task }: props) {
         aria-label="Basic button group"
         sx={{ alignItems: 'center' }}
       >
-        <Button onClick={() => navigate('/edit/' + Task.id)} size="small">
+        <Button onClick={() => navigate('/edit/' + index)} size="small">
           {`${i18n.t('common.edit')}`}
         </Button>
         <Button onClick={() => DeleteTodo(Task)} size="small">

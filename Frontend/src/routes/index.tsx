@@ -1,6 +1,6 @@
 import { LoadingScreenContainer } from '@components/loading-screen';
 import RootDataWrapper from '@layouts/RootDataWrapper';
-import PopUPComponents from '@sections/TodoList/PopUPComponents';
+import PopUPComponents from '@sections/TodoList/PopUPComponent/PopUPComponents';
 import { ElementType, lazy, Suspense } from 'react';
 import { RouteObject } from 'react-router';
 import { matchRoutes, useLocation, useRoutes } from 'react-router-dom';

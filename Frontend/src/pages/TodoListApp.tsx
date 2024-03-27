@@ -3,8 +3,8 @@ import { Paper, Switch } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Outlet } from 'react-router';
 
-import InteractiveSection from '../sections/TodoList/InteractiveSectionComponenet';
-import TodoListSection from '../sections/TodoList/TodoListSection';
+import InteractiveSection from '../sections/TodoList/InteractiveSection/InteractiveSectionComponenet';
+import TodoListSection from '../sections/TodoList/TodoListSection/TodoListSection';
 
 function App() {
   const { onToggleMode } = useSettingsContext();
@@ -33,6 +33,5 @@ function App() {
     </>
   );
 }
-//<InputPopup isEdited={editTodo} id={editIndex}showPopup={isEdited} oldValue={editValue} newValue={setEditValue} cancel={() => {setEditValue("");setIsEdited(!isEdited)}}/>
 
 export default App;

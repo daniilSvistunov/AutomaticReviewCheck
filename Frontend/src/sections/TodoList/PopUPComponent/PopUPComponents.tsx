@@ -17,7 +17,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { updateTask } from '@redux/slices/list';
 import { useDispatch, useSelector } from '@redux/store';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import * as yup from 'yup';
 
 type FormFields = {
@@ -38,7 +38,8 @@ const schema = yup.object({
 function InputPopup() {
   const list = useSelector((state) => state.list);
   const dispatch = useDispatch();
-  const param = useParams<RouteParams>();
+  const location = useLocation();
+  const id = location.pathname.match('[0-9]+')?.[0];
   const navigate = useNavigate();
 
   const {
@@ -48,15 +49,15 @@ function InputPopup() {
     formState: { errors },
   } = useForm<FormFields>({
     defaultValues: {
-      date: new Date(list.tasks[Number(param.id)].Date),
-      importance: list.tasks[Number(param.id)].importance - 1,
-      Task: list.tasks[Number(param.id)].todo,
+      date: new Date(list.tasks[Number(id)].Date),
+      importance: list.tasks[Number(id)].importance - 1,
+      Task: list.tasks[Number(id)].todo,
     },
     resolver: yupResolver(schema),
   });
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    const index = Number(param.id);
+    const index = Number(id);
     const task = { ...list.tasks[index] };
     data.Task === undefined ? undefined : (task.todo = data.Task);
     data.date === undefined ? undefined : (task.Date = data.date.toLocaleDateString());
@@ -87,7 +88,7 @@ function InputPopup() {
               <InputLabel>{`${i18n.t('todoList.popUp.importance')}`}</InputLabel>
               <Select
                 {...register('importance', { required: true })}
-                defaultValue={list.tasks[Number(param.id)].importance - 1}
+                defaultValue={list.tasks[Number(id)].importance - 1}
               >
                 {i18n
                   .t('todoList.importanceSelect.select', { returnObjects: true })

@@ -3,8 +3,8 @@ import i18n from '@locales/i18n';
 import { Divider, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
-import AddingTasks from './AddingComponent';
-import Filter from './FilterComponent';
+import AddingTasks from '../AddingComponent/AddingComponent';
+import Filter from '../FilterComponent/FilterComponent';
 
 function InteractiveSection() {
   return (

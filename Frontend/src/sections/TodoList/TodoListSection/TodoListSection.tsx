@@ -1,9 +1,10 @@
 import { Task } from '@models/interfaces';
-import { Grow, List, Paper } from '@mui/material';
+import { List, Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useSelector } from '@redux/store';
+import { TransitionGroup } from 'react-transition-group';
 
-import TodoItem from './TodoItem';
+import TodoItem from '../TodoItem/TodoItem';
 
 function TodoListSection() {
   const list = useSelector((state) => state.list);
@@ -22,7 +23,7 @@ function TodoListSection() {
       >
         <List>
           {filteredList.map((todo: Task, index) => (
-            <TodoItem key={index} Task={todo} />
+            <TodoItem key={index} Task={todo} index={index} />
           ))}
         </List>
       </Paper>
