@@ -34,6 +34,6 @@ describe('AddingComponent', () => {
       </Router>
     );
     const Filt = screen.getByRole('combobox');
-    expect(1 + 1).equal(2);
+    expect(Filt).toBeInTheDocument();
   });
 });
