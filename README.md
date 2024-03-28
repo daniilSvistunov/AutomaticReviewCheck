@@ -42,6 +42,7 @@ Template für neue Projekte.
 - [ ]Port der neuen Anwendung anpassen ('frontend/vite.config.ts')
 - [ ]Name der Anwendung in 'frontend/package.json' anpassen
 - [ ]Dependencies installieren mit `npm i` muss im Frontend-Ordner ausgeführt werden.
+- [ ]json-Server für BE-Mocking aufsetzen (siehe README in 'frontend')
 
 **6. Frontend-Skripte**
 - Frontend starten: `npm run dev`
