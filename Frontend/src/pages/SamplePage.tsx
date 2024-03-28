@@ -14,7 +14,7 @@ const StyledContainer = styled(Container)(() => ({
   margin: 'auto',
 }));
 
-export default function Page403() {
+export default function SamplePage() {
   return (
     <>
       <Helmet>
