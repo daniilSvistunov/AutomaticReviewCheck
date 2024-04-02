@@ -1,18 +1,18 @@
 import i18n from '@locales/i18n';
 import { Task } from '@models/interfaces';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import ErrorIcon from '@mui/icons-material/Error';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import {
-  Button,
-  ButtonGroup,
   Checkbox,
+  IconButton,
   ListItemButton,
   ListItemSecondaryAction,
   ListItemText,
   Tooltip,
 } from '@mui/material';
-import { Stack } from '@mui/system';
 import { removeTask, updateTask } from '@redux/slices/list';
 import { useDispatch } from '@redux/store';
 import { useEffect } from 'react';
@@ -43,21 +43,27 @@ function TodoItem({ Task, index }: props) {
     dispatch(updateTask({ index: Task.id, task: updatedTask }));
     setIsChecked(!isChecked);
   }
-
+  function changeImportance() {
+    const newImp = ((Task.importance + 1) % 3) + 1;
+    const updatedTask = { ...Task, importance: newImp };
+    dispatch(updateTask({ index: index, task: updatedTask }));
+  }
   function chooseIcon(task: Task) {
     switch (task.importance) {
       case 1:
         return (
           <Tooltip
             title={`${i18n.t('todoList.importanceSelect.select.0', { returnObjects: true })}`}
+            sx={{ justifySelf: 'center' }}
           >
-            <ErrorIcon color="error" sx={{ justifySelf: 'center' }} />
+            <ErrorIcon color="error" />
           </Tooltip>
         );
       case 2:
         return (
           <Tooltip
             title={`${i18n.t('todoList.importanceSelect.select.1', { returnObjects: true })}`}
+            sx={{ justifyContent: 'center' }}
           >
             <ReportProblemIcon color="warning" />
           </Tooltip>
@@ -75,30 +81,67 @@ function TodoItem({ Task, index }: props) {
     }
   }
   return (
-    <Stack direction={'row'} sx={{ marginRight: '1rem' }}>
-      <ListItemButton onClick={check}>
-        <Checkbox onChange={check} size="large" checked={isChecked} />
-        <ListItemText
-          primary={Task.todo}
-          secondary={Task.Date}
-          sx={{ textDecoration: isChecked ? 'line-through' : 'none' }}
-        />
-        <ListItemSecondaryAction> {chooseIcon(Task)} </ListItemSecondaryAction>
-      </ListItemButton>
+    <ListItemButton onClick={check}>
+      <Checkbox onClick={check} size="large" checked={isChecked} />
+      <ListItemText
+        primary={
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div>{Task.todo}</div>
+            <Tooltip title={`${i18n.t('common.edit')}`}>
+              <IconButton
+                onClick={(event: MouseEvent) => {
+                  event.stopPropagation();
+                  navigate('/edit/' + index);
+                }}
+                size="small"
+              >
+                <EditIcon fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
+          </div>
+        }
+        secondary={
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div>{Task.Date}</div>
+            <Tooltip title={`${i18n.t('common.edit')}`}>
+              <IconButton
+                onClick={(event: MouseEvent) => {
+                  event.stopPropagation();
+                  navigate('/editDate/' + index);
+                }}
+                size="small"
+              >
+                <EditIcon fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
+          </div>
+        }
+        sx={{ textDecoration: isChecked ? 'line-through' : 'none' }}
+      />
 
-      <ButtonGroup
-        variant="contained"
-        aria-label="Basic button group"
-        sx={{ alignItems: 'center' }}
-      >
-        <Button onClick={() => navigate('/edit/' + index)} size="small">
-          {`${i18n.t('common.edit')}`}
-        </Button>
-        <Button onClick={() => DeleteTodo(Task)} size="small">
-          {`${i18n.t('common.remove')}`}
-        </Button>
-      </ButtonGroup>
-    </Stack>
+      <ListItemSecondaryAction>
+        <IconButton
+          size="large"
+          onClick={(event: MouseEvent) => {
+            changeImportance();
+            event.stopPropagation();
+          }}
+        >
+          {chooseIcon(Task)}
+        </IconButton>
+        <Tooltip title={`${i18n.t('common.remove')}`}>
+          <IconButton
+            onClick={(event: MouseEvent) => {
+              event.stopPropagation();
+              DeleteTodo(Task);
+            }}
+            size="large"
+          >
+            <DeleteIcon fontSize="inherit" />
+          </IconButton>
+        </Tooltip>
+      </ListItemSecondaryAction>
+    </ListItemButton>
   );
 }
 export default TodoItem;

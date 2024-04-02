@@ -13,10 +13,20 @@ import { describe, expect, it } from 'vitest';
 import TodoListSection from '../TodoListSection/TodoListSection';
 import InputPopup from './PopUPComponents';
 
-describe('AddingComponent', () => {
+describe('PopUpComponent', () => {
   it('render the component', () => {
     const history = createMemoryHistory();
     history.createHref('/edit/0');
+    const Task = {
+      todo: 'hallo',
+      id: 0,
+      Date: '2025-04-03',
+      importance: 0,
+      Finished: false,
+    };
+    {
+      store.dispatch(addTask(Task));
+    }
 
     render(
       <ReduxProvider store={store}>

@@ -3,6 +3,7 @@ import 'simplebar-react/dist/simplebar.min.css';
 import './locales/i18n';
 
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
+import RootDataWrapper from '@layouts/RootDataWrapper';
 // ----------------------------------------------------------------------
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -19,7 +20,7 @@ import { useLocales } from './locales';
 import ThemeLocalization from './locales/ThemeLocalization';
 import { persistor, store } from './redux/store';
 import Router from './routes';
-import ThemeProvider, { darkTheme } from './theme';
+import ThemeProvider from './theme';
 import { AppConnectorGateway } from './utils/app-connector';
 import { isAppRunningInPlattform } from './utils/isAppRunningInPlattform';
 
@@ -40,7 +41,9 @@ const App = () => {
                 <SnackbarProvider>
                   <AuthProvider pca={msalInstance} interactionType={InteractionType.Silent}>
                     <AppConnectorGateway />
-                    <Router />
+                    <RootDataWrapper>
+                      <Router />
+                    </RootDataWrapper>
                   </AuthProvider>
                 </SnackbarProvider>
               </MotionLazyContainer>
@@ -62,7 +65,9 @@ const App = () => {
                       <SnackbarProvider>
                         <AuthProvider pca={msalInstance} interactionType={InteractionType.Redirect}>
                           <AppConnectorGateway />
-                          <Router />
+                          <RootDataWrapper>
+                            <Router />
+                          </RootDataWrapper>
                         </AuthProvider>
                       </SnackbarProvider>
                     </ThemeLocalization>

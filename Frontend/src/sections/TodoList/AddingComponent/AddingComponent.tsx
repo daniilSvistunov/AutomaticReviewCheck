@@ -2,7 +2,8 @@ import { DevTool } from '@hookform/devtools';
 import { yupResolver } from '@hookform/resolvers/yup';
 import i18n from '@locales/i18n';
 import { Task } from '@models/interfaces';
-import { Button, FormControl, InputLabel, MenuItem, TextField } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { FormControl, IconButton, InputLabel, MenuItem, TextField, Tooltip } from '@mui/material';
 import Select from '@mui/material/Select';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -35,7 +36,7 @@ function AddingTasks() {
   const list = useSelector((state) => state.list);
   const dispatch = useDispatch();
 
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
+  const onSubmit: SubmitHandler<FormFields> = (data, e) => {
     const item: Task = {
       todo: data.Task,
       id: list.tasks?.length,
@@ -85,14 +86,13 @@ function AddingTasks() {
           size="small"
           label={`${i18n.t('todoList.addInputDescription')}`}
         />
-
-        <Button type="submit" variant="contained">
-          {`${i18n.t('common.add')}`}
-        </Button>
+        <Tooltip title={`${i18n.t('common.add')}`}>
+          <IconButton type="submit">
+            <AddCircleIcon />
+          </IconButton>
+        </Tooltip>
       </Stack>
-      <p style={{ color: 'red' }}> {errors.importance?.message}</p>
-      <p style={{ color: 'red' }}> {errors.date?.message}</p>
-      <p style={{ color: 'red' }}> {errors.Task?.message}</p>
+
       <DevTool control={control} />
     </form>
   );

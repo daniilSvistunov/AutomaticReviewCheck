@@ -1,6 +1,7 @@
 import { LoadingScreenContainer } from '@components/loading-screen';
 import RootDataWrapper from '@layouts/RootDataWrapper';
 import PopUPComponents from '@sections/TodoList/PopUPComponent/PopUPComponents';
+import DateInputPopUp from '@sections/TodoList/PopUPComponent/PopUpDateComponent';
 import { ElementType, lazy, Suspense } from 'react';
 import { RouteObject } from 'react-router';
 import { matchRoutes, useLocation, useRoutes } from 'react-router-dom';
@@ -27,15 +28,18 @@ const routes: RouteObject[] = [
     path: '/',
 
     element: (
-      <RootDataWrapper>
+     
         <App />
-      </RootDataWrapper>
     ),
     children: [
       {
         path: '/edit/:id',
 
         element: <PopUPComponents />,
+      },
+      {
+        path: '/editDate/:id',
+        element: <DateInputPopUp />,
       },
     ],
   },

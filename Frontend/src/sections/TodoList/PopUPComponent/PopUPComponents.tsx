@@ -1,17 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import i18n from '@locales/i18n';
-import {
-  Button,
-  ButtonGroup,
-  Divider,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Modal,
-  Paper,
-  Select,
-  TextField,
-} from '@mui/material';
+import CancelIcon from '@mui/icons-material/Cancel';
+import SaveIcon from '@mui/icons-material/Save';
+import { Divider, IconButton, Modal, Paper, TextField, Tooltip } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
 import { updateTask } from '@redux/slices/list';
@@ -25,10 +16,6 @@ type FormFields = {
   date: Date;
   Task: string;
 };
-interface RouteParams {
-  [key: string]: string;
-  id: string;
-}
 const schema = yup.object({
   importance: yup.number().required('importance is Requiered'),
   date: yup.date().required('Date is requiered'),
@@ -84,21 +71,6 @@ function InputPopup() {
             spacing={1}
             sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <FormControl sx={{ m: 1, minWidth: '15%' }} size="small">
-              <InputLabel>{`${i18n.t('todoList.popUp.importance')}`}</InputLabel>
-              <Select
-                {...register('importance', { required: true })}
-                defaultValue={list.tasks[Number(id)].importance - 1}
-              >
-                {i18n
-                  .t('todoList.importanceSelect.select', { returnObjects: true })
-                  .map((option: string, index: number) => (
-                    <MenuItem key={option} value={index}>
-                      {option}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
             <Controller
               {...register('date')}
               name="date"
@@ -117,10 +89,16 @@ function InputPopup() {
               size="small"
               label={`${i18n.t('todoList.addInputDescription')}`}
             />
-            <ButtonGroup variant="contained">
-              <Button type="submit">{`${i18n.t('common.edit')}`}</Button>
-              <Button onClick={() => navigate('/')}>{`${i18n.t('common.abort')}`}</Button>
-            </ButtonGroup>
+            <Tooltip title={`${i18n.t('common.edit')}`}>
+              <IconButton type="submit">
+                <SaveIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={`${i18n.t('common.abort')}`}>
+              <IconButton onClick={() => navigate('/')}>
+                <CancelIcon />
+              </IconButton>
+            </Tooltip>
           </Stack>
         </form>
         <Stack>

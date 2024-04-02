@@ -1,5 +1,5 @@
 import { Task } from '@models/interfaces';
-import { List, Paper } from '@mui/material';
+import { Collapse, List, Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useSelector } from '@redux/store';
 import { TransitionGroup } from 'react-transition-group';
@@ -22,9 +22,13 @@ function TodoListSection() {
         sx={{ maxHeight: '900px', overflow: 'auto', minHeight: '400px', marginBottom: '16px' }}
       >
         <List>
-          {filteredList.map((todo: Task, index) => (
-            <TodoItem key={index} Task={todo} index={index} />
-          ))}
+          <TransitionGroup>
+            {filteredList.map((todo: Task, index) => (
+              <Collapse key={todo.id}>
+                <TodoItem key={todo.id} Task={todo} index={index} />
+              </Collapse>
+            ))}
+          </TransitionGroup>
         </List>
       </Paper>
     </Stack>
