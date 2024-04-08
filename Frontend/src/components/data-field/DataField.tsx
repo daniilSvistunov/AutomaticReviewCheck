@@ -22,7 +22,7 @@ const DataField = ({ field }: DataFieldProps) => {
         {translation}
       </Typography>
       <Typography variant="body2">
-        {value ? value : '--'}
+        {value ?? '--'}
         {value && link && (
           <Link href={baseURL + value} target="blank">
             <IconButton size="small" color={'primary'}>

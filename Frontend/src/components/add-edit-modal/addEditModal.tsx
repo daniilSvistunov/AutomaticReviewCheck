@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
-import { useLocales } from '../../locales';
+import { i18n } from '../../locales';
 import { ModalProps } from './types';
 
 const AddEditModal = ({
@@ -13,7 +13,6 @@ const AddEditModal = ({
   saveButtonProps,
   abortButtonProps,
 }: ModalProps) => {
-  const { translate } = useLocales();
 
   return (
     <Dialog open={open} fullWidth {...dialogProps}>
@@ -21,7 +20,7 @@ const AddEditModal = ({
       <DialogContent {...dialogContentProps}>{children}</DialogContent>
       <DialogActions>
         <Button variant="outlined" color="inherit" size="medium" {...abortButtonProps}>
-          {`${translate('save.abort')}`}
+          {`${i18n.t('save.abort')}`}
         </Button>
         <Button
           variant="contained"
@@ -30,7 +29,7 @@ const AddEditModal = ({
           {...saveButtonProps}
           disabled={!isDirty}
         >
-          {`${translate('save.label')}`}
+          {`${i18n.t('save.label')}`}
         </Button>
       </DialogActions>
     </Dialog>
