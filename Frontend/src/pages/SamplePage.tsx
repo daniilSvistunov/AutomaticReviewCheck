@@ -1,6 +1,7 @@
 import { MotionContainer, varBounce } from '@components/animate';
 import { Container, styled, Typography } from '@mui/material';
 import { m } from 'framer-motion';
+import { CustomAvatar } from 'ok-ui-lib';
 import { Helmet } from 'react-helmet-async';
 
 // ----------------------------------------------------------------------
@@ -20,7 +21,7 @@ export default function SamplePage() {
       <Helmet>
         <title>{`Sample page`}</title>
       </Helmet>
-
+      <CustomAvatar name='test'/>
       <StyledContainer>
         <MotionContainer>
           <m.div variants={varBounce().in}>
