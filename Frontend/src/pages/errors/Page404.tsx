@@ -6,7 +6,7 @@ import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
-import { PageNotFoundIllustration } from '../assets/illustrations';
+import { PageNotFoundIllustration } from '../../assets/illustrations';
 
 // ----------------------------------------------------------------------
 
