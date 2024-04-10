@@ -15,7 +15,8 @@ const Loadable = (Component: ElementType) => (props: any) =>
 
 // Lazy loaded pages
 // ----------------------------------------------------------------------------
-const SamplePage = Loadable(lazy(() => import('../pages/SamplePage')));
+const SamplePage = Loadable(lazy(() => import('@pages/SamplePage')));
+const Page404 = Loadable(lazy(() => import('@pages/errors/Page404')));
 
 // Router
 // ----------------------------------------------------------------------------
@@ -34,6 +35,10 @@ const routes: RouteObject[] = [
       },
       // TODO: further paths can be added here
     ],
+  },
+  {
+    path: '*',
+    element: <Page404 />,
   },
 ];
 
