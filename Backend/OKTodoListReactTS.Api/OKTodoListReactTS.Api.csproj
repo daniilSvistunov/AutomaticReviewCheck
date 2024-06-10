@@ -50,8 +50,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\OKTemplate.BusinessLayer\OKTemplate.BusinessLayer.csproj" />
-		<ProjectReference Include="..\OKTemplate.Common\OKTemplate.Common.csproj" />
+		<ProjectReference Include="..\OKTodoListReactTS.BusinessLayer\OKTodoListReactTS.BusinessLayer.csproj" />
+		<ProjectReference Include="..\OKTodoListReactTS.Common\OKTodoListReactTS.Common.csproj" />
 	</ItemGroup>
 
 </Project>

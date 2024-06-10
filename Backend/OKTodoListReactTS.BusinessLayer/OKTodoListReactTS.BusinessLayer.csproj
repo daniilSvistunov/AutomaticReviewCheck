@@ -31,7 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\OKTemplate.Common\OKTemplate.Common.csproj" />
+		<ProjectReference Include="..\OKTodoListReactTS.Common\OKTodoListReactTS.Common.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

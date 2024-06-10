@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OKTemplate.Api\OKTemplate.Api.csproj" />
+    <ProjectReference Include="..\OKTodoListReactTS.Api\OKTodoListReactTS.Api.csproj" />
   </ItemGroup>
 
 </Project>

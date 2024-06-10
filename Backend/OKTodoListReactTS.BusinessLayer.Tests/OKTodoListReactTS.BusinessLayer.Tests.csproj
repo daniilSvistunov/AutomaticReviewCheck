@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OKTemplate.BusinessLayer\OKTemplate.BusinessLayer.csproj" />
+    <ProjectReference Include="..\OKTodoListReactTS.BusinessLayer\OKTodoListReactTS.BusinessLayer.csproj" />
   </ItemGroup>
 
 </Project>
