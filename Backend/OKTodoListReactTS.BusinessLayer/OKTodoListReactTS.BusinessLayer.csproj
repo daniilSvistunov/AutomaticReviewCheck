@@ -17,6 +17,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.2" />
 		<PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="7.0.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,6 +33,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\OKTodoListReactTS.Common\OKTodoListReactTS.Common.csproj" />
+		<ProjectReference Include="..\OKTodoListReactTS.DataLayer\OKTodoListReactTS.DataLayer.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
