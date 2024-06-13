@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OKTemplate.BusinessLayer.Dtos;
@@ -19,7 +20,7 @@ namespace OKTemplate.Api.Controllers
         }
 
         /// <summary>
-        /// Gets all de la ToDo
+        /// Retrieves all ToDo items
         /// </summary>
         /// <returns></returns>
         [HttpGet("getall", Name = nameof(GetAllTodosAsync))]
@@ -31,7 +32,7 @@ namespace OKTemplate.Api.Controllers
         }
 
         /// <summary>
-        /// Adds la ToDo
+        /// Adds a new ToDo item
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
@@ -44,29 +45,41 @@ namespace OKTemplate.Api.Controllers
         }
 
         /// <summary>
-        /// Delete de la ToDo
+        /// Deletes an existing ToDo item
         /// </summary>
         /// <returns></returns>
         [HttpDelete("delete", Name = nameof(DeleteToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ToDoDto>> DeleteToDoAsync(/*zu ergänzen*/[FromBody] ToDoDto toDoDto)
+        public async Task<ActionResult<ToDoDto>> DeleteToDoAsync([FromBody] Guid Id)
         {
-            await _service.DeleteTodoAsync(/*zu ergänzen*/toDoDto);
+            await _service.DeleteTodoAsync(Id);
             return NoContent();
         }
 
         /// <summary>
-        /// Update de la ToDo
+        /// Updates an existing ToDo item
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="toDoDto"></param>
         /// <returns></returns>
         [HttpPut("update", Name = nameof(UpdateTodoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ToDoDto>> UpdateTodoAsync(/*zu ergänzen*/[FromBody] ToDoDto toDoDto)
+        public async Task<ActionResult<ToDoDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto)
         {
-            return Ok(await _service.UpdateTodoAsync(/*zu ergänzen*/toDoDto));
+            return Ok(await _service.UpdateTodoAsync(toDoDto));
+        }
+
+        /// <summary>
+        /// Gets an ToDo item
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getID", Name = nameof(GetTodoByIdAsync))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ToDoDto>> GetTodoByIdAsync(Guid Id)
+        {
+            return Ok(await _service.GetTodoByIdAsync(Id));
         }
     }
 }

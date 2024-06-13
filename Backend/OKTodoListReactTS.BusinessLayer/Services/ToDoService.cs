@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OKTemplate.BusinessLayer.Dtos;
 using OKTemplate.BusinessLayer.Interfaces;
 
 //Welche using-Anweisungen werden hier wieso gebraucht?
 using OKTemplate.DataLayer;
+using OKTemplate.DataLayer.Entities;
 
 namespace OKTemplate.BusinessLayer.Services
 {
@@ -35,12 +37,12 @@ namespace OKTemplate.BusinessLayer.Services
         // Füge die Implementierung für die Methode GetAllTodosAsync hier ein, Warum hat die Methode keinen Wert der übergeben wird? 
         public async Task<List<ToDoDto>> GetAllTodosAsync() //Die Methode hat keinen Wert der übergeben wird, weil [...]	--> Weil der alle zurückgeben geben soll, nicht nur ein ToDo spezifisch 
         {
-            // Implementiere die Logik zum Abrufen aller Todos hier
+            // Implementiere die Logik zum Abrufen aller Todos hier    
+            var allToDoEntities = await _dbContext.ToDo.ToListAsync(); //Nimmt alle ToDos von DB und wird es in eine Liste konvertiert 
+            var allToDoDtos = _mapper.Map<List<ToDoDto>>(allToDoEntities); // Hier wird diese Liste in eine ToDoDto konvertiert
+            return allToDoDtos;
             /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
-            //var result = new ToDoDto { }; //--> hier muss ich die ganze ToDo Liste zurückgeben;
-            //result.Text = "Hello";
-            //return result;
+            //throw new NotImplementedException();
         }
         /*
          * Beispielhafte Task:
@@ -55,10 +57,14 @@ namespace OKTemplate.BusinessLayer.Services
         //Diese Methode soll Dir als Beispiel für die Logik hinter den Implementierungen gelten
         public async Task<ToDoDto> AddTodoAsync(ToDoDto toDoDto)
         {
+            var toEntity = _mapper.Map<ToDoEntry>(toDoDto); // Hier wird der gegebene Dto in eine ToDoEntry konvertiert
+            await _dbContext.ToDo.AddAsync(toEntity);
+            await _dbContext.SaveChangesAsync();
+
+            var returnedDto = _mapper.Map<ToDoDto>(toEntity);
+            return returnedDto;
             /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
             //throw new NotImplementedException();
-            toDoDto.Text = "Hello this is a Test - Christian"; //Test
-            return toDoDto;
         }
 
         /*Beispielhafte Task:
@@ -70,12 +76,19 @@ namespace OKTemplate.BusinessLayer.Services
         * Der Endpunkt bekommt eine {????} (Welcher Parameter muss übergeben werden?). --> Man muss nicht zurückgeben. Siehe ToDoController -> "return NoContent()"
         */
 
-        // Füge die Implementierung für die Methode DeleteTodoAsync hier ein
-        public async Task DeleteTodoAsync(/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/ToDoDto toDoDto)
+        // Füge die Implementierung für die Methode DeleteTodoAsync hier ein        
+        public async Task DeleteTodoAsync(Guid Id)
         {
             // Implementiere die Logik zum Löschen eines Todos hier
+            // Man sucht die korrekte Entity mit die gegebene Id um es zu löschen.
+            var toDoEntity = await _dbContext.ToDo.FindAsync(Id) ?? throw new InvalidOperationException("Error - Id was not found");
+
+            _dbContext.Remove(toDoEntity); //Dann mit diese gefundene ToDo löscht es aus dbContext
+            await _dbContext.SaveChangesAsync(); //Save
+            //return; //return no content()
+
             /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
         /*Beispielhafte Task:
         * Hintergrund:
@@ -91,8 +104,24 @@ namespace OKTemplate.BusinessLayer.Services
         public async Task<ToDoDto> UpdateTodoAsync(/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/ ToDoDto toDoDto)
         {
             // Implementiere die Logik zum Aktualisieren eines Todos hier
+            var searchToDoDto = await _dbContext.ToDo.FindAsync(toDoDto.Id) ?? throw new InvalidOperationException("Error - Id was not found");
+            _mapper.Map(toDoDto, searchToDoDto); //Es wird die gefundene toDo ersetzt
+            await _dbContext.SaveChangesAsync();
+
+            var returnedDto = _mapper.Map<ToDoDto>(searchToDoDto); //Die Entität wird zurück in ein DTO umgewandelt
+
+            return returnedDto;
             /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+        }
+
+        public async Task<ToDoDto> GetTodoByIdAsync(Guid Id)
+        {
+            var toDoEntity = await _dbContext.ToDo.FindAsync(Id) ?? throw new InvalidOperationException("Error - Id was not found");
+
+            var toDoDtoById = _mapper.Map<ToDoDto>(toDoEntity);
+
+            return toDoDtoById;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OKTemplate.BusinessLayer.Dtos;
 
@@ -8,7 +9,8 @@ namespace OKTemplate.BusinessLayer.Interfaces
     {
         Task<List<ToDoDto>> GetAllTodosAsync();
         Task<ToDoDto> AddTodoAsync(ToDoDto toDoDto);
-        Task DeleteTodoAsync(/*zu ergänzen*/ToDoDto toDoDto);
-        Task<ToDoDto> UpdateTodoAsync(/*zu ergänzen*/ToDoDto toDoDto);
+        Task DeleteTodoAsync(Guid Id);
+        Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto);
+        Task<ToDoDto> GetTodoByIdAsync(Guid Id);
     }
 }
