@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OKTodoListReactTS.BusinessLayer\OKTodoListReactTS.BusinessLayer.csproj" />
+    <ProjectReference Include="..\OKTodoListReactTS.DataLayer.Tests\OKTodoListReactTS.DataLayer.Tests.csproj" />
+    <ProjectReference Include="..\OKTodoListReactTS.DataLayer\OKTodoListReactTS.DataLayer.csproj" />
   </ItemGroup>
 
 </Project>
