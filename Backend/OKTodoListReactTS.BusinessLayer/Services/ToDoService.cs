@@ -47,8 +47,6 @@ namespace OKTemplate.BusinessLayer.Services
             var toDoEntities = await _dbContext.ToDo.ToListAsync(); //Diese Zeile ruft alle ToDo-Entitäten aus der Datenbank ab und konvertiert sie in eine Liste
             var toDoDtos = _mapper.Map<List<ToDoDto>>(toDoEntities); //Hier wird AutoMapper verwendet, um die Liste der ToDo-Entitäten in eine Liste von ToDoDto-Objekten umzuwandeln
             return toDoDtos;
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
         }
 
         /*
@@ -72,9 +70,6 @@ namespace OKTemplate.BusinessLayer.Services
             var toDoDtoAdded = _mapper.Map<ToDoDto>(toDoEntity); //Entität zurück in DTO umwandeln
 
             return toDoDtoAdded;
-
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
         }
 
         /*Beispielhafte Task:
@@ -94,11 +89,6 @@ namespace OKTemplate.BusinessLayer.Services
 
             _dbContext.Remove(toDoEntity); //Die gefundene ToDo-Entität wird aus dem Datenbankkontext entfernt
             await _dbContext.SaveChangesAsync();
-
-            return;
-
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
         }
 
         /*Beispielhafte Task:
@@ -125,8 +115,6 @@ namespace OKTemplate.BusinessLayer.Services
             var toDoDtoUpdated = _mapper.Map<ToDoDto>(toDoEntity); //Die Entität wird zurück in ein DTO umgewandelt
 
             return toDoDtoUpdated;
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
         }
 
         public async Task<ToDoDto> GetTodoByIdAsync(Guid Id)

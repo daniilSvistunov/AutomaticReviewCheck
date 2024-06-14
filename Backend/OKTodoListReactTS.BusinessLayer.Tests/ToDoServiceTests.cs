@@ -67,6 +67,10 @@ namespace OKTemplate.BusinessLayer.Tests
 
             // Assert
             Assert.NotNull(result);
+            Assert.Equal(toDoDto.Id, result.Id);
+            Assert.Equal(toDoDto.Text, result.Text);
+            //Assert.Equal(toDoDto.DueDate, result.DueDate);
+            Assert.Equal(toDoDto.Completed, result.Completed);
         }
 
         [Fact]
@@ -135,6 +139,10 @@ namespace OKTemplate.BusinessLayer.Tests
 
             // Arrange
             Assert.NotNull(result);
+            Assert.Equal(updatedToDoDto.Id, result.Id);
+            Assert.Equal(updatedToDoDto.Text, result.Text);
+            //Assert.Equal(updatedToDoDto.DueDate, result.DueDate);
+            Assert.Equal(updatedToDoDto.Completed, result.Completed);
         }
 
         [Fact]
@@ -159,7 +167,7 @@ namespace OKTemplate.BusinessLayer.Tests
         }
 
         [Fact]
-        public async Task GetTodoByIdAsync()
+        public async Task GetTodoByIdAsync_Success()
         {
             // Arrange
             _toDoService = CreateToDoService();
@@ -179,6 +187,24 @@ namespace OKTemplate.BusinessLayer.Tests
 
             // Arrange
             Assert.NotNull(result);
+            Assert.Equal(toDoDto.Id, result.Id);
+            Assert.Equal(toDoDto.Text, result.Text);
+            //Assert.Equal(toDoDto.DueDate, result.DueDate);
+            Assert.Equal(toDoDto.Completed, result.Completed);
+        }
+
+        [Fact]
+        public async Task GetTodoByIdAsync_ReturnsNotFound()
+        {
+            // Arrange
+            _toDoService = CreateToDoService();
+            var nonExistentId = Guid.NewGuid();
+
+            // Act
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => _toDoService.GetTodoByIdAsync(nonExistentId));
+
+            // Arrange
+            Assert.Equal("ID kann nicht gefunden werden.", exception.Message);
         }
     }
 }

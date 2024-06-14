@@ -21,7 +21,6 @@ namespace OKTemplate.BusinessLayer.Tests
         public async Task InitializeAsync()
         {
             CreateContext();
-
         }
 
         private void CreateContext()
