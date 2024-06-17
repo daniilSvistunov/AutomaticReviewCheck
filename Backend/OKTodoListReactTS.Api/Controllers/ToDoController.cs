@@ -23,7 +23,7 @@ namespace OKTemplate.Api.Controllers
         /// Retrieves all ToDo items
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getall", Name = nameof(GetAllTodosAsync))]
+        [HttpGet(Name = nameof(GetAllTodosAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ToDoDto>> GetAllTodosAsync()
@@ -36,7 +36,7 @@ namespace OKTemplate.Api.Controllers
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
-        [HttpPost("add", Name = nameof(AddToDoAsync))]
+        [HttpPost(Name = nameof(AddToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ToDoDto>> AddToDoAsync([FromBody] ToDoDto toDoDto)
@@ -48,10 +48,10 @@ namespace OKTemplate.Api.Controllers
         /// Deletes an existing ToDo item
         /// </summary>
         /// <returns></returns>
-        [HttpDelete("delete", Name = nameof(DeleteToDoAsync))]
+        [HttpDelete("{Id}", Name = nameof(DeleteToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ToDoDto>> DeleteToDoAsync([FromBody] Guid Id)
+        public async Task<ActionResult<ToDoDto>> DeleteToDoAsync([FromRoute] Guid Id)
         {
             await _service.DeleteTodoAsync(Id);
             return NoContent();
@@ -62,7 +62,7 @@ namespace OKTemplate.Api.Controllers
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
-        [HttpPut("update", Name = nameof(UpdateTodoAsync))]
+        [HttpPut(Name = nameof(UpdateTodoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ToDoDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto)
@@ -74,10 +74,10 @@ namespace OKTemplate.Api.Controllers
         /// Gets an ToDo item
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getID", Name = nameof(GetTodoByIdAsync))]
+        [HttpGet("{Id}", Name = nameof(GetTodoByIdAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ToDoDto>> GetTodoByIdAsync(Guid Id)
+        public async Task<ActionResult<ToDoDto>> GetTodoByIdAsync([FromRoute] Guid Id)
         {
             return Ok(await _service.GetTodoByIdAsync(Id));
         }

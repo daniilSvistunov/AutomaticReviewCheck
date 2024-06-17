@@ -65,7 +65,7 @@ namespace OKTemplate.BusinessLayer.Tests
             //Assert.NotNull(result);
             Assert.Equal(addtoDo.Id, result.Id);
             Assert.Equal(addtoDo.Text, result.Text);
-            //Assert.Equal(addtoDo.DueDate, result.DueDate);
+            Assert.Equal(addtoDo.DueDate, result.DueDate);
             Assert.Equal(addtoDo.Completed, result.Completed);
         }
 
@@ -105,7 +105,6 @@ namespace OKTemplate.BusinessLayer.Tests
             //Act
             var errorMessage = await Assert.ThrowsAsync<InvalidOperationException>(() => _toDoService.DeleteTodoAsync(addtoDo.Id)); // Dann suche ich die toDo
 
-
             //Assert
             Assert.Equal("Error - Id was not found", errorMessage.Message); //jetzt gucke ich dass der error Message stimmt mit was ich bekommen habe
         }
@@ -140,7 +139,7 @@ namespace OKTemplate.BusinessLayer.Tests
             //Assert
             Assert.Equal(updatedDto.Id, result.Id);
             Assert.Equal(updatedDto.Text, result.Text);
-            //Assert.Equal(addtoDo.DueDate, result.DueDate);
+            Assert.Equal(updatedDto.DueDate, result.DueDate);
             Assert.Equal(updatedDto.Completed, result.Completed);
         }
 
@@ -164,6 +163,32 @@ namespace OKTemplate.BusinessLayer.Tests
             //Assert
             Assert.Equal("Error - Id was not found", errorMessage.Message); //jetzt gucke ich dass der error Message stimmt mit was ich bekommen habe
 
+        }
+
+        [Fact]
+        public async Task GetTodoByIdAsync()
+        {
+            // Arrange
+            _toDoService = CreateToDoService(); // hier stelle ich ein neuen toDo
+
+            ToDoDto toDoDto = new ToDoDto
+            {
+                Id = Guid.NewGuid(),
+                Text = "Create ToDo and search by Id test",
+                DueDate = DateTime.Now,
+                Completed = false,
+            };
+
+            await _toDoService.AddTodoAsync(toDoDto); // add
+
+            // Act
+            var result = await _toDoService.GetTodoByIdAsync(toDoDto.Id); // probiere ich die Funktion
+
+            //Assert
+            Assert.Equal(toDoDto.Id, result.Id);
+            Assert.Equal(toDoDto.Text, result.Text);
+            Assert.Equal(toDoDto.DueDate, result.DueDate);
+            Assert.Equal(toDoDto.Completed, result.Completed);
         }
     }
 }
