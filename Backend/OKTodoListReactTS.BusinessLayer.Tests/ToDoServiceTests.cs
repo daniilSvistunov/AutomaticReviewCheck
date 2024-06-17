@@ -87,7 +87,6 @@ namespace OKTemplate.BusinessLayer.Tests
 
             //Assert
             Assert.Null(await _dbContext.ToDo.FindAsync(addtoDo.Id));
-
         }
 
         [Fact]
@@ -145,7 +144,6 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.Equal(updatedDto.Completed, result.Completed);
         }
 
-
         [Fact]
         public async Task UpdateTodoAsync_ReturnsNotFound()
         {
@@ -162,7 +160,6 @@ namespace OKTemplate.BusinessLayer.Tests
             //Ähnlich wie beim delete not found -  suche ich die toDo
             //Act
             var errorMessage = await Assert.ThrowsAsync<InvalidOperationException>(() => _toDoService.UpdateTodoAsync(addtoDo)); // Dann suche ich die toDo und es sollte es nicht finden
-
 
             //Assert
             Assert.Equal("Error - Id was not found", errorMessage.Message); //jetzt gucke ich dass der error Message stimmt mit was ich bekommen habe
