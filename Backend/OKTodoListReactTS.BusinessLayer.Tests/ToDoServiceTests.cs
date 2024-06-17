@@ -69,7 +69,7 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.NotNull(result);
             Assert.Equal(toDoDto.Id, result.Id);
             Assert.Equal(toDoDto.Text, result.Text);
-            //Assert.Equal(toDoDto.DueDate, result.DueDate);
+            Assert.Equal(toDoDto.DueDate, result.DueDate);
             Assert.Equal(toDoDto.Completed, result.Completed);
         }
 
@@ -141,7 +141,7 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.NotNull(result);
             Assert.Equal(updatedToDoDto.Id, result.Id);
             Assert.Equal(updatedToDoDto.Text, result.Text);
-            //Assert.Equal(updatedToDoDto.DueDate, result.DueDate);
+            Assert.Equal(updatedToDoDto.DueDate, result.DueDate);
             Assert.Equal(updatedToDoDto.Completed, result.Completed);
         }
 
@@ -189,7 +189,7 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.NotNull(result);
             Assert.Equal(toDoDto.Id, result.Id);
             Assert.Equal(toDoDto.Text, result.Text);
-            //Assert.Equal(toDoDto.DueDate, result.DueDate);
+            Assert.Equal(toDoDto.DueDate, result.DueDate);
             Assert.Equal(toDoDto.Completed, result.Completed);
         }
 
