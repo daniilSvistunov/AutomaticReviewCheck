@@ -147,11 +147,12 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             // Arrange
             _toDoService = CreateToDoService();
+            var newTime = System.DateTime.Now;
             ToDoDto toDoDto = new ToDoDto
             {
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo 1",
-                DueDate = System.DateTime.Now,
+                DueDate = newTime,
                 Completed = true
             };
             await _toDoService.AddTodoAsync(toDoDto);
@@ -164,6 +165,7 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.False(result.Completed);
             Assert.Equal(result.Id, toDoDto.Id);
             Assert.Equal(result.Text, toDoDto.Text);
+            Assert.Equal(result.DueDate, newTime);
         }
 
         [Fact]
