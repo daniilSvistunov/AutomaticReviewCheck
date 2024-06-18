@@ -32,6 +32,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\OKTodoListReactTS.Common\OKTodoListReactTS.Common.csproj" />
+		<ProjectReference Include="..\OKTodoListReactTS.DataLayer\OKTodoListReactTS.DataLayer.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

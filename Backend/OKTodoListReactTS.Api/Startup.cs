@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.InMemory;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
@@ -25,6 +26,9 @@ using OKTemplate.Api.Mapping;
 using OKTemplate.BusinessLayer.Interfaces;
 using OKTemplate.BusinessLayer.Services;
 using OKTemplate.Common.Logging;
+using OKTemplate.DataLayer.Entities;
+using OKTemplate.DataLayer;
+using Microsoft.EntityFrameworkCore;
 
 namespace OKTemplate.Api
 {
@@ -47,6 +51,8 @@ namespace OKTemplate.Api
         public void ConfigureServices(IServiceCollection services)
         {
             ConfigureApplicationInsights(services);
+
+            ConfigureDbContext(services);
 
             ConfigureAuthentication(services);
 
@@ -183,10 +189,27 @@ namespace OKTemplate.Api
             services.AddSingleton(mapper);
 
             services.AddSingleton<ILoggerManager, LoggerManager>();
+            services.AddTransient<IToDoService, ToDoService>();
 
             services.AddTransient<IGraphApiService, GraphApiService>();
 
             services.AddLocalization(o => { o.ResourcesPath = "Resources"; });
+        }
+
+        // Wir nutzen hier eine InMemory-Datenbank
+        // In unseren Projekten nutzen wir eine echte Datenbank, die würde man auch in dieser Funktion 
+        private void ConfigureDbContext(IServiceCollection services)
+        {
+            services.AddDbContext<ToDoDbContext>(options =>
+            {
+                options.UseInMemoryDatabase("InMemoryDatabase");
+            });
+
+            using (var scope = services.BuildServiceProvider().CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
+                SeedData(dbContext);
+            }
         }
 
         private void ConfigureAuthentication(IServiceCollection services)
@@ -231,6 +254,44 @@ namespace OKTemplate.Api
             config.LoggingRules.Add(applicationInsightsRule);
 
             LogManager.Configuration = config;
+        }
+
+        // Hier befüllen wir die InMemory-Datenbank mit Daten
+        private void SeedData(ToDoDbContext dbContext)
+        {
+            dbContext.Database.EnsureDeleted();
+            dbContext.Database.EnsureCreated();
+
+            var toDoEntries = new List<ToDoEntry>
+            {
+                new ToDoEntry
+                {
+                    Id = Guid.NewGuid(),
+                    Text = "ToDo 1",
+                    TargetDate = DateTime.UtcNow.AddDays(1),
+                    CreatedOn = DateTime.UtcNow,
+                    UpdatedOn = DateTime.UtcNow
+                },
+                new ToDoEntry
+                {
+                    Id = Guid.NewGuid(),
+                    Text = "ToDo 2",
+                    TargetDate = DateTime.UtcNow.AddDays(2),
+                    CreatedOn = DateTime.UtcNow,
+                    UpdatedOn = DateTime.UtcNow
+                },
+                new ToDoEntry
+                {
+                    Id = Guid.NewGuid(),
+                    Text = "ToDo 3",
+                    TargetDate = DateTime.UtcNow.AddDays(3),
+                    CreatedOn = DateTime.UtcNow,
+                    UpdatedOn = DateTime.UtcNow
+                }
+            };
+
+            dbContext.ToDo.AddRange(toDoEntries);
+            dbContext.SaveChanges();
         }
     }
 }
