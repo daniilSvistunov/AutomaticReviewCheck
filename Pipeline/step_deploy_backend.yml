@@ -6,7 +6,7 @@ parameters: # defaults
 jobs:
     - deployment: DeployAPI
       displayName: "Deploy API"
-      environment: "okp-okorder-${{parameters.environment}}" #TODO env name -okorder-
+      environment: "okorder-${{parameters.environment}}" #TODO env name -okorder-
       pool:
           vmImage: ubuntu-latest
       variables:

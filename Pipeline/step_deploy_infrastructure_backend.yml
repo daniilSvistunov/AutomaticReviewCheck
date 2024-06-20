@@ -1,6 +1,6 @@
 #TODO inlineScript: --name $backend-name$
 jobs:
-  - deployment: DeploySolution
+  - deployment: DeployBicep
     displayName: "Deploy infrastructure"
     environment: "${{parameters.environment}}"
     pool:

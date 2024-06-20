@@ -1,6 +1,6 @@
 jobs:
-  - job: BuildArtifactsFrontend
-    displayName: "Build infrastructure Frontend"
+  - job: BuildBicep_frontend
+    displayName: "Build frontend infrastructure"
     pool:
       vmImage: ubuntu-latest
     steps:

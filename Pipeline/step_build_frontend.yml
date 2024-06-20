@@ -1,6 +1,6 @@
 jobs:
-  - job: BuildFrontend
-    displayName: 'Build React App using vite'
+  - job: BuildApp
+    displayName: 'Build App'
     pool:
       vmImage: ubuntu-latest
     steps:
