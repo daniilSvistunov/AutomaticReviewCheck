@@ -114,6 +114,19 @@ Anschließend kannst du die Duplikatsprüfung implementieren und die Tests erneu
 In der folgenden Aufgabe geht es nochmal um UnitTests, doch dieses Mal umd die Tests der ToDoController-Klasse.
 Es ist hierbei ratsam, sich mit dem [Moq Framework](https://github.com/devlooped/moq) vertraut zu machen, um die Controller-Tests zu schreiben.
 Ein Grundgerüst der Test-Klasse exitsiert bereits, allerdings muss das Moq-Setup und Tests für die weiteren Methoden des Controllers hinzugefügt werden.
-Wie viele Test werden benötigt um den Code zu testen? Gibt es Negativtests? Tipp: kannst du velleicht die Verifizierung von Moq nutzen? (Verify)
+Wie viele Test werden benötigt um den Code zu testen? Werden Negativtests benötigt? Tipp: kannst du velleicht die Verifizierung von Moq nutzen? (Verify)
 
 Nach der 7. Aufgabe sollte der Stand erneut mit dem Verantwortlichen besprochen werden.
+
+
+# 8. Aufgabe / Zusatzaufgabe (Ardalis.Result)
+
+Die nächste Aufgabe besteht darin, die Fehlerbehandlung im Projekt zu verbessern, indem keine Exceptions mehr geworfen werden.
+Arbeite dich hierfür in [Ardalis.Result](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/1072/Ardalis-Result) ein und integriere das Framework in das Projekt.
+Wir haben für OKPlattform das offiziele Package erweitert, um es für uns nutzbar zu machen. 
+Deshalb musst du folgender Anleitung folgen, um unseren Feed als Paket-Quelle hinzuzufügen: [Azure-Atrifacts-Feed](https://dev.azure.com/ok-objektkultur/OKPlattform/_artifacts/feed/OKArdalisResult/connect).
+Versuche den ToDoService so umzubauen, dass er die Result-Klasse von Ardalis verwendet und keine Exceptions mehr wirft.
+Der ToDoController sollte ebenfalls angepasst werden, um die Result-Klasse zu verwenden.
+Zusätzlich sollte das TranslateResultToActionResultAttribute in den Controller eingebaut werden, um die Result-Klasse in HTTP-Statuscodes zu übersetzen.
+Zuletzt muss der ExceptionHandler noch angepasst werden, um die Result-Klasse zu verwenden.
+Am besten versuchst du die Umsetzung anhand von anderen Repositories (z.B. [OKSkill-Management-Service](https://dev.azure.com/ok-objektkultur/OKPlattform/_git/OKSkill-Management-Service)) oder der Dokumentation von Ardalis.Result durchzuführen.
