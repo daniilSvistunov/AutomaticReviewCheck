@@ -16,7 +16,7 @@ Mehr Informationen zur Struktur/Architektur im [Wiki-Architektur](https://dev.az
 Zur Bearbeitung der Aufgaben solltest du das Repository klonen und mit Visual Studio öffnen.
 Du startest das Projekt, indem du im Browser localhost+/docs [https://localhost:5002/docs](https://localhost:5002/docs) eingibst.
 Dort musst du dich auch authorisieren.
-Zur Vervollständigung des Projektes soll ein eigener Branch erstellt werden, der eueren Namen beinhaltet und auf dem "main"-Branch basiert.
+Zur Vervollständigung des Projektes soll ein eigener Branch erstellt werden, der eueren Namen beinhaltet und auf dem "onboarding"-Branch basiert.
 
 **DISCLAIMER:**
 Das Projekt kann man von Anfang an starten.
