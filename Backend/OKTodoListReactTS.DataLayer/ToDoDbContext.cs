@@ -9,7 +9,7 @@ using OKTodoListReactTS.DataLayer.Entities;
 
 namespace OKTodoListReactTS.DataLayer
 {
-    public class TemplateDbContext : DbContext
+    public class ToDoDbContext : DbContext
     {
         public DbSet<Application> Application { get; set; } = null!;
 
@@ -21,7 +21,7 @@ namespace OKTodoListReactTS.DataLayer
         /// Constructor used for dependency injection in azure function.
         /// </summary>
         /// <param name="options"></param>
-        public TemplateDbContext(DbContextOptions<TemplateDbContext> options) : base(options)
+        public ToDoDbContext(DbContextOptions<ToDoDbContext> options) : base(options)
         {
         }
 
@@ -30,7 +30,7 @@ namespace OKTodoListReactTS.DataLayer
         /// </summary>
         /// <param name="options"></param>
         /// <param name="httpContextAccessor"></param>
-        public TemplateDbContext(DbContextOptions<TemplateDbContext> options, IHttpContextAccessor httpContextAccessor) :
+        public ToDoDbContext(DbContextOptions<ToDoDbContext> options, IHttpContextAccessor httpContextAccessor) :
             base(options)
         {
             HttpContextAccessor = httpContextAccessor;

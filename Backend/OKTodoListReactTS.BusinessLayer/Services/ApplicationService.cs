@@ -14,7 +14,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
     /// <inheritdoc cref="ITeamProjectService" />
     public class ApplicationService : BaseEntityService, IApplicationService
     {
-        public ApplicationService(TemplateDbContext dbContext, ILoggerManager logger)
+        public ApplicationService(ToDoDbContext dbContext, ILoggerManager logger)
             : base(dbContext, logger)
         {
             // nop
@@ -38,7 +38,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 _logger.LogWarning(ErrorCode.TeamProjectNotFound, "User has tried to get application by id which doesn't exist");
 
-                throw new TemplateException(HttpStatusCode.BadRequest, ErrorCode.TeamProjectNotFound);
+                throw new ApiException(HttpStatusCode.BadRequest, ErrorCode.TeamProjectNotFound);
             }
 
             return application;

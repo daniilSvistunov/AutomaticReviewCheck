@@ -14,7 +14,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
 {
     public class EventTypeService : BaseEntityService, IEventTypeService
     {
-        public EventTypeService(TemplateDbContext dbContext, ILoggerManager logger) : base(dbContext, logger)
+        public EventTypeService(ToDoDbContext dbContext, ILoggerManager logger) : base(dbContext, logger)
         {
             // nop
         }

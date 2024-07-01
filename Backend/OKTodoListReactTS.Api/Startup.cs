@@ -20,9 +20,9 @@ using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using OKTemplate.Api.Mapping;
 using OKTodoListReactTS.Api.ErrorHandling;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
+using OKTodoListReactTS.BusinessLayer.Mapping;
 using OKTodoListReactTS.BusinessLayer.Services;
 using OKTodoListReactTS.Common.Logging;
 

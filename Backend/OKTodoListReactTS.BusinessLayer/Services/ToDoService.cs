@@ -11,9 +11,9 @@ namespace OKTodoListReactTS.BusinessLayer.Services
     public class ToDoService : IToDoService
     {
         private readonly IMapper _mapper;
-        private readonly TemplateDbContext _dbContext;
+        private readonly ToDoDbContext _dbContext;
 
-        public ToDoService(IMapper mapper, TemplateDbContext dbContext)
+        public ToDoService(IMapper mapper, ToDoDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;

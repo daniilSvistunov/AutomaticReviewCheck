@@ -9,7 +9,7 @@ namespace OKTodoListReactTS.DataLayer.Helpers
 {
     public class MockDataGenerator : IMockDataGenerator
     {
-        private readonly TemplateDbContext _context;
+        private readonly ToDoDbContext _context;
 
         public static readonly string ProjectWithoutData = "ProjectWithoutData";
 
@@ -44,7 +44,7 @@ namespace OKTodoListReactTS.DataLayer.Helpers
                 "scopereports/","qualityreports/","projectprofile/","teamprojectsettings"
             };
 
-        public MockDataGenerator(TemplateDbContext context)
+        public MockDataGenerator(ToDoDbContext context)
         {
             _context = context;
         }

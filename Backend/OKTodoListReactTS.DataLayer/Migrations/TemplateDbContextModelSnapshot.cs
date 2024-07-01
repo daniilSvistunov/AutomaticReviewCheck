@@ -10,7 +10,7 @@ using OKTodoListReactTS.DataLayer;
 
 namespace OKTemplate.Model.Migrations
 {
-    [DbContext(typeof(TemplateDbContext))]
+    [DbContext(typeof(ToDoDbContext))]
     partial class TemplateDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

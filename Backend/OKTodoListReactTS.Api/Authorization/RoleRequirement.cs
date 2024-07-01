@@ -1,9 +1,8 @@
 ﻿using System.Net;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using OKTemplate.Common.Exceptions;
-using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
 using OKTodoListReactTS.Common.Exceptions;
+using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
 
 namespace OKTodoListReactTS.Api.Authorization
 {

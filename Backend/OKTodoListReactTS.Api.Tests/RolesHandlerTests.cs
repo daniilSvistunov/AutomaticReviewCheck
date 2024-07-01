@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using OKTemplate.Api.Authorization;
 using OKTodoListReactTS.Api.Authorization;
 using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
 using Xunit;
