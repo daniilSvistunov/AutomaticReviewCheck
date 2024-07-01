@@ -37,7 +37,7 @@ namespace OKTodoListReactTS.Api.Controllers
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
-        [HttpDelete(Name = nameof(AddToDoAsync))]
+        [HttpDelete(Name = nameof(DeleteToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync(/*zu ergänzen*/)
@@ -51,7 +51,7 @@ namespace OKTodoListReactTS.Api.Controllers
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
-        [HttpGet(Name = nameof(AddToDoAsync))]
+        [HttpGet(Name = nameof(GetAllTodosAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ApplicationDto>> GetAllTodosAsync()
