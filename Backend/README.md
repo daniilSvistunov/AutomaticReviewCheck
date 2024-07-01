@@ -29,7 +29,7 @@ Generell (nicht bei dieser Aufgabe) sollen folgende Richtlinien eingehalten werd
 [Branches und PR-Richtlinien](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/218/Branches-und-PR-Richtlinien)
 
 
-## 1.Aufgabe 
+## 1. Aufgabe 
 
 Im Grundgerüst des BusinessLayer-Projektes findet ihr die Klasse ToDoService, die das Interface IToDoService implementieren soll. 
 Vervollständigt die Methoden anhand der dort stehenden Kommentare.
@@ -46,7 +46,7 @@ Versuche die Enpunkte in Swagger aufzurufen.
 [Interfaces](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/1070/Interfaces)
 [Vererbung](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/1078/Vererbung)
 
-## 2.Aufgabe
+## 2. Aufgabe
 
 Damit die Datenbankobjekte richtig in die Data-Transfer-Objects (DTO) konvertiert werden können (was in Aufgabe 1 bereits passieren sollte/kann), muss das Mapping angepasst werden.
 Hierfür wird das Framework AutoMapper eingesetzt: [AutoMapper](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/1058/Auto-Mapper).
@@ -54,7 +54,7 @@ Das Mapping wird in MappingProfile.cs festgelegt.
 Du kannst dir zur Inspiration auch andere Projekte ansehen.
 
 
-## 3.Aufgabe
+## 3. Aufgabe
 
 Für den erstellten Service müssen UnitTests erstellt werden, um die Funktionalität abzusichern. Der folgende Artikel hilft euch dabei:
 
@@ -63,8 +63,7 @@ Für den erstellten Service müssen UnitTests erstellt werden, um die Funktional
 Ein Unit-Test und die Struktur drumrum wurde schon implementiert und die benötigten Test(namen) sind schon gegeben. Vervollständige die entsprechenden Tests in ToDoServiceTests.cs
 
 
-
-## 4.Aufgabe
+## 4. Aufgabe
 
 Erstelle nun im ToDoController einen neuen Endpunkt, der ein gewisses ToDo nach Id holt und füge die entsprechende Service-Funktion im ToDoService hinzu.
 
@@ -80,3 +79,29 @@ Inhalt:
 Über einen Endpunkt die ToDo Id mitschickt soll die ToDo-Aufgabe geholt werden.
 
 ```
+
+Nach der 4. Aufgabe sollte das Projekt lauffähig sein und die Tests sollten erfolgreich durchlaufen.
+Anschließend sollte der Stand mit dem Verantwortlichen besprochen werden.
+
+
+## 5. Aufgabe (Feld-Erweiterung)
+
+Als nächstes soll der Use-Case noch etwas weiter ausgebaut werden.
+Zunächst soll das Modell der ToDos um das Feld Title ergänzt. Hierfür muss sowohl die Klasse ToDoEntry als auch das DTO ToDoDto erweitert werden.
+Erweitere hierfür auch deine UnitTests und teste deine Endpunkte gründlich durch.
+
+Fragestellung: Was ist eine Migration und wofür wird sie normalerweise benötigt?
+Tipp: Im Wiki unter [Datenbank](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/873/Datenbank) kann dazu ein wenig nachgelesen werden, ansonsten kannst du dich auch generell zu Entity Framework Core Migrations informieren
+
+
+## 6. Aufgabe (Duplikatserkennung)
+
+Nun muss eine Duplikatsprüfung in den ToDoService eingebaut werden.
+Hierbei soll in den Add- und Update-Methoden überprüft werden, ob es bereits ein ToDo mit dem selben Titel und Fälligkeitsdatum gibt.
+Falls es bereits ein ToDo mit diesen Eigenschaften gibt, soll eine aussagekräftige Exception geworfen werden.
+
+Bevor du beginnst die Duplikatsprüfung zu implementieren, solltest du dir überlegen, wie du diese testen kannst.
+Schreibe hierfür entsprechende UnitTests und führe diese aus. Das Ergebnis sollte natürlich sein, dass diese noch fehlschlagen.
+Anschließend kannst du die Duplikatsprüfung implementieren und die Tests erneut ausführen. Diese sollten nun erfolgreich sein.
+
+Nach der 6. Aufgabe sollte der Stand erneut mit dem Verantwortlichen besprochen werden.

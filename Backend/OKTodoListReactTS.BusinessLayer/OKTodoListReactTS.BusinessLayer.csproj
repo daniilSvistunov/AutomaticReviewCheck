@@ -6,6 +6,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Dtos\Validators\**" />
+	  <Compile Remove="Helpers\**" />
+	  <Compile Remove="OpenAPIs\**" />
+	  <EmbeddedResource Remove="Dtos\Validators\**" />
+	  <EmbeddedResource Remove="Helpers\**" />
+	  <EmbeddedResource Remove="OpenAPIs\**" />
+	  <None Remove="Dtos\Validators\**" />
+	  <None Remove="Helpers\**" />
+	  <None Remove="OpenAPIs\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Ardalis.Result" Version="8.0.0" />
 		<PackageReference Include="Ardalis.Result.AspNetCore" Version="8.0.0" />
 		<PackageReference Include="AutoMapper" Version="11.0.1" />
@@ -33,11 +45,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\OKTodoListReactTS.Common\OKTodoListReactTS.Common.csproj" />
 		<ProjectReference Include="..\OKTodoListReactTS.DataLayer\OKTodoListReactTS.DataLayer.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Dtos\Validators\" />
-	  <Folder Include="Helpers\" />
-	  <Folder Include="OpenAPIs\" />
 	</ItemGroup>
 </Project>
