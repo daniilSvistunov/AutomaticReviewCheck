@@ -182,7 +182,11 @@ namespace OKTodoListReactTS.Api
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            //Hier werden die Services registriert
+
             services.AddSingleton<ILoggerManager, LoggerManager>();
+
+            services.AddTransient<IToDoService, ToDoService>();
 
             services.AddTransient<IGraphApiService, GraphApiService>();
 

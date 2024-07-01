@@ -8,8 +8,6 @@ namespace OKTodoListReactTS.BusinessLayer.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Application, ApplicationDto>().ReverseMap();
-            CreateMap<EventType, EventTypeDto>().ReverseMap();
             CreateMap<ToDoEntry, ToDoDto>().ReverseMap();
         }
     }

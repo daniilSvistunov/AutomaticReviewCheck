@@ -1,25 +1,62 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
-using OKTodoListReactTS.BusinessLayer.Mapping;
 using OKTodoListReactTS.BusinessLayer.Services;
-using OKTodoListReactTS.DataLayer;
+using Xunit;
 
-namespace OKTodoListReactTS.BusinessLayer.Tests
+namespace OKTemplate.BusinessLayer.Tests
 {
-    public class ToDoServiceTests : BaseEntityServiceTests
+    public class ToDoServiceTests : ServiceTests
     {
-        private IToDoService _toDoService;
-        private readonly IMapper _mapper;
-        private readonly ToDoDbContext _dbContext;
+        private IToDoService? _toDoService;
 
-        public ToDoServiceTests()
+        private ToDoService CreateToDoService()
         {
-            var config = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()));
-            _mapper = config.CreateMapper();
+            return new ToDoService(/*welche Parameter braucht man hier?*/);
+        }
 
-            _dbContext = CreateTestDbContext();
+        //Der erste Test ist schon für Dich implementiert
+        [Fact]
+        public async Task GetAllTodosAsync()
+        {
+            // Arrange
+            _toDoService = CreateToDoService();
 
-            _toDoService = new ToDoService(_mapper, _dbContext);
-        }        
+            // Act
+            var result = await _toDoService.GetAllTodosAsync();
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        //Die weiteren Tests musst Du selbst implementieren
+        [Fact]
+        public async Task AddTodoAsync()
+        {
+
+        }
+
+        [Fact]
+        public async Task DeleteTodoAsync_Success()
+        {
+
+        }
+
+        [Fact]
+        public async Task DeleteTodoAsync_ReturnsNotFound()
+        {
+
+        }
+
+        [Fact]
+        public async Task UpdateTodoAsync_Success()
+        {
+
+        }
+
+        [Fact]
+        public async Task UpdateTodoAsync_ReturnsNotFound()
+        {
+
+        }
     }
 }

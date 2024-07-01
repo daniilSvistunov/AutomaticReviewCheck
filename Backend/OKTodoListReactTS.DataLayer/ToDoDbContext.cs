@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using System.Threading;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OKTodoListReactTS.DataLayer.Entities;
@@ -11,27 +11,23 @@ namespace OKTodoListReactTS.DataLayer
 {
     public class ToDoDbContext : DbContext
     {
-        public DbSet<Application> Application { get; set; } = null!;
+        public DbSet<ToDoEntry> ToDo { get; set; } = null!;
 
-        public DbSet<EventType> EventType { get; set; } = null!;
+        protected IHttpContextAccessor? HttpContextAccessor { get; }
 
-        protected IHttpContextAccessor HttpContextAccessor { get; }
-
-        /// <summary>
-        /// Constructor used for dependency injection in azure function.
-        /// </summary>
-        /// <param name="options"></param>
-        public ToDoDbContext(DbContextOptions<ToDoDbContext> options) : base(options)
+        // Konstruktor für Dependency Injection
+        public ToDoDbContext(DbContextOptions<ToDoDbContext> options) 
+            : base(options)
         {
         }
-
+        
         /// <summary>
-        /// Constructor used for dependency injection.
-        /// </summary>
-        /// <param name="options"></param>
-        /// <param name="httpContextAccessor"></param>
-        public ToDoDbContext(DbContextOptions<ToDoDbContext> options, IHttpContextAccessor httpContextAccessor) :
-            base(options)
+         /// Constructor used for dependency injection.
+         /// </summary>
+         /// <param name="options"></param>
+         /// <param name="httpContextAccessor"></param>
+        public ToDoDbContext(DbContextOptions<ToDoDbContext> options, IHttpContextAccessor httpContextAccessor) 
+            : base(options)
         {
             HttpContextAccessor = httpContextAccessor;
         }
@@ -101,15 +97,9 @@ namespace OKTodoListReactTS.DataLayer
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Application>(entity =>
+            modelBuilder.Entity<ToDoEntry>(entity =>
             {
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getutcdate())");
-                entity.Property(e => e.UpdatedOn).HasDefaultValueSql("(getutcdate())");
-            });
-            modelBuilder.Entity<EventType>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getutcdate())");
                 entity.Property(e => e.UpdatedOn).HasDefaultValueSql("(getutcdate())");
             });

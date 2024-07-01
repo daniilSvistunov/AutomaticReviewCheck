@@ -40,9 +40,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [HttpDelete(Name = nameof(AddToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync([FromBody] Guid toDoId)
+        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync(/*zu ergänzen*/)
         {
-            await _service.DeleteTodoAsync(toDoId);
+            await _service.DeleteTodoAsync(/*zu ergänzen*/);
             return Ok();
         }
 
@@ -67,9 +67,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [HttpPost(Name = nameof(UpdateTodoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto)
+        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync(/*zu ergänzen*/)
         {
-            return Ok(await _service.UpdateTodoAsync(toDoDto));
+            return Ok(await _service.UpdateTodoAsync(/*zu ergänzen*/));
         }
     }
 }
