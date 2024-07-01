@@ -29,7 +29,7 @@ Generell (nicht bei dieser Aufgabe) sollen folgende Richtlinien eingehalten werd
 [Branches und PR-Richtlinien](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/218/Branches-und-PR-Richtlinien)
 
 
-## 1. Aufgabe 
+## 1. Aufgabe (Service-Implementierung)
 
 Im Grundgerüst des BusinessLayer-Projektes findet ihr die Klasse ToDoService, die das Interface IToDoService implementieren soll. 
 Vervollständigt die Methoden anhand der dort stehenden Kommentare.
@@ -46,7 +46,7 @@ Versuche die Enpunkte in Swagger aufzurufen.
 [Interfaces](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/1070/Interfaces)
 [Vererbung](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/1078/Vererbung)
 
-## 2. Aufgabe
+## 2. Aufgabe (Mapping)
 
 Damit die Datenbankobjekte richtig in die Data-Transfer-Objects (DTO) konvertiert werden können (was in Aufgabe 1 bereits passieren sollte/kann), muss das Mapping angepasst werden.
 Hierfür wird das Framework AutoMapper eingesetzt: [AutoMapper](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/1058/Auto-Mapper).
@@ -54,16 +54,20 @@ Das Mapping wird in MappingProfile.cs festgelegt.
 Du kannst dir zur Inspiration auch andere Projekte ansehen.
 
 
-## 3. Aufgabe
+## 3. Aufgabe (Unit-Testing)
 
 Für den erstellten Service müssen UnitTests erstellt werden, um die Funktionalität abzusichern. Der folgende Artikel hilft euch dabei:
 
 [UnitTests](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/1015/Unit-Tests)
 
-Ein Unit-Test und die Struktur drumrum wurde schon implementiert und die benötigten Test(namen) sind schon gegeben. Vervollständige die entsprechenden Tests in ToDoServiceTests.cs
+Ein Unit-Test und die Basis-Struktur wurde schon implementiert und die einige Test(namen) sind schon gegeben. 
+Versuche hier den vorhandenen Code oder wende dich an einen Kollegen, falls du nicht weiterkommst.
+Anschließend vervollständige die Tests in ToDoServiceTests.cs und ergänze gerne noch weitere Tests, um deine Implementierung optimal abzusichern.
+Versuche dabei jede deiner Code-Zeilen und alle möglichen Pfade abzudecken. 
+Führe die Tests aus und stelle sicher, dass sie erfolgreich durchlaufen.
 
 
-## 4. Aufgabe
+## 4. Aufgabe (Endpunkt ergänzen)
 
 Erstelle nun im ToDoController einen neuen Endpunkt, der ein gewisses ToDo nach Id holt und füge die entsprechende Service-Funktion im ToDoService hinzu.
 
@@ -91,7 +95,7 @@ Zunächst soll das Modell der ToDos um das Feld Title ergänzt. Hierfür muss so
 Erweitere hierfür auch deine UnitTests und teste deine Endpunkte gründlich durch.
 
 Fragestellung: Was ist eine Migration und wofür wird sie normalerweise benötigt?
-Tipp: Im Wiki unter [Datenbank](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/873/Datenbank) kann dazu ein wenig nachgelesen werden, ansonsten kannst du dich auch generell zu Entity Framework Core Migrations informieren
+Tipp: Im Wiki unter [Datenbank](https://dev.azure.com/ok-objektkultur/OKPlattform/_wiki/wikis/OKPlattform.wiki/873/Datenbank) kann dazu ein wenig nachgelesen werden, ansonsten kannst du dich auch generell zu Entity Framework Core Migrations informieren.
 
 
 ## 6. Aufgabe (Duplikatserkennung)
@@ -104,4 +108,12 @@ Bevor du beginnst die Duplikatsprüfung zu implementieren, solltest du dir über
 Schreibe hierfür entsprechende UnitTests und führe diese aus. Das Ergebnis sollte natürlich sein, dass diese noch fehlschlagen.
 Anschließend kannst du die Duplikatsprüfung implementieren und die Tests erneut ausführen. Diese sollten nun erfolgreich sein.
 
-Nach der 6. Aufgabe sollte der Stand erneut mit dem Verantwortlichen besprochen werden.
+
+## 7. Aufgabe (Controller-Tests)
+
+In der folgenden Aufgabe geht es nochmal um UnitTests, doch dieses Mal umd die Tests der ToDoController-Klasse.
+Es ist hierbei ratsam, sich mit dem [Moq Framework](https://github.com/devlooped/moq) vertraut zu machen, um die Controller-Tests zu schreiben.
+Ein Grundgerüst der Test-Klasse exitsiert bereits, allerdings muss das Moq-Setup und Tests für die weiteren Methoden des Controllers hinzugefügt werden.
+Wie viele Test werden benötigt um den Code zu testen? Gibt es Negativtests? Tipp: kannst du velleicht die Verifizierung von Moq nutzen? (Verify)
+
+Nach der 7. Aufgabe sollte der Stand erneut mit dem Verantwortlichen besprochen werden.
