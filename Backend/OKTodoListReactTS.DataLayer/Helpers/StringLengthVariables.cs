@@ -1,4 +1,4 @@
-﻿namespace OKTemplate.DataLayer.Helpers
+﻿namespace OKTodoListReactTS.DataLayer.Helpers
 {
     public static class StringLengthVariables
     {

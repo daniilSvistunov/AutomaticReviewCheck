@@ -1,4 +1,4 @@
-﻿namespace OKTemplate.BusinessLayer.Interfaces
+﻿namespace OKTodoListReactTS.BusinessLayer.Interfaces
 {
     public interface IExternalApiService<out T>
     {

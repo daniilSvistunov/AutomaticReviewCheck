@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace OKTemplate.Api.Authorization
+namespace OKTodoListReactTS.Api.Authorization
 {
     /// <inheritdoc cref="AuthorizationHandler" />
     public class RolesHandler : AuthorizationHandler<RoleRequirement>

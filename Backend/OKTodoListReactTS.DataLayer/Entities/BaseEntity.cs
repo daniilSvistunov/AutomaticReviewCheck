@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using OKTemplate.DataLayer.Helpers;
+using OKTodoListReactTS.DataLayer.Helpers;
 
-namespace OKTemplate.DataLayer.Entities
+namespace OKTodoListReactTS.DataLayer.Entities
 {
     /// <summary>
     /// Describes a <see cref="BaseEntity"/>

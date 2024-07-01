@@ -1,4 +1,4 @@
-﻿namespace OKTemplate.Api.Authorization
+﻿namespace OKTodoListReactTS.Api.Authorization
 {
     /// <summary>
     /// Defines names for authorization policies

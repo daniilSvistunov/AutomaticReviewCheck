@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace OKTemplate.DataLayer.Helpers
+namespace OKTodoListReactTS.DataLayer.Helpers
 {
     public interface IMockDataGenerator
     {

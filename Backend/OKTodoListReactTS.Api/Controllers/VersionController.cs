@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace OKTemplate.Api.Controllers
+namespace OKTodoListReactTS.Api.Controllers
 {
     /// <summary>
     /// Provides an endpoint to get the backend version

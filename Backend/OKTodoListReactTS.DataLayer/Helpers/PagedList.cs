@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace OKTemplate.DataLayer.Helpers
+namespace OKTodoListReactTS.DataLayer.Helpers
 {
     public class PagedList<TEntity> : List<TEntity>
     {

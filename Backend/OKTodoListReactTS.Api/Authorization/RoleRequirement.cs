@@ -1,10 +1,11 @@
 ﻿using System.Net;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using OKTemplate.BusinessLayer.Dtos.Enums;
 using OKTemplate.Common.Exceptions;
+using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
+using OKTodoListReactTS.Common.Exceptions;
 
-namespace OKTemplate.Api.Authorization
+namespace OKTodoListReactTS.Api.Authorization
 {
     /// <inheritdoc cref="IAuthorizationRequirement" />
     public class RoleRequirement : IAuthorizationRequirement

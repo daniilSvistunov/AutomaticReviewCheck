@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Security.Principal;
-using OKTemplate.BusinessLayer.Dtos.Enums;
+using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
 
-namespace OKTemplate.Api.Authorization
+namespace OKTodoListReactTS.Api.Authorization
 {
     /// <summary>
     /// Reads information from claims

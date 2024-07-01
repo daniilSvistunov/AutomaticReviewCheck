@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Security.Claims;
 using System.Security.Principal;
-using OKTemplate.BusinessLayer.Dtos.Enums;
+using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
 
-namespace OKTemplate.Api.Authorization
+namespace OKTodoListReactTS.Api.Authorization
 {
     /// <inheritdoc cref="IClaimsHelper" />
     public class ClaimsHelper : IClaimsHelper

@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using OKTemplate.Common.Exceptions;
-using OKTemplate.Common.Logging;
+using OKTodoListReactTS.Common.Exceptions;
+using OKTodoListReactTS.Common.Logging;
 
-namespace OKTemplate.Api.ErrorHandling
+namespace OKTodoListReactTS.Api.ErrorHandling
 {
     /// <summary>
     /// Extends the <see cref="IApplicationBuilder"/> to use global exception handling

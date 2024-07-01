@@ -1,4 +1,4 @@
-﻿namespace OKTemplate.Common.Logging
+﻿namespace OKTodoListReactTS.Common.Logging
 {
     /// <summary>
     /// Manages logging within the api

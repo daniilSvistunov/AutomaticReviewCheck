@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace OKTemplate.DataLayer.Helpers
+namespace OKTodoListReactTS.DataLayer.Helpers
 {
     public static class MockDataHelper
     {

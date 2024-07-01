@@ -1,4 +1,4 @@
-﻿namespace OKTemplate.Common.Exceptions
+﻿namespace OKTodoListReactTS.Common.Exceptions
 {
     public enum ErrorCode
     {

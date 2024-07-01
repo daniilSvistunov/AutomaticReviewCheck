@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.Graph;
 using Microsoft.Identity.Web;
 using Newtonsoft.Json;
-using OKTemplate.BusinessLayer.Interfaces;
-using OKTemplate.Common.Exceptions;
-using OKTemplate.Common.Logging;
+using OKTodoListReactTS.BusinessLayer.Interfaces;
+using OKTodoListReactTS.Common.Exceptions;
+using OKTodoListReactTS.Common.Logging;
 
-namespace OKTemplate.BusinessLayer.Services
+namespace OKTodoListReactTS.BusinessLayer.Services
 {
     /// <inheritdoc cref="IGraphApi"/>
     public class GraphApiService : IGraphApiService

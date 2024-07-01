@@ -1,7 +1,7 @@
 ﻿using FluentValidation.Results;
-using OKTemplate.Common.Exceptions;
+using OKTodoListReactTS.Common.Exceptions;
 
-namespace OKTemplate.Common.Logging
+namespace OKTodoListReactTS.Common.Logging
 {
     public static class LoggerManagerExtensions
     {

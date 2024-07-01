@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
-using OKTemplate.Api.Authorization;
-using OKTemplate.BusinessLayer.Dtos.Enums;
+using OKTodoListReactTS.Api.Authorization;
+using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
 using Xunit;
 
-namespace OKTemplate.Api.Tests
+namespace OKTodoListReactTS.Api.Tests
 {
     /// <summary>
     /// Runs tests on <see cref="ClaimsHelper"/>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OKTemplate.BusinessLayer.Dtos
+namespace OKTodoListReactTS.BusinessLayer.Dtos
 {
     /// <summary>
     /// Represents a basic wrapper for data transfer objects.

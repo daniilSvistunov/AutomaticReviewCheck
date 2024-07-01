@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using OKTemplate.Common.Exceptions;
+using OKTodoListReactTS.Common.Exceptions;
 
-namespace OKTemplate.Api.ErrorHandling
+namespace OKTodoListReactTS.Api.ErrorHandling
 {
     /// <summary>
     /// Contains information about occurred errors

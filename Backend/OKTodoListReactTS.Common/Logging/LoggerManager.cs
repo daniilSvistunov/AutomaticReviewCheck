@@ -1,6 +1,6 @@
 ﻿using NLog;
 
-namespace OKTemplate.Common.Logging
+namespace OKTodoListReactTS.Common.Logging
 {
     /// <inheritdoc cref="ILoggerManager" />
     public class LoggerManager : ILoggerManager

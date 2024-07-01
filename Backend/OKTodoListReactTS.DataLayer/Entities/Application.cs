@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using OKTemplate.DataLayer.Helpers;
+using OKTodoListReactTS.DataLayer.Helpers;
 
-namespace OKTemplate.DataLayer.Entities
+namespace OKTodoListReactTS.DataLayer.Entities
 {
 
     /// <summary>

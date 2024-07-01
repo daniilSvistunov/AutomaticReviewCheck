@@ -1,4 +1,4 @@
-﻿namespace OKTemplate.Api.Authorization
+﻿namespace OKTodoListReactTS.Api.Authorization
 {
     /// <summary>
     /// Defines operators on role requirements

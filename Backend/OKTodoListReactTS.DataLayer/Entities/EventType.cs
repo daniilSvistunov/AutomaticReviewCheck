@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using OKTemplate.DataLayer.Helpers;
+using OKTodoListReactTS.DataLayer.Helpers;
 
-namespace OKTemplate.DataLayer.Entities
+namespace OKTodoListReactTS.DataLayer.Entities
 {
     /// <summary>
     /// Describes a <see cref="EventType"/>
@@ -26,7 +26,7 @@ namespace OKTemplate.DataLayer.Entities
         public Application? Application { get; set; }
 
         [NotMapped]
-        public string? ApplicationName { get => this.Application?.AppName; }
+        public string? ApplicationName { get => Application?.AppName; }
     }
 }
 

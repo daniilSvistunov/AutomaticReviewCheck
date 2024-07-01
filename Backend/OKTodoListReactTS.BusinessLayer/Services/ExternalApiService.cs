@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
-using OKTemplate.BusinessLayer.Interfaces;
+using OKTodoListReactTS.BusinessLayer.Interfaces;
 
-namespace OKTemplate.BusinessLayer.Services
+namespace OKTodoListReactTS.BusinessLayer.Services
 {
     public class ExternalApiService<T> : IExternalApiService<T>
     {

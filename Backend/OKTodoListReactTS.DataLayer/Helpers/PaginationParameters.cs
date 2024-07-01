@@ -1,4 +1,4 @@
-﻿namespace OKTemplate.DataLayer.Helpers
+﻿namespace OKTodoListReactTS.DataLayer.Helpers
 {
     public class PaginationParameters
     {
@@ -13,7 +13,7 @@
             }
             set
             {
-                _pageSize = (value > maxPageSize) ? maxPageSize : value;
+                _pageSize = value > maxPageSize ? maxPageSize : value;
             }
         }
     }

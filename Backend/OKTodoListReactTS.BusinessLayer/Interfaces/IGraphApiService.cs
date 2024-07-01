@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Graph;
 
-namespace OKTemplate.BusinessLayer.Interfaces
+namespace OKTodoListReactTS.BusinessLayer.Interfaces
 {
     public interface IGraphApiService
     {

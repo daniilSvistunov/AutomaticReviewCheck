@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OKTemplate.BusinessLayer.Dtos.Enums
+namespace OKTodoListReactTS.BusinessLayer.Dtos.Enums
 {
     /// <summary>
     /// Roles that are defined in AzureAD, for more information see: 

@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using OKTemplate.BusinessLayer.Dtos.Enums;
+using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
 
-namespace OKTemplate.Api.Authorization
+namespace OKTodoListReactTS.Api.Authorization
 {
     /// <inheritdoc cref="DefaultAuthorizationPolicyProvider" />
     public class RolesAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider

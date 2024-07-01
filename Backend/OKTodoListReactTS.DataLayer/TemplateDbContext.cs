@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using OKTemplate.DataLayer.Entities;
+using OKTodoListReactTS.DataLayer.Entities;
 
-namespace OKTemplate.DataLayer
+namespace OKTodoListReactTS.DataLayer
 {
     public class TemplateDbContext : DbContext
     {

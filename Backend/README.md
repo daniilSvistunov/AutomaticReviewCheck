@@ -21,7 +21,7 @@ Zur Vervollständigung des Projektes soll ein eigener Branch erstellt werden, de
 **DISCLAIMER:**
 Das Projekt kann man von Anfang an starten.
 Es sind mehrere Controller und Services im Projekt, um bisschen das drumherum zu simulieren. Die anderen Controller/Endpunkte sind nicht funktionsfähig.
-Man kann sie sich jedoch anschauen. Eventuell kann man sich davon inspirierien.
+Man kann sie sich jedoch anschauen. Eventuell kann man sich davon inspirierien lassen.
 Wir fokussieren uns auf die ToDo´s.
 Es gibt nicht die eine richtige Lösung. Das Ergebnis muss stimmen.
 

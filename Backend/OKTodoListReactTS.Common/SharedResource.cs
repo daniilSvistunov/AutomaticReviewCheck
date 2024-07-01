@@ -1,4 +1,4 @@
-﻿namespace OKTemplate.Common
+﻿namespace OKTodoListReactTS.Common
 {
     /// <summary>
     /// Dummy class to group shared resources

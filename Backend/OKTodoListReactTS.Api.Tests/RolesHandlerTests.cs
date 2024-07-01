@@ -3,10 +3,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using OKTemplate.Api.Authorization;
-using OKTemplate.BusinessLayer.Dtos.Enums;
+using OKTodoListReactTS.Api.Authorization;
+using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
 using Xunit;
 
-namespace OKTemplate.Api.Tests
+namespace OKTodoListReactTS.Api.Tests
 {
     /// <summary>
     /// Runs tests against the <see cref="RolesHandler"/>

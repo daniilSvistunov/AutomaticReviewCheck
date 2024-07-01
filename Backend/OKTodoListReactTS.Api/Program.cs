@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using OKTemplate.Api.WorkerServices;
+using OKTodoListReactTS.Api.WorkerServices;
 
-namespace OKTemplate.Api
+namespace OKTodoListReactTS.Api
 {
     public static class Program
     {

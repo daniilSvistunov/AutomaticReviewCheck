@@ -20,13 +20,13 @@ using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using OKTemplate.Api.ErrorHandling;
 using OKTemplate.Api.Mapping;
-using OKTemplate.BusinessLayer.Interfaces;
-using OKTemplate.BusinessLayer.Services;
-using OKTemplate.Common.Logging;
+using OKTodoListReactTS.Api.ErrorHandling;
+using OKTodoListReactTS.BusinessLayer.Interfaces;
+using OKTodoListReactTS.BusinessLayer.Services;
+using OKTodoListReactTS.Common.Logging;
 
-namespace OKTemplate.Api
+namespace OKTodoListReactTS.Api
 {
     public class Startup
     {

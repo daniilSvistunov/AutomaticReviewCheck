@@ -1,7 +1,7 @@
 ﻿using System;
-using OKTemplate.Common.Exceptions;
+using OKTodoListReactTS.Common.Exceptions;
 
-namespace OKTemplate.BusinessLayer.Dtos.Helpers
+namespace OKTodoListReactTS.BusinessLayer.Dtos.Helpers
 {
     public static class NumberStringToErrorCode
     {

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Runtime.Serialization;
 
-namespace OKTemplate.Common.Exceptions
+namespace OKTodoListReactTS.Common.Exceptions
 {
 
     /// <inheritdoc />

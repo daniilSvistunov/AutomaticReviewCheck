@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-using OKTemplate.BusinessLayer.Dtos.Enums;
+using OKTodoListReactTS.BusinessLayer.Dtos.Enums;
 
-namespace OKTemplate.Api.Authorization
+namespace OKTodoListReactTS.Api.Authorization
 {
     /// <inheritdoc cref="AuthorizeAttribute" />
     public class RolesAuthorizeAttribute : AuthorizeAttribute

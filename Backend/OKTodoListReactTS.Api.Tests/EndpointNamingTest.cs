@@ -3,10 +3,10 @@ using System.Linq;
 using AutoMapper.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using OKTemplate.Api.Controllers;
+using OKTodoListReactTS.Api.Controllers;
 using Xunit;
 
-namespace OKTemplate.Api.Tests
+namespace OKTodoListReactTS.Api.Tests
 {
     public class EndpointNamingTest
     {

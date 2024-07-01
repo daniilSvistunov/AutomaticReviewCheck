@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using OKTemplate.DataLayer.Entities;
+using OKTodoListReactTS.DataLayer;
+using OKTodoListReactTS.DataLayer.Entities;
 
-namespace OKTemplate.DataLayer.Helpers
+namespace OKTodoListReactTS.DataLayer.Helpers
 {
     public class MockDataGenerator : IMockDataGenerator
     {

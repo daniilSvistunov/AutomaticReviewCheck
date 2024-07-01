@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using OKTemplate.Common.Logging;
+using OKTodoListReactTS.Common.Logging;
 
-namespace OKTemplate.Api.WorkerServices
+namespace OKTodoListReactTS.Api.WorkerServices
 {
     public class NotificationQueueWorkerService : BackgroundService
     {
