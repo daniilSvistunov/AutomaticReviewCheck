@@ -25,6 +25,7 @@ using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.BusinessLayer.Mapping;
 using OKTodoListReactTS.BusinessLayer.Services;
 using OKTodoListReactTS.Common.Logging;
+using OKTodoListReactTS.DataLayer;
 
 namespace OKTodoListReactTS.Api
 {
@@ -56,6 +57,9 @@ namespace OKTodoListReactTS.Api
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddControllers().AddNewtonsoftJson();
 
+            // fix for the InvalidOperationException with dbContext.
+            services.AddDbContext<ToDoDbContext>();
+
             services.AddControllers(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -73,7 +77,7 @@ namespace OKTodoListReactTS.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OKTemplate REST API", Version = "v1" });
 
-                // fix to avoid "Fetch error response status is 500" by Swagger
+                // fix to avoid "Fetch error response status is 500" by Swagger.
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
                 var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
