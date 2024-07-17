@@ -3,18 +3,36 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 // ----------------------------------------------------------------------
 
+export enum Priority {
+  HIGH = 'Hoch',
+  MEDIUM = 'Mittel',
+  LOW = 'Niedrig',
+}
+
 export interface Task {
   ID: number;
   title: string;
   checked: boolean;
+  priority?: Priority;
+  bucket?: string;
+  team?: string;
+  assignee?: string;
 }
+
+export type Properties = Pick<Task, 'priority' | 'bucket' | 'team' | 'assignee'>;
 
 interface TaskState {
   list: Task[];
+  buckets: string[];
+  teams: string[];
+  assignees: string[];
 }
 
 const initialState: TaskState = {
   list: [],
+  buckets: ['Bucket 1', 'Bucket 2', 'Bucket 3', 'Bucket 4', 'Bucket 5'],
+  teams: ['Team 1', 'Team 2', 'Team 3', 'Team 4', 'Team 5'],
+  assignees: ['Assignee 1', 'Assignee 2', 'Assignee 3', 'Assignee 4', 'Assignee 5'],
 };
 
 // ----------------------------------------------------------------------
@@ -46,6 +64,10 @@ export const taskSlice = createSlice({
 // ----------------------------------------------------------------------
 
 export const selectList = (state: RootState) => state.task.list;
+
+export const selectBuckets = (state: RootState) => state.task.buckets;
+export const selectTeams = (state: RootState) => state.task.teams;
+export const selectAssignees = (state: RootState) => state.task.assignees;
 
 // ----------------------------------------------------------------------
 
