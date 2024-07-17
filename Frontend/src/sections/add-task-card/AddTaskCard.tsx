@@ -1,7 +1,8 @@
 import { AddRounded } from '@mui/icons-material';
 import { Button, Card, CardActions, CardContent, TextField } from '@mui/material';
-import { create } from '@redux/slices/task';
+import { type Properties, create } from '@redux/slices/task';
 import { useDispatch } from '@redux/store';
+import { FilterChips } from '@sections/task-properties';
 import { useState } from 'react';
 
 // ----------------------------------------------------------------------
@@ -11,8 +12,10 @@ export default function AddTaskCard() {
 
   const [title, setTitle] = useState('');
 
+  const [properties, setProperties] = useState<Properties>({});
+
   function handleSubmit() {
-    dispatch(create({ title }));
+    dispatch(create({ title, ...properties }));
 
     setTitle('');
   }
@@ -32,6 +35,8 @@ export default function AddTaskCard() {
       </CardContent>
 
       <CardActions sx={{ pb: 3, px: 3 }}>
+        <FilterChips onSelect={setProperties} properties={properties} />
+
         <Button
           onClick={handleSubmit}
           size="small"
