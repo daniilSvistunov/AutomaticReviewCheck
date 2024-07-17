@@ -15,13 +15,13 @@ namespace OKTodoListReactTS.BusinessLayer.Services
 
     {
         // Füge hier das benötigte Feld ToDoDbContext ein
-        private readonly ToDoDbContext _dbContext;
+        private readonly ToDoDbContext _context;
         private readonly IMapper _mapper; //Autmoapper wird benötigt um die DTOs in Entities umzuwandeln und umgekehrt (mehr Infos im Wiki)
 
         public ToDoService(/* Füge die benötigten Parameter hier ein */IMapper mapper, ToDoDbContext context)
         {
             _mapper = mapper; /*Initialisiere das IMapper-Feld mit dem übergebenen Parameter */
-            _dbContext = context; /* Initialisiere das ToDoDbContext-Feld mit dem übergebenen Parameter */
+            _context = context; /* Initialisiere das ToDoDbContext-Feld mit dem übergebenen Parameter */
         }
 
         /*Beispielhafte Task:
@@ -36,7 +36,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             try
             {
-                var toDoEntries = await _dbContext.ToDo.ToListAsync();
+                var toDoEntries = await _context.ToDo.ToListAsync();
                 var toDoDtos = _mapper.Map<List<ToDoDto>>(toDoEntries);
                 return toDoDtos;
             }
@@ -66,8 +66,8 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             try
             {
                 var toDoEntry = _mapper.Map<ToDoEntry>(toDoDto);
-                await _dbContext.AddAsync(toDoEntry);
-                await _dbContext.SaveChangesAsync();
+                await _context.AddAsync(toDoEntry);
+                await _context.SaveChangesAsync();
                 return toDoDto;
             }
             catch (Exception ex)
@@ -93,10 +93,8 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             try
             {
                 var toDoEntry = _mapper.Map<ToDoEntry>(toDoDto);
-                Guid id = toDoEntry.Id;
-
-                // await _dbContext.                    DB con: Server=localhost\MSSQLSERVER01;Database=master;Trusted_Connection=True;
-                // await _dbContext.SaveChangesAsync();
+                _context.Remove(toDoEntry);
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -120,9 +118,32 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         // Füge die Implementierung für die Methode UpdateTodoAsync hier ein
         public async Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/)
         {
+            try
+            {
+                var existingToDo = await _context.ToDo.FindAsync(toDoDto.Id);
+
+                if (existingToDo == null)
+                {
+                    return null; // Ardalis result
+                }
+
+                existingToDo.Text = toDoDto.Text;
+                existingToDo.Completed = toDoDto.Completed;
+                existingToDo.TargetDate = toDoDto.DueDate;
+
+                var newToDoDto = _mapper.Map<ToDoDto>(existingToDo);
+
+                await _context.SaveChangesAsync();
+
+                return newToDoDto;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
             // Implementiere die Logik zum Aktualisieren eines Todos hier
             /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
     }
 }
