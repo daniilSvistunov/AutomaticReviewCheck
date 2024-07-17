@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Ardalis.Result.AspNetCore;
 using AutoMapper;
 using FluentValidation.AspNetCore;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -58,7 +58,7 @@ namespace OKTodoListReactTS.Api
             services.AddControllers().AddNewtonsoftJson();
 
             // fix for the InvalidOperationException with dbContext.
-            services.AddDbContext<ToDoDbContext>();
+            services.AddDbContext<ToDoDbContext>(options => options.UseInMemoryDatabase("InMemoryDatabase"));
 
             services.AddControllers(options =>
             {
@@ -78,7 +78,7 @@ namespace OKTodoListReactTS.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OKTemplate REST API", Version = "v1" });
 
                 // fix to avoid "Fetch error response status is 500" by Swagger.
-                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                // c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
                 var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
