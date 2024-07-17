@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OKTodoListReactTS.BusinessLayer.Dtos;
@@ -20,10 +19,10 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// adds a new ToDo
         /// </summary>
-        /// <param name="toDoDto"></param>
-        /// <returns></returns>
+        /// <param name="toDoDto">ToDo to add</param>
+        /// <returns>200 OK with ApplicationDto-Object, if operation is successful, 400 otherwise</returns>
         [HttpPost(Name = nameof(AddToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -33,24 +32,23 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// deletes a ToDo
         /// </summary>
-        /// <param name="toDoDto"></param>
-        /// <returns></returns>
+        /// <param name="toDoDto">ToDo to delete</param>
+        /// <returns>200 OK with ApplicationDto-Object, if operation is successful, 400 otherwise</returns>
         [HttpDelete(Name = nameof(DeleteToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync(/*zu ergänzen*/)
+        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync([FromBody] ToDoDto toDoDto/*zu ergänzen*/)
         {
-            await _service.DeleteTodoAsync(/*zu ergänzen*/);
+            await _service.DeleteTodoAsync(toDoDto/*zu ergänzen*/);
             return Ok();
         }
 
         /// <summary>
-        /// 
+        /// gets all ToDos
         /// </summary>
-        /// <param name="toDoDto"></param>
-        /// <returns></returns>
+        /// <returns>200 OK with ApplicationDto-Object, if operation is successful, 400 otherwise</returns>
         [HttpGet(Name = nameof(GetAllTodosAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -60,16 +58,16 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// updates a ToDo
         /// </summary>
-        /// <param name="toDoDto"></param>
-        /// <returns></returns>
+        /// <param name="toDoDto">ToDo to update</param>
+        /// <returns>200 OK with ApplicationDto-Object, if operation is successful, 400 otherwise</returns>
         [HttpPost(Name = nameof(UpdateTodoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync(/*zu ergänzen*/)
+        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto/*zu ergänzen*/)
         {
-            return Ok(await _service.UpdateTodoAsync(/*zu ergänzen*/));
+            return Ok(await _service.UpdateTodoAsync(toDoDto/*zu ergänzen*/));
         }
     }
 }
