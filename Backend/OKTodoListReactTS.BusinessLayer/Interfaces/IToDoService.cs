@@ -8,7 +8,7 @@ namespace OKTodoListReactTS.BusinessLayer.Interfaces
     {
         Task<List<ToDoDto>> GetAllTodosAsync();
         Task<ToDoDto> AddTodoAsync(ToDoDto toDoDto);
-        Task DeleteTodoAsync(/*zu ergänzen*/);
-        Task<ToDoDto> UpdateTodoAsync(/*zu ergänzen*/);
+        Task DeleteTodoAsync(ToDoDto toDoDto/*zu ergänzen*/);
+        Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto/*zu ergänzen*/);
     }
 }
