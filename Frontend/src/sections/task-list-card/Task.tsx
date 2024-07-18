@@ -6,13 +6,16 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from '@mui/material';
 import { type Task as Props, remove, toggle } from '@redux/slices/task';
 import { useDispatch } from '@redux/store';
 
+import TaskPropertiesSizes from './TaskPropertiesSizes';
+
 // ----------------------------------------------------------------------
 
-export default function Task({ ID, title, checked }: Readonly<Props>) {
+export default function Task({ ID, title, checked, ...properties }: Readonly<Props>) {
   const dispatch = useDispatch();
 
   return (
@@ -34,8 +37,13 @@ export default function Task({ ID, title, checked }: Readonly<Props>) {
         </ListItemIcon>
 
         <ListItemText
-          primary={title}
-          primaryTypographyProps={{ fontSize: 16, variant: 'subtitle1' }}
+          disableTypography
+          primary={
+            <Typography sx={{ fontSize: 16 }} variant="subtitle1">
+              {title}
+            </Typography>
+          }
+          secondary={<TaskPropertiesSizes {...properties} />}
         />
       </ListItemButton>
     </ListItem>
