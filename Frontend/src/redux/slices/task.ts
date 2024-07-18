@@ -21,6 +21,8 @@ export interface Task {
 
 export type Properties = Pick<Task, 'priority' | 'bucket' | 'team' | 'assignee'>;
 
+export type Update = Omit<Task, 'checked'>;
+
 interface TaskState {
   list: Task[];
   buckets: string[];
@@ -53,6 +55,11 @@ export const taskSlice = createSlice({
 
       state.list[index].checked = !state.list[index].checked;
     },
+    update: (state, action: PayloadAction<Update>) => {
+      const index = state.list.findIndex((task) => task.ID === action.payload.ID);
+
+      state.list[index] = { ...state.list[index], ...action.payload };
+    },
     remove: (state, action: PayloadAction<number>) => {
       const index = state.list.findIndex((task) => task.ID === action.payload);
 
@@ -71,6 +78,6 @@ export const selectAssignees = (state: RootState) => state.task.assignees;
 
 // ----------------------------------------------------------------------
 
-export const { create, toggle, remove } = taskSlice.actions;
+export const { create, toggle, update, remove } = taskSlice.actions;
 
 export default taskSlice.reducer;
