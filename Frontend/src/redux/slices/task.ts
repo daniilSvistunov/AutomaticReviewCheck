@@ -18,6 +18,7 @@ export interface Task {
   ID: number;
   title: string;
   checked: boolean;
+  due: Date;
   priority?: Priority;
   bucket?: string;
   team?: string;
@@ -26,7 +27,7 @@ export interface Task {
   steps: Step[];
 }
 
-export type Properties = Pick<Task, 'priority' | 'bucket' | 'team' | 'assignee'>;
+export type Properties = Pick<Task, 'due' | 'priority' | 'bucket' | 'team' | 'assignee'>;
 
 export type Update = Omit<Task, 'checked'>;
 

@@ -21,7 +21,7 @@ import TaskPropertiesSizes from './TaskPropertiesSizes';
 export default function Task(props: Readonly<Props>) {
   const { ID, title, checked } = props;
 
-  const properties = pick(props, ['priority', 'bucket', 'team', 'assignee']);
+  const properties = pick(props, ['due', 'priority', 'bucket', 'team', 'assignee']);
 
   const dispatch = useDispatch();
 
