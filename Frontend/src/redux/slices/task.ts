@@ -1,5 +1,6 @@
 import { type RootState } from '@redux/store';
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type Duration } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +20,7 @@ export interface Task {
   title: string;
   checked: boolean;
   due: Date;
+  reminder?: Duration;
   priority?: Priority;
   bucket?: string;
   team?: string;
@@ -27,7 +29,10 @@ export interface Task {
   steps: Step[];
 }
 
-export type Properties = Pick<Task, 'due' | 'priority' | 'bucket' | 'team' | 'assignee'>;
+export type Properties = Pick<
+  Task,
+  'due' | 'reminder' | 'priority' | 'bucket' | 'team' | 'assignee'
+>;
 
 export type Update = Omit<Task, 'checked'>;
 
