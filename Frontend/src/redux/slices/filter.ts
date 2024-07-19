@@ -5,11 +5,20 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 // ----------------------------------------------------------------------
 
+export enum DateFilter {
+  TOTAL = 'Gesamt',
+  TODAY = 'Heute',
+  WEEK = 'Woche',
+  MONTH = 'Monat',
+  DONE = 'Erledigt',
+}
+
 interface FilterState {
+  date: DateFilter;
   filter: Filter<Task>;
 }
 
-const initialState: FilterState = { filter: [] };
+const initialState: FilterState = { date: DateFilter.TOTAL, filter: [] };
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +26,10 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    create: (
+    updateDate: (state, action: PayloadAction<DateFilter>) => {
+      state.date = action.payload;
+    },
+    createFilter: (
       state,
       action: PayloadAction<{ buckets: string[]; teams: string[]; assignees: string[] }>
     ) => {
@@ -52,7 +64,7 @@ export const filterSlice = createSlice({
         },
       ];
     },
-    update: (state, action: PayloadAction<FilterItem<Task>>) => {
+    updateFilter: (state, action: PayloadAction<FilterItem<Task>>) => {
       state.filter = state.filter.map((item) => {
         if (item.key === action.payload.key) {
           return { ...item, value: action.payload.value };
@@ -66,10 +78,12 @@ export const filterSlice = createSlice({
 
 // ----------------------------------------------------------------------
 
+export const selectDate = (state: RootState) => state.filter.date;
+
 export const selectFilter = (state: RootState) => state.filter.filter;
 
 // ----------------------------------------------------------------------
 
-export const { create, update } = filterSlice.actions;
+export const { updateDate, createFilter, updateFilter } = filterSlice.actions;
 
 export default filterSlice.reducer;
