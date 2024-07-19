@@ -1,4 +1,4 @@
-import { DeleteRounded } from '@mui/icons-material';
+import Iconify from '@components/iconify';
 import {
   Checkbox,
   IconButton,
@@ -40,7 +40,7 @@ export default function Task(props: Readonly<Props>) {
       disablePadding
       secondaryAction={
         <IconButton color="error" edge="end" onClick={() => dispatch(remove(ID))}>
-          <DeleteRounded />
+          <Iconify icon="eva:trash-2-outline" />
         </IconButton>
       }
       sx={{

@@ -1,4 +1,5 @@
-import { AddRounded, CheckRounded, CloseRounded, DeleteRounded } from '@mui/icons-material';
+import Iconify from '@components/iconify';
+import { AddRounded, CheckRounded, CloseRounded } from '@mui/icons-material';
 import {
   Button,
   Dialog,
@@ -117,7 +118,7 @@ export default function TaskEditCard({
               />
 
               <IconButton onClick={() => deleteStep(item.ID)}>
-                <DeleteRounded />
+                <Iconify icon="eva:trash-2-outline" />
               </IconButton>
             </Stack>
           ))}
@@ -138,7 +139,7 @@ export default function TaskEditCard({
           color="error"
           onClick={handleDelete}
           size="small"
-          startIcon={<DeleteRounded />}
+          startIcon={<Iconify icon="eva:trash-2-outline" />}
           variant="contained"
         >
           Aufgabe löschen

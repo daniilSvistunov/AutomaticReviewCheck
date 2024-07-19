@@ -1,5 +1,7 @@
+import { applyAdvancedFilter } from '@components/advanced-filter/AdvancedFilter';
 import { WarningRounded } from '@mui/icons-material';
 import { Box, Card, CardActionArea, CardContent, List, Stack, Typography } from '@mui/material';
+import { selectFilter } from '@redux/slices/filter';
 import { selectList } from '@redux/slices/task';
 import { useSelector } from '@redux/store';
 
@@ -9,6 +11,10 @@ import Task from './Task';
 
 export default function TaskListCard() {
   const list = useSelector(selectList);
+
+  const filter = useSelector(selectFilter);
+
+  const filteredList = applyAdvancedFilter(list, filter);
 
   return (
     <Card>
@@ -33,7 +39,7 @@ export default function TaskListCard() {
       ) : (
         <CardContent>
           <List>
-            {list.map((task) => (
+            {filteredList.map((task) => (
               <Task key={task.ID} {...task} />
             ))}
           </List>
