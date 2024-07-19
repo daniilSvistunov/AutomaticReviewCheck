@@ -14,6 +14,7 @@ import {
 } from '@redux/slices/task';
 import { useSelector } from '@redux/store';
 
+import DatePicker from './DatePicker';
 import FilterValueMenu from './FilterValueMenu';
 
 // ----------------------------------------------------------------------
@@ -32,6 +33,11 @@ export default function FilterChips({ properties, onSelect }: Readonly<Props>) {
 
   return (
     <Stack direction="row" spacing={1}>
+      <DatePicker
+        setValue={(value) => onSelect({ ...properties, due: value })}
+        value={properties.due}
+      />
+
       <FilterValueMenu
         icon={<PriorityHighRounded />}
         label="Priorität"

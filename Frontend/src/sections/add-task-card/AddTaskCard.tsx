@@ -12,7 +12,7 @@ export default function AddTaskCard() {
 
   const [title, setTitle] = useState('');
 
-  const [properties, setProperties] = useState<Properties>({});
+  const [properties, setProperties] = useState<Properties>({ due: new Date() });
 
   function handleSubmit() {
     dispatch(create({ title, ...properties }));
@@ -34,16 +34,10 @@ export default function AddTaskCard() {
         />
       </CardContent>
 
-      <CardActions sx={{ pb: 3, px: 3 }}>
+      <CardActions sx={{ justifyContent: 'space-between', pb: 3, px: 3 }}>
         <FilterChips onSelect={setProperties} properties={properties} />
 
-        <Button
-          onClick={handleSubmit}
-          size="small"
-          startIcon={<AddRounded />}
-          sx={{ ml: 'auto' }}
-          variant="contained"
-        >
+        <Button onClick={handleSubmit} size="small" startIcon={<AddRounded />} variant="contained">
           Hinzufügen
         </Button>
       </CardActions>

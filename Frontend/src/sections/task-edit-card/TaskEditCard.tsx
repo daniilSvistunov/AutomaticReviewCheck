@@ -40,7 +40,7 @@ export default function TaskEditCard({
 
   const mergedProperties = {
     ...properties,
-    ...pick(task, ['priority', 'bucket', 'team', 'assignee']),
+    ...pick(task, ['due', 'priority', 'bucket', 'team', 'assignee']),
   };
 
   function createStep() {
@@ -77,7 +77,7 @@ export default function TaskEditCard({
   }
 
   return (
-    <Dialog onClose={onClose} open={open}>
+    <Dialog fullWidth maxWidth="md" onClose={onClose} open={open}>
       <DialogTitle sx={{ pb: 1.5 }}>Aufgabe bearbeiten</DialogTitle>
 
       <IconButton onClick={onClose} sx={{ position: 'absolute', right: 16, top: 18 }}>
