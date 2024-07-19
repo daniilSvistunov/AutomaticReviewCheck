@@ -1,7 +1,7 @@
 import { applyAdvancedFilter } from '@components/advanced-filter/AdvancedFilter';
 import { WarningRounded } from '@mui/icons-material';
 import { Box, Card, CardActionArea, CardContent, List, Stack, Typography } from '@mui/material';
-import { DateFilter, selectDate, selectFilter } from '@redux/slices/filter';
+import { DateFilter, selectDate, selectFilter, selectSearch } from '@redux/slices/filter';
 import { type Task, selectList } from '@redux/slices/task';
 import { useSelector } from '@redux/store';
 import { isThisMonth, isThisWeek, isToday } from 'date-fns';
@@ -9,6 +9,14 @@ import { isThisMonth, isThisWeek, isToday } from 'date-fns';
 import { default as Item } from './Task';
 
 // ----------------------------------------------------------------------
+
+function searchFilter(list: Task[], search?: string): Task[] {
+  if (search === undefined) {
+    return list;
+  }
+
+  return list.filter((item) => item.title.includes(search));
+}
 
 function dateFilter(list: Task[], date: DateFilter): Task[] {
   return list.filter(({ checked, due }) => {
@@ -35,11 +43,13 @@ function dateFilter(list: Task[], date: DateFilter): Task[] {
 export default function TaskListCard() {
   const list = useSelector(selectList);
 
+  const search = useSelector(selectSearch);
+
   const date = useSelector(selectDate);
 
   const filter = useSelector(selectFilter);
 
-  const filteredList = applyAdvancedFilter(dateFilter(list, date), filter);
+  const filteredList = applyAdvancedFilter(dateFilter(searchFilter(list, search), date), filter);
 
   return (
     <Card>

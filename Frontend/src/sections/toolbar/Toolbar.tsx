@@ -8,6 +8,7 @@ import { Stack } from '@mui/material';
 import { createFilter, selectFilter, updateFilter } from '@redux/slices/filter';
 import { type Task, selectAssignees, selectBuckets, selectTeams } from '@redux/slices/task';
 import { dispatch, useSelector } from '@redux/store';
+import { ToolbarGlobalSearch } from '@sections/toolbar-global-search';
 import { useEffect } from 'react';
 
 import DateButtonGroup from './DateButtonGroup';
@@ -37,7 +38,11 @@ export default function Toolbar() {
       spacing={2}
       sx={{ alignItems: 'center', justifyContent: 'space-between' }}
     >
-      <AdvancedFilter filter={filter} saveFilter={handleSave} />
+      <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <ToolbarGlobalSearch />
+
+        <AdvancedFilter filter={filter} saveFilter={handleSave} />
+      </Stack>
 
       <DateButtonGroup />
     </Stack>
