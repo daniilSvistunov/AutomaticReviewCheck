@@ -10,13 +10,30 @@ import {
 } from '@mui/material';
 import { type Task as Props, remove, toggle } from '@redux/slices/task';
 import { useDispatch } from '@redux/store';
+import { TaskEditCard } from '@sections/task-edit-card';
+import { omit, pick } from 'lodash';
+import { type MouseEvent, useRef, useState } from 'react';
 
 import TaskPropertiesSizes from './TaskPropertiesSizes';
 
 // ----------------------------------------------------------------------
 
-export default function Task({ ID, title, checked, ...properties }: Readonly<Props>) {
+export default function Task(props: Readonly<Props>) {
+  const { ID, title, checked } = props;
+
+  const properties = pick(props, ['priority', 'bucket', 'team', 'assignee']);
+
   const dispatch = useDispatch();
+
+  const [open, setOpen] = useState(false);
+
+  const icon = useRef<HTMLDivElement | null>(null);
+
+  function handleClick(event: MouseEvent<HTMLDivElement>) {
+    if (icon.current !== null && !icon.current.contains(event.target as HTMLElement)) {
+      setOpen(true);
+    }
+  }
 
   return (
     <ListItem
@@ -31,9 +48,14 @@ export default function Task({ ID, title, checked, ...properties }: Readonly<Pro
         '&:hover .MuiListItemSecondaryAction-root': { visibility: 'visible' },
       }}
     >
-      <ListItemButton dense onClick={() => dispatch(toggle(ID))} sx={{ borderRadius: 1 }}>
-        <ListItemIcon>
-          <Checkbox checked={checked} disableRipple edge="start" />
+      <ListItemButton dense onClick={handleClick} sx={{ borderRadius: 1 }}>
+        <ListItemIcon ref={icon}>
+          <Checkbox
+            checked={checked}
+            disableRipple
+            edge="start"
+            onChange={() => dispatch(toggle(ID))}
+          />
         </ListItemIcon>
 
         <ListItemText
@@ -46,6 +68,8 @@ export default function Task({ ID, title, checked, ...properties }: Readonly<Pro
           secondary={<TaskPropertiesSizes {...properties} />}
         />
       </ListItemButton>
+
+      <TaskEditCard onClose={() => setOpen(false)} open={open} {...omit(props, ['checked'])} />
     </ListItem>
   );
 }
