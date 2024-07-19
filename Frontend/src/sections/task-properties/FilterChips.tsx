@@ -16,6 +16,7 @@ import { useSelector } from '@redux/store';
 
 import DatePicker from './DatePicker';
 import FilterValueMenu from './FilterValueMenu';
+import TaskDetailReminder from './TaskDetailReminder';
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,11 @@ export default function FilterChips({ properties, onSelect }: Readonly<Props>) {
       <DatePicker
         setValue={(value) => onSelect({ ...properties, due: value })}
         value={properties.due}
+      />
+
+      <TaskDetailReminder
+        setValue={(value) => onSelect({ ...properties, reminder: value })}
+        value={properties.reminder}
       />
 
       <FilterValueMenu

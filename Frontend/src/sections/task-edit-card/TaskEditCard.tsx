@@ -40,7 +40,7 @@ export default function TaskEditCard({
 
   const mergedProperties = {
     ...properties,
-    ...pick(task, ['due', 'priority', 'bucket', 'team', 'assignee']),
+    ...pick(task, ['due', 'reminder', 'priority', 'bucket', 'team', 'assignee']),
   };
 
   function createStep() {
