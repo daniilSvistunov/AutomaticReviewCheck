@@ -9,6 +9,11 @@ export enum Priority {
   LOW = 'Niedrig',
 }
 
+export interface Step {
+  ID: number;
+  text: string;
+}
+
 export interface Task {
   ID: number;
   title: string;
@@ -17,6 +22,8 @@ export interface Task {
   bucket?: string;
   team?: string;
   assignee?: string;
+  note?: string;
+  steps: Step[];
 }
 
 export type Properties = Pick<Task, 'priority' | 'bucket' | 'team' | 'assignee'>;
@@ -43,10 +50,11 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
-    create: (state, action: PayloadAction<Omit<Task, 'ID' | 'checked'>>) => {
+    create: (state, action: PayloadAction<Omit<Task, 'ID' | 'checked' | 'note' | 'steps'>>) => {
       state.list.push({
         ID: state.list.length === 0 ? 1 : state.list[state.list.length - 1].ID + 1,
         checked: false,
+        steps: [],
         ...action.payload,
       });
     },
