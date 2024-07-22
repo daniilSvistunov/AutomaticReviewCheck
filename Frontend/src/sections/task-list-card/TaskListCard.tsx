@@ -75,7 +75,7 @@ export default function TaskListCard() {
         <CardContent>
           <List>
             {filteredList.map((task) => (
-              <Item key={task.ID} {...task} />
+              <Item key={task.id} {...task} />
             ))}
           </List>
         </CardContent>

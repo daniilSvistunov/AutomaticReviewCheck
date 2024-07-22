@@ -19,7 +19,7 @@ import TaskPropertiesSizes from './TaskPropertiesSizes';
 // ----------------------------------------------------------------------
 
 export default function Task(props: Readonly<Props>) {
-  const { ID, title, checked } = props;
+  const { id, title, checked } = props;
 
   const properties = pick(props, ['due', 'reminder', 'priority', 'bucket', 'team', 'assignee']);
 
@@ -39,7 +39,7 @@ export default function Task(props: Readonly<Props>) {
     <ListItem
       disablePadding
       secondaryAction={
-        <IconButton color="error" edge="end" onClick={() => dispatch(remove(ID))}>
+        <IconButton color="error" edge="end" onClick={() => dispatch(remove(id))}>
           <Iconify icon="eva:trash-2-outline" />
         </IconButton>
       }
@@ -54,7 +54,7 @@ export default function Task(props: Readonly<Props>) {
             checked={checked}
             disableRipple
             edge="start"
-            onChange={() => dispatch(toggle(ID))}
+            onChange={() => dispatch(toggle(id))}
           />
         </ListItemIcon>
 

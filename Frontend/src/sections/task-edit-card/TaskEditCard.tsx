@@ -28,7 +28,7 @@ type Props = {
 export default function TaskEditCard({
   open,
   onClose,
-  ID,
+  id,
   title,
   note,
   steps,
@@ -36,7 +36,7 @@ export default function TaskEditCard({
 }: Readonly<Props>) {
   const dispatch = useDispatch();
 
-  const [task, setTask] = useState<Update>({ ID, title, note, steps, ...properties });
+  const [task, setTask] = useState<Update>({ id, title, note, steps, ...properties });
 
   const mergedProperties = {
     ...properties,
@@ -48,7 +48,7 @@ export default function TaskEditCard({
       ...task,
       steps: [
         ...task.steps,
-        { ID: task.steps.length === 0 ? 1 : task.steps[task.steps.length - 1].ID + 1, text: '' },
+        { id: task.steps.length === 0 ? 1 : task.steps[task.steps.length - 1].id + 1, text: '' },
       ],
     });
   }
@@ -56,12 +56,12 @@ export default function TaskEditCard({
   function updateStep(step: Step) {
     setTask({
       ...task,
-      steps: task.steps.map((item) => (item.ID === step.ID ? step : item)),
+      steps: task.steps.map((item) => (item.id === step.id ? step : item)),
     });
   }
 
-  function deleteStep(ID: number) {
-    setTask({ ...task, steps: task.steps.filter((item) => item.ID !== ID) });
+  function deleteStep(id: number) {
+    setTask({ ...task, steps: task.steps.filter((item) => item.id !== id) });
   }
 
   function handleUpdate() {
@@ -71,7 +71,7 @@ export default function TaskEditCard({
   }
 
   function handleDelete() {
-    dispatch(remove(ID));
+    dispatch(remove(id));
 
     onClose();
   }
@@ -108,16 +108,16 @@ export default function TaskEditCard({
           />
 
           {task.steps.map((item) => (
-            <Stack direction="row" key={item.ID} spacing={1.25} sx={{ alignItems: 'center' }}>
+            <Stack direction="row" key={item.id} spacing={1.25} sx={{ alignItems: 'center' }}>
               <TextField
                 fullWidth
-                onChange={(event) => updateStep({ ID: item.ID, text: event.target.value })}
+                onChange={(event) => updateStep({ id: item.id, text: event.target.value })}
                 placeholder="Schritt hinzufügen"
                 size="small"
                 value={item.text}
               />
 
-              <IconButton onClick={() => deleteStep(item.ID)}>
+              <IconButton onClick={() => deleteStep(item.id)}>
                 <Iconify icon="eva:trash-2-outline" />
               </IconButton>
             </Stack>

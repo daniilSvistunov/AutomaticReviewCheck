@@ -1,0 +1,19 @@
+{
+  "task": [
+    {
+      "id": 1,
+      "title": "Aufgabe 1",
+      "checked": false,
+      "due": "2024-07-30T00:00:00.000Z",
+      "steps": [],
+      "reminder": {
+        "minutes": 5
+      },
+      "priority": "Hoch",
+      "bucket": "Bucket 1",
+      "team": "Team 1",
+      "assignee": "Assignee 1",
+      "note": "Notiz zu Aufgabe 1"
+    }
+  ]
+}

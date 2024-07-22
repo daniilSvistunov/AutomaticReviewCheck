@@ -1,11 +1,15 @@
+import { getTasks } from '@redux/slices/task';
+import { dispatch } from '@redux/store';
 import { ReactNode } from 'react';
 
 // ----------------------------------------------------------------------
-type Props = { children: ReactNode };
-const RootDataWrapper = ({ children }: Props) => { 
-  // TODO: this can be usesd to fetch initial data that's used within the whole application
+
+interface Props {
+  children: ReactNode;
+}
+
+export default function RootDataWrapper({ children }: Readonly<Props>) {
+  dispatch(getTasks());
 
   return <>{children}</>;
-};
-
-export default RootDataWrapper;
+}
