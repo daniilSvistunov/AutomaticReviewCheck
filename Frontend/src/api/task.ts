@@ -9,3 +9,6 @@ export const postTask = (task: Omit<Task, 'id'>) =>
 
 export const patchTask = (id: number, task: Update) =>
   axiosInstance.patch<Task>(`${import.meta.env.VITE_ENDPOINT_TASK}/${id}`, task);
+
+export const deleteTask = (id: number) =>
+  axiosInstance.delete<number>(`${import.meta.env.VITE_ENDPOINT_TASK}/${id}`);

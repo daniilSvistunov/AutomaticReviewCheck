@@ -1,4 +1,9 @@
-import { getTasks as get, patchTask as patch, postTask as post } from '@api/task';
+import {
+  deleteTask as remove,
+  getTasks as get,
+  patchTask as patch,
+  postTask as post,
+} from '@api/task';
 import { type AppThunk, type RootState } from '@redux/store';
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { type Duration } from 'date-fns';
@@ -44,11 +49,13 @@ interface TaskState {
     get: AsyncCallStatus;
     post: AsyncCallStatus;
     patch: AsyncCallStatus;
+    delete: AsyncCallStatus;
   };
   error: {
     get: Error | null;
     post: Error | null;
     patch: Error | null;
+    delete: Error | null;
   };
   list: Task[];
   buckets: string[];
@@ -61,11 +68,13 @@ const initialState: TaskState = {
     get: 'idle',
     post: 'idle',
     patch: 'idle',
+    delete: 'idle',
   },
   error: {
     get: null,
     post: null,
     patch: null,
+    delete: null,
   },
   list: [],
   buckets: ['Bucket 1', 'Bucket 2', 'Bucket 3', 'Bucket 4', 'Bucket 5'],
@@ -124,7 +133,17 @@ export const taskSlice = createSlice({
 
       state.list[index] = parse({ ...state.list[index], ...action.payload });
     },
-    remove: (state, action: PayloadAction<number>) => {
+    deleteTaskStarted: (state) => {
+      state.status.delete = 'loading';
+    },
+    deleteTaskFailed: (state, action: PayloadAction<Error>) => {
+      state.status.delete = 'failed';
+
+      state.error.delete = action.payload;
+    },
+    deleteTaskSucceeded: (state, action: PayloadAction<number>) => {
+      state.status.delete = 'succeeded';
+
       const index = state.list.findIndex((task) => task.id === action.payload);
 
       state.list.splice(index, 1);
@@ -214,8 +233,26 @@ export const patchTask = (id: number, task: Update): AppThunk<Promise<Task>> => 
   };
 };
 
-// ----------------------------------------------------------------------
+export const deleteTask = (id: number): AppThunk<Promise<number>> => {
+  return async (dispatch) => {
+    dispatch(taskSlice.actions.deleteTaskStarted());
 
-export const { remove } = taskSlice.actions;
+    try {
+      await remove(id);
+    } catch (_) {
+      const error = new Error('Task could not be deleted.');
+
+      dispatch(taskSlice.actions.deleteTaskFailed(error));
+
+      return Promise.reject(error);
+    }
+
+    dispatch(taskSlice.actions.deleteTaskSucceeded(id));
+
+    return Promise.resolve(id);
+  };
+};
+
+// ----------------------------------------------------------------------
 
 export default taskSlice.reducer;

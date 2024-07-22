@@ -10,7 +10,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { type Step, type Task, patchTask, remove } from '@redux/slices/task';
+import { type Step, type Task, deleteTask, patchTask } from '@redux/slices/task';
 import { useDispatch } from '@redux/store';
 import { FilterChips } from '@sections/task-properties';
 import { pick } from 'lodash';
@@ -74,7 +74,7 @@ export default function TaskEditCard({
   }
 
   function handleDelete() {
-    dispatch(remove(id));
+    dispatch(deleteTask(id));
 
     onClose();
   }

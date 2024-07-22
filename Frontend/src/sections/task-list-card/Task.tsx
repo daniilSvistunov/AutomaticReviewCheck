@@ -8,7 +8,7 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { type Task as Props, patchTask, remove } from '@redux/slices/task';
+import { type Task as Props, deleteTask, patchTask } from '@redux/slices/task';
 import { useDispatch } from '@redux/store';
 import { TaskEditCard } from '@sections/task-edit-card';
 import { omit, pick } from 'lodash';
@@ -39,7 +39,7 @@ export default function Task(props: Readonly<Props>) {
     <ListItem
       disablePadding
       secondaryAction={
-        <IconButton color="error" edge="end" onClick={() => dispatch(remove(id))}>
+        <IconButton color="error" edge="end" onClick={() => dispatch(deleteTask(id))}>
           <Iconify icon="eva:trash-2-outline" />
         </IconButton>
       }
