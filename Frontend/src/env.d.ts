@@ -36,6 +36,7 @@ interface ImportMetaEnv {
   readonly VITE_ENDPOINT_CAPACITIES: string;
 
   readonly VITE_ENDPOINT_TASK: string;
+  readonly VITE_ENDPOINT_PROPERTIES: string;
 
   // GraphApi
   readonly VITE_GRAPH_API_SCOPE_USER_READ: string;

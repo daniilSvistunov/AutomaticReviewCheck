@@ -1,4 +1,4 @@
-import { type Task, type Update } from '@redux/slices/task';
+import { type Task, type TaskState, type Update } from '@redux/slices/task';
 
 import axiosInstance from './axiosInstance';
 
@@ -12,3 +12,8 @@ export const patchTask = (id: number, task: Update) =>
 
 export const deleteTask = (id: number) =>
   axiosInstance.delete<number>(`${import.meta.env.VITE_ENDPOINT_TASK}/${id}`);
+
+export const getProperties = () =>
+  axiosInstance.get<Pick<TaskState, 'buckets' | 'teams' | 'assignees'>>(
+    import.meta.env.VITE_ENDPOINT_PROPERTIES
+  );

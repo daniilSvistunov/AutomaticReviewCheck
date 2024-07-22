@@ -1,5 +1,6 @@
 import {
   deleteTask as remove,
+  getProperties,
   getTasks as get,
   patchTask as patch,
   postTask as post,
@@ -44,18 +45,20 @@ export type Properties = Pick<
 
 export type Update = Partial<Omit<Task, 'id'>>;
 
-interface TaskState {
+export interface TaskState {
   status: {
     get: AsyncCallStatus;
     post: AsyncCallStatus;
     patch: AsyncCallStatus;
     delete: AsyncCallStatus;
+    properties: AsyncCallStatus;
   };
   error: {
     get: Error | null;
     post: Error | null;
     patch: Error | null;
     delete: Error | null;
+    properties: Error | null;
   };
   list: Task[];
   buckets: string[];
@@ -69,17 +72,19 @@ const initialState: TaskState = {
     post: 'idle',
     patch: 'idle',
     delete: 'idle',
+    properties: 'idle',
   },
   error: {
     get: null,
     post: null,
     patch: null,
     delete: null,
+    properties: null,
   },
   list: [],
-  buckets: ['Bucket 1', 'Bucket 2', 'Bucket 3', 'Bucket 4', 'Bucket 5'],
-  teams: ['Team 1', 'Team 2', 'Team 3', 'Team 4', 'Team 5'],
-  assignees: ['Assignee 1', 'Assignee 2', 'Assignee 3', 'Assignee 4', 'Assignee 5'],
+  buckets: [],
+  teams: [],
+  assignees: [],
 };
 
 // ----------------------------------------------------------------------
@@ -147,6 +152,26 @@ export const taskSlice = createSlice({
       const index = state.list.findIndex((task) => task.id === action.payload);
 
       state.list.splice(index, 1);
+    },
+    getPropertiesStarted: (state) => {
+      state.status.get = 'loading';
+    },
+    getPropertiesFailed: (state, action: PayloadAction<Error>) => {
+      state.status.get = 'failed';
+
+      state.error.get = action.payload;
+    },
+    getPropertiesSucceeded: (
+      state,
+      action: PayloadAction<Pick<TaskState, 'buckets' | 'teams' | 'assignees'>>
+    ) => {
+      state.status.get = 'succeeded';
+
+      const { buckets, teams, assignees } = action.payload;
+
+      state.buckets = buckets;
+      state.teams = teams;
+      state.assignees = assignees;
     },
   },
 });
@@ -250,6 +275,30 @@ export const deleteTask = (id: number): AppThunk<Promise<number>> => {
     dispatch(taskSlice.actions.deleteTaskSucceeded(id));
 
     return Promise.resolve(id);
+  };
+};
+
+export const fetchProperties = (): AppThunk<
+  Promise<Pick<TaskState, 'buckets' | 'teams' | 'assignees'>>
+> => {
+  return async (dispatch) => {
+    dispatch(taskSlice.actions.getPropertiesStarted());
+
+    let response;
+
+    try {
+      response = await getProperties();
+    } catch (_) {
+      const error = new Error('Properties could not be fetched.');
+
+      dispatch(taskSlice.actions.getPropertiesFailed(error));
+
+      return Promise.reject(error);
+    }
+
+    dispatch(taskSlice.actions.getPropertiesSucceeded(response.data));
+
+    return Promise.resolve(response.data);
   };
 };
 

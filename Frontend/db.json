@@ -1,4 +1,9 @@
 {
+  "properties": {
+    "buckets": ["Bucket 1", "Bucket 2", "Bucket 3", "Bucket 4", "Bucket 5"],
+    "teams": ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5"],
+    "assignees": ["Assignee 1", "Assignee 2", "Assignee 3", "Assignee 4", "Assignee 5"]
+  },
   "task": [
     {
       "id": 1,
