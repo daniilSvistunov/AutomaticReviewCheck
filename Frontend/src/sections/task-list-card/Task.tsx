@@ -8,7 +8,7 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { type Task as Props, remove, toggle } from '@redux/slices/task';
+import { type Task as Props, patchTask, remove } from '@redux/slices/task';
 import { useDispatch } from '@redux/store';
 import { TaskEditCard } from '@sections/task-edit-card';
 import { omit, pick } from 'lodash';
@@ -54,7 +54,7 @@ export default function Task(props: Readonly<Props>) {
             checked={checked}
             disableRipple
             edge="start"
-            onChange={() => dispatch(toggle(id))}
+            onChange={() => dispatch(patchTask(id, { checked: !checked }))}
           />
         </ListItemIcon>
 

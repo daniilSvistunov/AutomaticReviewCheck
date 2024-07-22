@@ -10,13 +10,15 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { type Step, type Update, remove, update } from '@redux/slices/task';
+import { type Step, type Task, patchTask, remove } from '@redux/slices/task';
 import { useDispatch } from '@redux/store';
 import { FilterChips } from '@sections/task-properties';
 import { pick } from 'lodash';
 import { useState } from 'react';
 
 // ----------------------------------------------------------------------
+
+type Update = Omit<Task, 'checked'>;
 
 type Props = {
   open: boolean;
@@ -65,7 +67,8 @@ export default function TaskEditCard({
   }
 
   function handleUpdate() {
-    dispatch(update(task));
+    // TODO: Remove Identical Fields
+    dispatch(patchTask(id, task));
 
     onClose();
   }
