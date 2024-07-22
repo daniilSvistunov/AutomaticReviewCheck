@@ -1,4 +1,4 @@
-import { getTasks as get } from '@api/task';
+import { getTasks as get, postTask as post } from '@api/task';
 import { type AppThunk, type RootState } from '@redux/store';
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { type Duration } from 'date-fns';
@@ -42,9 +42,11 @@ export type Update = Omit<Task, 'checked'>;
 interface TaskState {
   status: {
     get: AsyncCallStatus;
+    post: AsyncCallStatus;
   };
   error: {
     get: Error | null;
+    post: Error | null;
   };
   list: Task[];
   buckets: string[];
@@ -55,9 +57,11 @@ interface TaskState {
 const initialState: TaskState = {
   status: {
     get: 'idle',
+    post: 'idle',
   },
   error: {
     get: null,
+    post: null,
   },
   list: [],
   buckets: ['Bucket 1', 'Bucket 2', 'Bucket 3', 'Bucket 4', 'Bucket 5'],
@@ -66,6 +70,10 @@ const initialState: TaskState = {
 };
 
 // ----------------------------------------------------------------------
+
+function parse(task: Task): Task {
+  return { ...task, due: new Date(task.due) };
+}
 
 export const taskSlice = createSlice({
   name: 'task',
@@ -82,18 +90,20 @@ export const taskSlice = createSlice({
     getTasksSucceeded: (state, action: PayloadAction<Task[]>) => {
       state.status.get = 'succeeded';
 
-      state.list = action.payload.map((task) => ({
-        ...task,
-        due: new Date(task.due),
-      }));
+      state.list = action.payload.map(parse);
     },
-    create: (state, action: PayloadAction<Omit<Task, 'id' | 'checked' | 'note' | 'steps'>>) => {
-      state.list.push({
-        id: state.list.length === 0 ? 1 : state.list[state.list.length - 1].id + 1,
-        checked: false,
-        steps: [],
-        ...action.payload,
-      });
+    postTaskStarted: (state) => {
+      state.status.post = 'loading';
+    },
+    postTaskFailed: (state, action: PayloadAction<Error>) => {
+      state.status.post = 'failed';
+
+      state.error.post = action.payload;
+    },
+    postTaskSucceeded: (state, action: PayloadAction<Task>) => {
+      state.status.post = 'succeeded';
+
+      state.list.push(parse(action.payload));
     },
     toggle: (state, action: PayloadAction<number>) => {
       const index = state.list.findIndex((task) => task.id === action.payload);
@@ -145,8 +155,36 @@ export const getTasks = (): AppThunk<Promise<Task[]>> => {
   };
 };
 
+export const postTask = (
+  task: Omit<Task, 'id' | 'checked' | 'note' | 'steps'>
+): AppThunk<Promise<Task>> => {
+  return async (dispatch) => {
+    dispatch(taskSlice.actions.postTaskStarted());
+
+    let response;
+
+    try {
+      response = await post({
+        checked: false,
+        steps: [],
+        ...task,
+      });
+    } catch (_) {
+      const error = new Error('Task could not be created.');
+
+      dispatch(taskSlice.actions.postTaskFailed(error));
+
+      return Promise.reject(error);
+    }
+
+    dispatch(taskSlice.actions.postTaskSucceeded(response.data));
+
+    return Promise.resolve(response.data);
+  };
+};
+
 // ----------------------------------------------------------------------
 
-export const { create, toggle, update, remove } = taskSlice.actions;
+export const { toggle, update, remove } = taskSlice.actions;
 
 export default taskSlice.reducer;

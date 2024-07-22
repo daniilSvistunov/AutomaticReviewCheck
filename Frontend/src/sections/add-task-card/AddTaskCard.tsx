@@ -1,6 +1,6 @@
 import { AddRounded } from '@mui/icons-material';
 import { Button, Card, CardActions, CardContent, TextField } from '@mui/material';
-import { type Properties, create } from '@redux/slices/task';
+import { type Properties, postTask } from '@redux/slices/task';
 import { useDispatch } from '@redux/store';
 import { FilterChips } from '@sections/task-properties';
 import { useState } from 'react';
@@ -15,7 +15,7 @@ export default function AddTaskCard() {
   const [properties, setProperties] = useState<Properties>({ due: new Date() });
 
   function handleSubmit() {
-    dispatch(create({ title, ...properties }));
+    dispatch(postTask({ title, ...properties }));
 
     setTitle('');
   }
