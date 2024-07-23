@@ -3,24 +3,22 @@ import { Button, Menu } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
 import { format } from 'date-fns';
 import { type MouseEvent, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 // ----------------------------------------------------------------------
 
-interface Props {
-  value: Date;
-  setValue: (date: Date) => void;
-}
-
-// ----------------------------------------------------------------------
-
-export default function DatePicker({ value, setValue }: Readonly<Props>) {
+export default function DatePicker() {
   const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
 
-  function handleChange(value: Date) {
-    setValue(value);
+  const { getValues } = useFormContext();
+
+  const date = getValues('due');
+
+  const handleChange = (onChange: (date: Date) => void) => (date: Date) => {
+    onChange(date);
 
     setAnchor(null);
-  }
+  };
 
   return (
     <div>
@@ -32,11 +30,16 @@ export default function DatePicker({ value, setValue }: Readonly<Props>) {
         startIcon={<CalendarTodayRounded />}
         variant="outlined"
       >
-        {format(value, 'dd.MM.yy')}
+        {date ? format(date, 'dd.MM.yy') : 'Fällig bis'}
       </Button>
 
       <Menu anchorEl={anchor} onClose={() => setAnchor(null)} open={Boolean(anchor)}>
-        <DateCalendar onChange={handleChange} value={value} />
+        <Controller
+          name="due"
+          render={({ field: { onChange, value } }) => (
+            <DateCalendar onChange={handleChange(onChange)} value={value ?? null} />
+          )}
+        />
       </Menu>
     </div>
   );

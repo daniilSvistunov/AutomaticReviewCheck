@@ -2,13 +2,7 @@ import { KeyboardArrowDownRounded, NotificationsRounded } from '@mui/icons-mater
 import { Button, Menu, MenuItem } from '@mui/material';
 import { type Duration, formatDuration } from 'date-fns';
 import { type MouseEvent, useState } from 'react';
-
-// ----------------------------------------------------------------------
-
-interface Props {
-  value?: Duration;
-  setValue: (duration: Duration) => void;
-}
+import { Controller, useFormContext } from 'react-hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -20,14 +14,18 @@ const list: Duration[] = [
   { days: 1 },
 ];
 
-export default function TaskDetailReminder({ value, setValue }: Readonly<Props>) {
+export default function TaskDetailReminder() {
   const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
 
-  function handleClick(value: Duration) {
-    setValue(value);
+  const { getValues } = useFormContext();
+
+  const duration = getValues('reminder');
+
+  const handleChange = (onChange: (duration: Duration) => void, duration: Duration) => {
+    onChange(duration);
 
     setAnchor(null);
-  }
+  };
 
   return (
     <div>
@@ -39,16 +37,25 @@ export default function TaskDetailReminder({ value, setValue }: Readonly<Props>)
         startIcon={<NotificationsRounded />}
         variant="outlined"
       >
-        {value ? formatDuration(value) : 'Erinnerung'}
+        {duration ? formatDuration(duration) : 'Erinnerung'}
       </Button>
 
-      <Menu anchorEl={anchor} onClose={() => setAnchor(null)} open={Boolean(anchor)}>
-        {list.map((item) => (
-          <MenuItem key={formatDuration(item)} onClick={() => handleClick(item)}>
-            {formatDuration(item)}
-          </MenuItem>
-        ))}
-      </Menu>
+      <Controller
+        name="reminder"
+        render={({ field: { onChange, value } }) => (
+          <Menu anchorEl={anchor} onClose={() => setAnchor(null)} open={Boolean(anchor)}>
+            {list.map((item) => (
+              <MenuItem
+                key={formatDuration(item)}
+                onClick={() => handleChange(onChange, item)}
+                selected={value ? formatDuration(item) === formatDuration(value) : false}
+              >
+                {formatDuration(item)}
+              </MenuItem>
+            ))}
+          </Menu>
+        )}
+      />
     </div>
   );
 }
