@@ -41,7 +41,7 @@ namespace OKTodoListReactTS.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync([FromBody] ToDoDto toDoDto/*zu ergänzen*/)
         {
-            await _service.DeleteTodoAsync(toDoDto/*zu ergänzen*/);
+            await _service.DeleteTodoAsync(toDoDto.Id/*zu ergänzen*/);
             return Ok();
         }
 

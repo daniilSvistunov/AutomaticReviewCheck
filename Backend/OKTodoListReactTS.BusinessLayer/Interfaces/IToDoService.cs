@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 
@@ -8,7 +9,7 @@ namespace OKTodoListReactTS.BusinessLayer.Interfaces
     {
         Task<List<ToDoDto>> GetAllTodosAsync();
         Task<ToDoDto> AddTodoAsync(ToDoDto toDoDto);
-        Task DeleteTodoAsync(ToDoDto toDoDto/*zu ergänzen*/);
+        Task DeleteTodoAsync(Guid id/*zu ergänzen*/);
         Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto/*zu ergänzen*/);
     }
 }
