@@ -14,6 +14,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
     public class ToDoService : IToDoService /*Wieso wird hier das Interface IToDoService geerbt*/
 
     {
+        private const string NoToDoFound = "No ToDo with such ID was found";
         // Füge hier das benötigte Feld ToDoDbContext ein
         private readonly ToDoDbContext _context;
         private readonly IMapper _mapper; //Autmoapper wird benötigt um die DTOs in Entities umzuwandeln und umgekehrt (mehr Infos im Wiki)
@@ -88,11 +89,17 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          */
 
         // Füge die Implementierung für die Methode DeleteTodoAsync hier ein
-        public async Task DeleteTodoAsync(ToDoDto toDoDto/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/)
+        public async Task DeleteTodoAsync(Guid id/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/)
         {
             try
             {
-                var toDoEntry = _mapper.Map<ToDoEntry>(toDoDto);
+                // var id = toDoDto.Id;
+                var toDoEntry = await _context.ToDo.FindAsync(id);
+                if (toDoEntry == null)
+                {
+                    throw new Exception(NoToDoFound); // Ardalis result
+                }
+
                 _context.Remove(toDoEntry);
                 await _context.SaveChangesAsync();
             }
@@ -116,26 +123,25 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          */
 
         // Füge die Implementierung für die Methode UpdateTodoAsync hier ein
-        public async Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/)
+        public async Task<ToDoDto> UpdateTodoAsync(ToDoDto updatedToDoDto/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/)
         {
             try
             {
-                var existingToDo = await _context.ToDo.FindAsync(toDoDto.Id);
+                var existingToDoEntry = await _context.ToDo.FindAsync(updatedToDoDto.Id);
 
-                if (existingToDo == null)
+                if (existingToDoEntry == null)
                 {
-                    return null; // Ardalis result
+                    throw new Exception(NoToDoFound); // Ardalis result
                 }
 
-                existingToDo.Text = toDoDto.Text;
-                existingToDo.Completed = toDoDto.Completed;
-                existingToDo.TargetDate = toDoDto.DueDate;
+                existingToDoEntry.Text = updatedToDoDto.Text;
+                existingToDoEntry.Completed = updatedToDoDto.Completed;
+                existingToDoEntry.TargetDate = updatedToDoDto.DueDate;
 
-                var newToDoDto = _mapper.Map<ToDoDto>(existingToDo);
-
+                _context.Update(existingToDoEntry);
                 await _context.SaveChangesAsync();
 
-                return newToDoDto;
+                return updatedToDoDto;
             }
             catch (Exception ex)
             {
