@@ -1,7 +1,7 @@
+import { i18n } from '@locales';
 import { CalendarTodayRounded, KeyboardArrowDownRounded } from '@mui/icons-material';
 import { Button, Menu } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
-import { format } from 'date-fns';
 import { type MouseEvent, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
@@ -30,7 +30,7 @@ export default function DatePicker() {
         startIcon={<CalendarTodayRounded />}
         variant="outlined"
       >
-        {date ? format(date, 'dd.MM.yy') : 'Fällig bis'}
+        {date ? `${i18n.t('task.date', { val: date })}` : `${i18n.t('task.properties.due')}`}
       </Button>
 
       <Menu anchorEl={anchor} onClose={() => setAnchor(null)} open={Boolean(anchor)}>

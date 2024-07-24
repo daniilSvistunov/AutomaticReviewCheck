@@ -9,13 +9,14 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { setLocale } from 'yup';
 
 import AuthProvider from './auth/AuthProvider';
 import { msalConfig } from './auth/MsalConfig';
 import { MotionLazyContainer } from './components/animate';
 import { SettingsProvider, ThemeSettings } from './components/settings';
 import SnackbarProvider from './components/snackbar/SnackbarProvider';
-import { useLocales } from './locales';
+import { i18n, useLocales } from './locales';
 import ThemeLocalization from './locales/ThemeLocalization';
 import { persistor, store } from './redux/store';
 import Router from './routes';
@@ -28,6 +29,8 @@ const msalInstance = await PublicClientApplication.createPublicClientApplication
 
 const App = () => {
   const { currentLang } = useLocales();
+
+  setLocale({ mixed: { required: `${i18n.t('common.validation.isRequired')}` } });
 
   return isAppRunningInPlattform() ? (
     // If the app is running in OKPlattform, use the OKPlattform theme

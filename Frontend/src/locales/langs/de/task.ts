@@ -1,0 +1,32 @@
+export default {
+  title: 'ToDo Liste',
+  task_one: 'Aufgabe',
+  task_other: 'Aufgaben',
+  dateFilter: {
+    total: 'Gesamt',
+    today: 'Heute',
+    week: 'Woche',
+    month: 'Monat',
+    done: 'Erledigt',
+  },
+  properties: {
+    due: 'Fällig bis',
+    reminder: 'Erinnerung',
+    priority: 'Priorität',
+    bucket: 'Bucket',
+    team: 'Team',
+    assignee: 'Zuweisen an',
+  },
+  date: '{{val, datetime}}',
+  duration: {
+    minutes: '{{minutes}} min vorher',
+    hours: '{{hours}} h vorher',
+    days: '{{days}} Tag vorher',
+  },
+  empty: 'Keine Inhalte',
+  create: 'Klicke hier um eine neue Aufgabe hinzuzufügen',
+  edit: 'Aufgabe bearbeiten',
+  note: 'Notiz',
+  step: 'Schritt',
+  delete: 'Löschen',
+};

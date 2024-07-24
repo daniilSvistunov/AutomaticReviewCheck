@@ -1,6 +1,7 @@
 import { default as FormProvider, RHFTextField } from '@components/hook-form';
 import Iconify from '@components/iconify';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { i18n } from '@locales';
 import { AddRounded, CheckRounded, CloseRounded } from '@mui/icons-material';
 import {
   Button,
@@ -95,7 +96,9 @@ export default function TaskEditCard({
   return (
     <Dialog fullWidth maxWidth="md" onClose={onClose} open={open}>
       <FormProvider methods={methods} onSubmit={methods.handleSubmit(onSubmit)}>
-        <DialogTitle sx={{ pb: 1.5 }}>Aufgabe bearbeiten</DialogTitle>
+        <DialogTitle sx={{ pb: 1.5 }}>
+          {`${i18n.t('task.task', { count: 1 })} ${i18n.t('common.edit')}`}
+        </DialogTitle>
 
         <IconButton onClick={onClose} sx={{ position: 'absolute', right: 16, top: 18 }}>
           <CloseRounded />
@@ -103,9 +106,13 @@ export default function TaskEditCard({
 
         <DialogContent sx={{ pt: 1.5 }}>
           <Stack spacing={2}>
-            <RHFTextField label="Aufgaben Titel" name="title" size="small" />
+            <RHFTextField
+              label={`${i18n.t('task.task', { count: 0 })} ${i18n.t('common.placeholders.title')}`}
+              name="title"
+              size="small"
+            />
 
-            <RHFTextField label="Notiz" name="note" size="small" />
+            <RHFTextField label={`${i18n.t('task.note')}`} name="note" size="small" />
 
             <FilterChips />
 
@@ -114,7 +121,7 @@ export default function TaskEditCard({
                 <TextField
                   fullWidth
                   onChange={(event) => updateStep({ id: item.id, text: event.target.value })}
-                  placeholder="Schritt hinzufügen"
+                  placeholder={`${i18n.t('task.step')} ${i18n.t('common.add')}`}
                   size="small"
                   value={item.text}
                 />
@@ -131,7 +138,7 @@ export default function TaskEditCard({
               startIcon={<AddRounded />}
               sx={{ alignSelf: 'start' }}
             >
-              Schritt hinzufügen
+              {`${i18n.t('task.step')} ${i18n.t('common.add')}`}
             </Button>
           </Stack>
         </DialogContent>
@@ -144,11 +151,11 @@ export default function TaskEditCard({
             startIcon={<Iconify icon="eva:trash-2-outline" />}
             variant="contained"
           >
-            Aufgabe löschen
+            {`${i18n.t('task.task', { count: 1 })} ${i18n.t('task.delete')}`}
           </Button>
 
           <Button size="small" startIcon={<CheckRounded />} type="submit" variant="contained">
-            Speichern
+            {`${i18n.t('common.save')}`}
           </Button>
         </DialogActions>
       </FormProvider>

@@ -1,3 +1,4 @@
+import { i18n } from '@locales';
 import { SearchRounded } from '@mui/icons-material';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { selectSearch, updateSearch } from '@redux/slices/filter';
@@ -32,7 +33,7 @@ export default function ToolbarGlobalSearch() {
           }}
           onBlur={handleBlur}
           onChange={(event) => dispatch(updateSearch(event.target.value))}
-          placeholder="Suche"
+          placeholder={`${i18n.t('common.placeholders.search')}`}
           size="small"
           value={search ?? ''}
         />

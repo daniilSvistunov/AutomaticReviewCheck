@@ -1,3 +1,4 @@
+import { i18n } from '@locales';
 import {
   BookmarkRounded,
   CalendarTodayRounded,
@@ -9,7 +10,7 @@ import {
 import { Chip, Stack } from '@mui/material';
 import { styled } from '@mui/system';
 import { type Properties as Props } from '@redux/slices/task';
-import { format, formatDuration } from 'date-fns';
+import { formatDuration } from '@utils/formatTime';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ export default function TaskPropertiesSizes({
 }: Readonly<Props>) {
   return (
     <Stack direction="row">
-      <StyledChip icon={<CalendarTodayRounded />} label={format(due, 'dd.MM.yy')} />
+      <StyledChip icon={<CalendarTodayRounded />} label={`${i18n.t('task.date', { val: due })}`} />
 
       {reminder && <StyledChip icon={<NotificationsRounded />} label={formatDuration(reminder)} />}
       {priority && <StyledChip icon={<PriorityHighRounded />} label={priority} />}

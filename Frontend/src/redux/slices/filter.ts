@@ -6,11 +6,11 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 // ----------------------------------------------------------------------
 
 export enum DateFilter {
-  TOTAL = 'Gesamt',
-  TODAY = 'Heute',
-  WEEK = 'Woche',
-  MONTH = 'Monat',
-  DONE = 'Erledigt',
+  TOTAL = 'total',
+  TODAY = 'today',
+  WEEK = 'week',
+  MONTH = 'month',
+  DONE = 'done',
 }
 
 interface FilterState {

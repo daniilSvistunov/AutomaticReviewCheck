@@ -1,5 +1,6 @@
 import { RHFTextField } from '@components/hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { i18n } from '@locales';
 import { AddRounded } from '@mui/icons-material';
 import { Button, Card, CardActions, CardContent } from '@mui/material';
 import { type Priority, postTask } from '@redux/slices/task';
@@ -53,7 +54,7 @@ export default function AddTaskCard() {
         <CardContent>
           <RHFTextField
             fullWidth
-            label="Aufgaben Titel"
+            label={`${i18n.t('task.task', { count: 0 })} ${i18n.t('common.placeholders.title')}`}
             name="title"
             required
             size="small"
@@ -65,7 +66,7 @@ export default function AddTaskCard() {
           <FilterChips />
 
           <Button size="small" startIcon={<AddRounded />} type="submit" variant="contained">
-            Hinzufügen
+            {`${i18n.t('common.add')}`}
           </Button>
         </CardActions>
       </Card>

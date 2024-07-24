@@ -1,3 +1,4 @@
+import { i18n } from '@locales';
 import { CheckRounded } from '@mui/icons-material';
 import { Button, Stack } from '@mui/material';
 import { DateFilter, selectDate, updateDate } from '@redux/slices/filter';
@@ -21,7 +22,7 @@ export default function DateButtonGroup() {
           startIcon={item === date ? <CheckRounded /> : undefined}
           variant="outlined"
         >
-          {item}
+          {`${i18n.t('task.dateFilter.' + item)}`}
         </Button>
       ))}
     </Stack>

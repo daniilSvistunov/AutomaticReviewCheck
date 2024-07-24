@@ -1,3 +1,4 @@
+import { i18n } from '@locales';
 import {
   BookmarkRounded,
   GroupRounded,
@@ -31,7 +32,7 @@ export default function FilterChips() {
         render={({ field: { onChange, value } }) => (
           <FilterValueMenu
             icon={<PriorityHighRounded />}
-            label="Priorität"
+            label={i18n.t('task.properties.priority')}
             onSelect={onChange}
             selected={value}
             values={[...Object.values(Priority)]}
@@ -44,7 +45,7 @@ export default function FilterChips() {
         render={({ field: { onChange, value } }) => (
           <FilterValueMenu
             icon={<BookmarkRounded />}
-            label="Bucket"
+            label={i18n.t('task.properties.bucket')}
             onSelect={onChange}
             selected={value}
             values={buckets}
@@ -57,7 +58,7 @@ export default function FilterChips() {
         render={({ field: { onChange, value } }) => (
           <FilterValueMenu
             icon={<GroupRounded />}
-            label="Team"
+            label={i18n.t('task.properties.team')}
             onSelect={onChange}
             selected={value}
             values={teams}
@@ -70,7 +71,7 @@ export default function FilterChips() {
         render={({ field: { onChange, value } }) => (
           <FilterValueMenu
             icon={<PersonRounded />}
-            label="Zuweisen an"
+            label={i18n.t('task.properties.assignee')}
             onSelect={onChange}
             selected={value}
             values={assignees}

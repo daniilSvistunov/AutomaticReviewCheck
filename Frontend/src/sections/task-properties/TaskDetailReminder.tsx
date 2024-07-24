@@ -1,6 +1,8 @@
+import { i18n } from '@locales';
 import { KeyboardArrowDownRounded, NotificationsRounded } from '@mui/icons-material';
 import { Button, Menu, MenuItem } from '@mui/material';
-import { type Duration, formatDuration } from 'date-fns';
+import { formatDuration } from '@utils/formatTime';
+import { type Duration } from 'date-fns';
 import { type MouseEvent, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
@@ -37,7 +39,7 @@ export default function TaskDetailReminder() {
         startIcon={<NotificationsRounded />}
         variant="outlined"
       >
-        {duration ? formatDuration(duration) : 'Erinnerung'}
+        {duration ? `${formatDuration(duration)}` : `${i18n.t('task.properties.reminder')}`}
       </Button>
 
       <Controller

@@ -1,4 +1,5 @@
 import { applyAdvancedFilter } from '@components/advanced-filter/AdvancedFilter';
+import { i18n } from '@locales';
 import { WarningRounded } from '@mui/icons-material';
 import { Box, Card, CardActionArea, CardContent, List, Stack, Typography } from '@mui/material';
 import { DateFilter, selectDate, selectFilter, selectSearch } from '@redux/slices/filter';
@@ -61,11 +62,11 @@ export default function TaskListCard() {
 
               <Box sx={{ mt: 0.75, textAlign: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', fontSize: 14 }} variant="body2">
-                  Keine Inhalte
+                  {`${i18n.t('task.empty')}`}
                 </Typography>
 
                 <Typography sx={{ color: 'primary.main', fontSize: 12 }} variant="caption">
-                  Klicke hier um eine neue Aufgabe hinzuzufügen
+                  {`${i18n.t('task.create')}`}
                 </Typography>
               </Box>
             </Stack>
