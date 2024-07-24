@@ -8,14 +8,20 @@ import { persistReducer, persistStore } from 'redux-persist';
 
 import { rootPersistConfig, rootReducer } from './rootReducer';
 
-const store = configureStore({
-  reducer: persistReducer(rootPersistConfig, rootReducer),
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-      immutableCheck: false,
-    }),
-});
+export const storeSetUp = (preloadedState?: Partial<RootState>) =>
+  configureStore({
+    reducer: persistReducer(rootPersistConfig, rootReducer),
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+        immutableCheck: false,
+      }),
+    preloadedState,
+  });
+
+export type AppStore = ReturnType<typeof storeSetUp>;
+
+const store = storeSetUp();
 
 const persistor = persistStore(store, null, () => {
   // possibility to call an global app-init function

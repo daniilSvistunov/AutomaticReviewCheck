@@ -66,7 +66,7 @@ export interface TaskState {
   assignees: string[];
 }
 
-const initialState: TaskState = {
+export const initialState: TaskState = {
   status: {
     get: 'idle',
     post: 'idle',
