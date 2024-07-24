@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OKTodoListReactTS.BusinessLayer.Dtos;
@@ -36,12 +37,12 @@ namespace OKTodoListReactTS.Api.Controllers
         /// </summary>
         /// <param name="toDoDto">ToDo to delete</param>
         /// <returns>200 OK with ApplicationDto-Object, if operation is successful, 400 otherwise</returns>
-        [HttpDelete("DeleteToDoAsync", Name = nameof(DeleteToDoAsync))]
+        [HttpDelete("DeleteToDoAsync/{id}", Name = nameof(DeleteToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync([FromBody] ToDoDto toDoDto/*zu ergänzen*/)
+        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync([FromRoute] Guid id/*zu ergänzen*/)
         {
-            await _service.DeleteTodoAsync(toDoDto.Id/*zu ergänzen*/);
+            await _service.DeleteTodoAsync(id/*zu ergänzen*/);
             return Ok();
         }
 
@@ -68,6 +69,18 @@ namespace OKTodoListReactTS.Api.Controllers
         public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto/*zu ergänzen*/)
         {
             return Ok(await _service.UpdateTodoAsync(toDoDto/*zu ergänzen*/));
+        }
+
+        /// <summary>
+        /// Gets a ToDo by its ID
+        /// </summary>
+        /// <returns>200 OK with ApplicationDto-Object, if operation is successful, 400 otherwise</returns>
+        [HttpGet("getToDoByIdAsync/{id}", Name = nameof(GetToDoByIdAsync))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ApplicationDto>> GetToDoByIdAsync([FromRoute] Guid id)
+        {
+            return Ok(await _service.GetTodoByIdAsync(id));
         }
     }
 }

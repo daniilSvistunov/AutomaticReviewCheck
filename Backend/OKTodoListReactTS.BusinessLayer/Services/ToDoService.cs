@@ -45,10 +45,6 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 throw new Exception(ex.Message); // throw other exception for better code
             }
-
-            // Implementiere die Logik zum Abrufen aller Todos hier
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            // throw new NotImplementedException();
         }
 
         /*
@@ -75,8 +71,6 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 throw new Exception(ex.Message); // throw other exception for better code
             }
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            // throw new NotImplementedException();
         }
 
         /*Beispielhafte Task:
@@ -107,9 +101,6 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 throw new Exception(ex.Message); // throw other exception for better code
             }
-            // Implementiere die Logik zum Löschen eines Todos hier
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            // throw new NotImplementedException();
         }
 
         /*Beispielhafte Task:
@@ -147,9 +138,35 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 throw new Exception(ex.Message);
             }
-            // Implementiere die Logik zum Aktualisieren eines Todos hier
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            // throw new NotImplementedException();
+        }
+
+        /*Beispielhafte Task:
+         * Hintergrund:
+         * Für die ToDo-Planung wird ein Endpunkt benötigt, der eine ToDo von der Datenbank zieht
+         * Inhalt:
+         * Über einen Endpunkt die ToDo Id mitschickt soll die ToDo-Aufgabe geholt werden.
+         * Merkmale:
+         * Die ID des ToDos wird übergeben
+         * Als Antwort kommt ein ToDo zurück
+         */
+        public async Task<ToDoDto> GetTodoByIdAsync(Guid id)
+        {
+            try
+            {
+                var toDoEntry = await _context.ToDo.FindAsync(id);
+                if (toDoEntry == null)
+                {
+                    throw new Exception(NoToDoFound); // Ardalis result?
+                }
+
+                return _mapper.Map<ToDoDto>(toDoEntry);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message); // throw other exception for better code
+            }
+
+            throw new NotImplementedException();
         }
     }
 }
