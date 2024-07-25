@@ -39,8 +39,10 @@ namespace OKTemplate.BusinessLayer.Tests
             _toDoService = CreateToDoService();
             var dateTime = new DateTime(1998, 04, 30);
             var text = "Test";
+            var title = "Test title";
             ToDoDto expectedToDoDto = new ToDoDto()
             {
+                Title = title,
                 Text = text,
                 DueDate = dateTime,
                 Completed = true,
@@ -52,6 +54,7 @@ namespace OKTemplate.BusinessLayer.Tests
             // Assert
             Assert.NotNull(actualToDoDto);
             Assert.NotNull(expectedToDoDto);
+            Assert.Equal(expectedToDoDto.Title, actualToDoDto.Title);
             Assert.Equal(expectedToDoDto.Text, actualToDoDto.Text);
             Assert.Equal(expectedToDoDto.DueDate, actualToDoDto.DueDate);
             Assert.Equal(expectedToDoDto.Completed, actualToDoDto.Completed);
@@ -63,12 +66,14 @@ namespace OKTemplate.BusinessLayer.Tests
             // Arrange
             _toDoService = CreateToDoService();
 
+            var title = "Test title";
             var dateTime = new DateTime(1998, 04, 30);
             var text = "Test";
             Guid id = Guid.NewGuid();
             ToDoEntry toDoEntry = new ToDoEntry()
             {
                 Id = id,
+                Title = title,
                 Text = text,
                 TargetDate = dateTime,
                 Completed = true,
@@ -104,6 +109,7 @@ namespace OKTemplate.BusinessLayer.Tests
             // Arrange
             _toDoService = CreateToDoService();
 
+            var title = "Test title";
             var dateTime = new DateTime(1998, 04, 30);
             var text = "Test";
             Guid id = Guid.NewGuid();
@@ -113,6 +119,7 @@ namespace OKTemplate.BusinessLayer.Tests
             ToDoEntry initialToDoEntry = new ToDoEntry()
             {
                 Id = id,
+                Title = title,
                 Text = text,
                 TargetDate = dateTime,
                 Completed = true,
@@ -123,6 +130,7 @@ namespace OKTemplate.BusinessLayer.Tests
             ToDoDto expectedToDoDto = new ToDoDto()
             {
                 Id = id,
+                Title = title,
                 Text = updatedText,
                 DueDate = updatedDateTime,
                 Completed = false,
@@ -135,6 +143,7 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.NotNull(actualToDoDto);
             Assert.NotNull(expectedToDoDto);
             Assert.Equal(expectedToDoDto.Id, actualToDoDto.Id);
+            Assert.Equal(expectedToDoDto.Title, actualToDoDto.Title);
             Assert.Equal(expectedToDoDto.Text, actualToDoDto.Text);
             Assert.Equal(expectedToDoDto.DueDate, actualToDoDto.DueDate);
             Assert.Equal(expectedToDoDto.Completed, actualToDoDto.Completed);
@@ -149,10 +158,12 @@ namespace OKTemplate.BusinessLayer.Tests
             Guid id = Guid.NewGuid();
             var updatedText = "Updated";
             var updatedDateTime = new DateTime(1998, 04, 30);
+            var title = "Test title";
 
             ToDoDto expectedToDoDto = new ToDoDto()
             {
                 Id = id,
+                Title = title,
                 Text = updatedText,
                 DueDate = updatedDateTime,
                 Completed = false,
@@ -171,6 +182,7 @@ namespace OKTemplate.BusinessLayer.Tests
             // Arrange
             _toDoService = CreateToDoService();
 
+            var title = "Test title";
             var dateTime = new DateTime(1998, 04, 30);
             var text = "Test";
             Guid id = Guid.NewGuid();
@@ -178,6 +190,7 @@ namespace OKTemplate.BusinessLayer.Tests
             ToDoEntry toDoEntry = new ToDoEntry()
             {
                 Id = id,
+                Title = title,
                 Text = text,
                 TargetDate = dateTime,
                 Completed = true,
@@ -192,6 +205,7 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.NotNull(actualToDoDto);
             Assert.NotNull(expectedToDoDto);
             Assert.Equal(expectedToDoDto.Id, actualToDoDto.Id);
+            Assert.Equal(expectedToDoDto.Title, actualToDoDto.Title);
             Assert.Equal(expectedToDoDto.Text, actualToDoDto.Text);
             Assert.Equal(expectedToDoDto.DueDate, actualToDoDto.DueDate);
             Assert.Equal(expectedToDoDto.Completed, actualToDoDto.Completed);
