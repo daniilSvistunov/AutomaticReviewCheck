@@ -129,7 +129,6 @@ namespace OKTodoListReactTS.BusinessLayer.Services
                 existingToDoEntry.Completed = updatedToDoDto.Completed;
                 existingToDoEntry.TargetDate = updatedToDoDto.DueDate;
 
-                _context.Update(existingToDoEntry);
                 await _context.SaveChangesAsync();
 
                 return updatedToDoDto;
