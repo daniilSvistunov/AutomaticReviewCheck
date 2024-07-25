@@ -164,5 +164,52 @@ namespace OKTemplate.BusinessLayer.Tests
             // Assert
             Assert.Equal(NoTodoFound, exception.Message);
         }
+
+        [Fact]
+        public async Task GetTodoByIdAsync_Success()
+        {
+            // Arrange
+            _toDoService = CreateToDoService();
+
+            var dateTime = new DateTime(1998, 04, 30);
+            var text = "Test";
+            Guid id = Guid.NewGuid();
+
+            ToDoEntry toDoEntry = new ToDoEntry()
+            {
+                Id = id,
+                Text = text,
+                TargetDate = dateTime,
+                Completed = true,
+            };
+            ToDoDto expectedToDoDto = base.Mapper.Map<ToDoDto>(toDoEntry);
+            await base.Context.ToDo.AddAsync(toDoEntry);
+
+            // Act
+            ToDoDto actualToDoDto = await _toDoService.GetTodoByIdAsync(id);
+
+            // Assert
+            Assert.NotNull(actualToDoDto);
+            Assert.NotNull(expectedToDoDto);
+            Assert.Equal(expectedToDoDto.Id, actualToDoDto.Id);
+            Assert.Equal(expectedToDoDto.Text, actualToDoDto.Text);
+            Assert.Equal(expectedToDoDto.DueDate, actualToDoDto.DueDate);
+            Assert.Equal(expectedToDoDto.Completed, actualToDoDto.Completed);
+        }
+
+        [Fact]
+        public async Task GetTodoByIdAsync_ReturnsNotFound()
+        {
+            //Arrange
+            _toDoService = CreateToDoService();
+
+            Guid id = Guid.NewGuid();
+
+            // Act
+            var exception = await Assert.ThrowsAsync<Exception>(() => _toDoService.GetTodoByIdAsync(id));
+
+            // Assert
+            Assert.Equal(NoTodoFound, exception.Message);
+        }
     }
 }
