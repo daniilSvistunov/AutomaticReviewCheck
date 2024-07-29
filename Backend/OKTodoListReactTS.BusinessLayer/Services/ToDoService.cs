@@ -14,7 +14,8 @@ namespace OKTodoListReactTS.BusinessLayer.Services
     public class ToDoService : IToDoService /*Wieso wird hier das Interface IToDoService geerbt*/
 
     {
-        private const string NoToDoFound = "No ToDo with such ID was found";
+        private const string NoToDoFound = "No ToDo with such ID was found.";
+        private const string TodoAlreadyExists = "ToDo with such ID already exists.";
         // Füge hier das benötigte Feld ToDoDbContext ein
         private readonly ToDoDbContext _context;
         private readonly IMapper _mapper; //Autmoapper wird benötigt um die DTOs in Entities umzuwandeln und umgekehrt (mehr Infos im Wiki)
@@ -62,6 +63,17 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             try
             {
+                var title = toDoDto.Title;
+                var dueDate = toDoDto.DueDate;
+                List<ToDoEntry> existingToDoEntries = await _context.ToDo.ToListAsync();
+                foreach (var entry in existingToDoEntries)
+                {
+                    if (entry.Title == title && DateTime.Equals(entry.TargetDate, dueDate))
+                    {
+                        throw new Exception(TodoAlreadyExists);
+                    }
+                }
+
                 var toDoEntry = _mapper.Map<ToDoEntry>(toDoDto);
                 await _context.AddAsync(toDoEntry);
                 await _context.SaveChangesAsync();
@@ -87,7 +99,6 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             try
             {
-                // var id = toDoDto.Id;
                 var toDoEntry = await _context.ToDo.FindAsync(id);
                 if (toDoEntry == null)
                 {
@@ -118,11 +129,23 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             try
             {
-                var existingToDoEntry = await _context.ToDo.FindAsync(updatedToDoDto.Id);
+                var title = updatedToDoDto.Title;
+                var dueDate = updatedToDoDto.DueDate;
+                var id = updatedToDoDto.Id;
+                var existingToDoEntry = await _context.ToDo.FindAsync(id);
 
                 if (existingToDoEntry == null)
                 {
                     throw new Exception(NoToDoFound); // Ardalis result
+                }
+
+                List<ToDoEntry> existingToDoEntries = await _context.ToDo.ToListAsync();
+                foreach (var entry in existingToDoEntries)
+                {
+                    if (entry.Title == title && DateTime.Equals(entry.TargetDate, dueDate))
+                    {
+                        throw new Exception(TodoAlreadyExists);
+                    }
                 }
 
                 existingToDoEntry.Text = updatedToDoDto.Text;
