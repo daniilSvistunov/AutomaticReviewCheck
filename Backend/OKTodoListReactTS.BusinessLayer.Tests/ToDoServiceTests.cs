@@ -62,30 +62,20 @@ namespace OKTemplate.BusinessLayer.Tests
         }
 
         [Fact]
-        public async Task AddTodoAsync_ReturnsDuplicateDetected() // Titel und Fälligkeitsdatum gleich
+        public async Task AddTodoAsync_ReturnsDuplicateDetected()
         {
             // Arrange
             _toDoService = CreateToDoService();
-            var targetDate = new DateTime(1998, 04, 30);
-            var text1 = "Test1";
-            var text2 = "Test2";
-            var title = "Test title";
-            ToDoEntry alreadyAddedToDoEntry = new ToDoEntry()
-            {
-                Title = title,
-                Text = text1,
-                TargetDate = targetDate,
-                Completed = true,
-            };
+            var text = "Test";
+            var title = "Title 1";
+
             ToDoDto toBeAddedToDoDto = new ToDoDto()
             {
-                Title = title,
-                DueDate = targetDate,
-                Text = text2,
+                Title = "Title 1",
+                DueDate = new DateTime(1998, 04, 30),
+                Text = text,
                 Completed = false,
             };
-
-            await base.Context.ToDo.AddAsync(alreadyAddedToDoEntry);
 
             // Act
             var exception = await Assert.ThrowsAsync<Exception>(() => _toDoService.AddTodoAsync(toBeAddedToDoDto));
@@ -215,38 +205,17 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             // Arrange
             _toDoService = CreateToDoService();
-            Guid id = Guid.NewGuid();
-            var targetDate1 = new DateTime(1998, 04, 30);
-            var targetDate2 = targetDate1.AddDays(1);
-            var text1 = "Test1";
-            var text2 = "Test2";
-            var title1 = "Test title 1";
-            var title2 = "Test title 2";
-            ToDoEntry alreadyAddedToDoEntry1 = new ToDoEntry()
-            {
-                Title = title1,
-                Text = text1,
-                TargetDate = targetDate1,
-                Completed = true,
-            };
-            ToDoEntry alreadyAddedToDoEntry2 = new ToDoEntry()
-            {
-                Id = id,
-                Title = title2,
-                Text = text2,
-                TargetDate = targetDate2,
-                Completed = true,
-            };
-
-            await base.Context.ToDo.AddAsync(alreadyAddedToDoEntry1);
-            await base.Context.ToDo.AddAsync(alreadyAddedToDoEntry2);
+            Guid id = Guid.Parse("d50d4e5d-40a8-4c8b-a2aa-745f77c8b9d7");
+            var newDueDate = new DateTime(1998, 04, 30).AddDays(1);
+            var newText = "Test";
+            var newTitle = "Title 2";
 
             ToDoDto toBeUpdatedToDoDto = new ToDoDto()
             {
                 Id = id,
-                Title = title1,
-                DueDate = targetDate1,
-                Text = text2,
+                Title = newTitle,
+                DueDate = newDueDate,
+                Text = newText,
                 Completed = false,
             };
 
