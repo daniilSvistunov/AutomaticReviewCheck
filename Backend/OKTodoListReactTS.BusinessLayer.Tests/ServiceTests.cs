@@ -68,10 +68,10 @@ namespace OKTemplate.BusinessLayer.Tests
             {
                 new ToDoEntry
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("d50d4e5d-40a8-4c8b-a2aa-745f77c8b9d7"),
                     Title = "Title 1",
                     Text = "ToDo 1",
-                    TargetDate = DateTime.UtcNow.AddDays(1),
+                    TargetDate = new DateTime(1998, 04, 30),
                     CreatedOn = DateTime.UtcNow,
                     UpdatedOn = DateTime.UtcNow
                 },
@@ -80,7 +80,7 @@ namespace OKTemplate.BusinessLayer.Tests
                     Id = Guid.NewGuid(),
                     Title = "Title 2",
                     Text = "ToDo 2",
-                    TargetDate = DateTime.UtcNow.AddDays(2),
+                    TargetDate = new DateTime(1998, 04, 30).AddDays(1),
                     CreatedOn = DateTime.UtcNow,
                     UpdatedOn = DateTime.UtcNow
                 },
