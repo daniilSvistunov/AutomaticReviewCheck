@@ -99,7 +99,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 if (entry.Title == title && DateTime.Equals(entry.TargetDate, dueDate))
                 {
-                    return Result<ToDoDto>.Invalid(); // todo already exists
+                    return Result<ToDoDto>.Error(TodoAlreadyExists); // todo already exists
                 }
             }
 
@@ -141,7 +141,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             var toDoEntry = await _context.ToDo.FindAsync(id);
             if (toDoEntry == null)
             {
-                return Result.Invalid(); // todo not found
+                return Result.NotFound(NoToDoFound); // todo not found
             }
 
             _context.Remove(toDoEntry);
@@ -205,7 +205,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
 
             if (existingToDoEntry == null)
             {
-                return Result<ToDoDto>.NotFound();
+                return Result<ToDoDto>.NotFound(NoToDoFound);
             }
 
             List<ToDoEntry> existingToDoEntries = await _context.ToDo.ToListAsync();
@@ -213,7 +213,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 if (entry.Title == title && DateTime.Equals(entry.TargetDate, dueDate))
                 {
-                    return Result<ToDoDto>.Invalid(); // todo already exists
+                    return Result<ToDoDto>.Error(TodoAlreadyExists); // todo already exists
                 }
             }
 
@@ -257,7 +257,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             var toDoEntry = await _context.ToDo.FindAsync(id);
             if (toDoEntry == null)
             {
-                return Result<ToDoDto>.NotFound(); // todo not found
+                return Result<ToDoDto>.NotFound(NoToDoFound); // todo not found
             }
 
             ToDoDto toDoDto = _mapper.Map<ToDoDto>(toDoEntry);

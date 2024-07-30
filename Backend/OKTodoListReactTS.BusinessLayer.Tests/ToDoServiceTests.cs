@@ -50,7 +50,7 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             // Act
-            var actualToDoDto = await _toDoService.AddTodoAsync(expectedToDoDto);
+            ToDoDto actualToDoDto = await _toDoService.AddTodoAsync(expectedToDoDto);
 
             // Assert
             Assert.NotNull(actualToDoDto);
@@ -79,10 +79,11 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             // Act
-            var exception = await Assert.ThrowsAsync<Exception>(() => _toDoService.AddTodoAsync(toBeAddedToDoDto));
+            var result = await _toDoService.AddTodoAsync(toBeAddedToDoDto);
 
             // Assert
-            Assert.Equal(TodoAlreadyExists, exception.Message);
+            Assert.NotNull(result);
+            Assert.Equal(TodoAlreadyExists, result.Errors[0]);
         }
 
         [Fact]
@@ -122,10 +123,11 @@ namespace OKTemplate.BusinessLayer.Tests
             Guid id = Guid.NewGuid();
 
             // Act
-            var exception = await Assert.ThrowsAsync<Exception>(() => _toDoService.DeleteTodoAsync(id));
+            var result = await _toDoService.DeleteTodoAsync(id);
 
             // Assert
-            Assert.Equal(NoTodoFound, exception.Message);
+            Assert.NotNull(result);
+            Assert.Equal(NoTodoFound, result.Errors[0]);
         }
 
         [Fact]
@@ -195,14 +197,15 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             // Act
-            var exception = await Assert.ThrowsAsync<Exception>(() => _toDoService.UpdateTodoAsync(expectedToDoDto));
+            var result = await _toDoService.UpdateTodoAsync(expectedToDoDto);
 
             // Assert
-            Assert.Equal(NoTodoFound, exception.Message);
+            Assert.NotNull(result);
+            Assert.Equal(NoTodoFound, result.Errors[0]);
         }
 
         [Fact]
-        public async Task UpdateTodoAsync_ReturnsDuplicateDetected() // Titel und Fälligkeitsdatum gleich
+        public async Task UpdateTodoAsync_ReturnsDuplicateDetected()
         {
             // Arrange
             _toDoService = CreateToDoService();
@@ -221,10 +224,11 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             // Act
-            var exception = await Assert.ThrowsAsync<Exception>(() => _toDoService.UpdateTodoAsync(toBeUpdatedToDoDto));
+            var result = await _toDoService.UpdateTodoAsync(toBeUpdatedToDoDto);
 
             // Assert
-            Assert.Equal(TodoAlreadyExists, exception.Message);
+            Assert.NotNull(result);
+            Assert.Equal(TodoAlreadyExists, result.Errors[0]);
         }
 
         [Fact]
@@ -267,14 +271,14 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             //Arrange
             _toDoService = CreateToDoService();
-
             Guid id = Guid.NewGuid();
 
             // Act
-            var exception = await Assert.ThrowsAsync<Exception>(() => _toDoService.GetTodoByIdAsync(id));
+            var result = await _toDoService.GetTodoByIdAsync(id);
 
             // Assert
-            Assert.Equal(NoTodoFound, exception.Message);
+            Assert.NotNull(result);
+            Assert.Equal(NoTodoFound, result.Errors[0]);
         }
     }
 }
