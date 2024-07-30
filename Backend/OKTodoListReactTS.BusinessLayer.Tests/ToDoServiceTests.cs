@@ -68,11 +68,12 @@ namespace OKTemplate.BusinessLayer.Tests
             _toDoService = CreateToDoService();
             var text = "Test";
             var title = "Title 1";
+            var dueDate = new DateTime(1998, 04, 30);
 
             ToDoDto toBeAddedToDoDto = new ToDoDto()
             {
-                Title = "Title 1",
-                DueDate = new DateTime(1998, 04, 30),
+                Title = title,
+                DueDate = dueDate,
                 Text = text,
                 Completed = false,
             };
