@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ardalis.Result;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 
 namespace OKTodoListReactTS.BusinessLayer.Interfaces
 {
     public interface IToDoService
     {
-        Task<List<ToDoDto>> GetAllTodosAsync();
-        Task<ToDoDto> AddTodoAsync(ToDoDto toDoDto);
-        Task DeleteTodoAsync(Guid id/*zu ergänzen*/);
-        Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto/*zu ergänzen*/);
-        Task<ToDoDto> GetTodoByIdAsync(Guid id);
+        Task<Result<List<ToDoDto>>> GetAllTodosAsync();
+        Task<Result<ToDoDto>> AddTodoAsync(ToDoDto toDoDto);
+        Task<Result> DeleteTodoAsync(Guid id/*zu ergänzen*/);
+        Task<Result<ToDoDto>> UpdateTodoAsync(ToDoDto toDoDto/*zu ergänzen*/);
+        Task<Result<ToDoDto>> GetTodoByIdAsync(Guid id);
     }
 }
