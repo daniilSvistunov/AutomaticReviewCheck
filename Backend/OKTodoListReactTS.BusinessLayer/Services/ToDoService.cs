@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
-//Welche using-Anweisungen werden hier wieso gebraucht?
+using OKTodoListReactTS.Common.Logging;
+using OKTodoListReactTS.DataLayer;
+using OKTodoListReactTS.DataLayer.Entities;
 
 namespace OKTodoListReactTS.BusinessLayer.Services
 {
-    public class ToDoService : IToDoService /*Wieso wird hier das Interface IToDoService geerbt*/
-
+    public class ToDoService : BaseEntityService, IToDoService // Das Interface IToDoService stellt die Definition der Methodenrümpfe bereit, gegen das implementiert wird
     {
-        // Füge hier das benötigte Feld ToDoDbContext ein 
         private readonly IMapper _mapper; //Autmoapper wird benötigt um die DTOs in Entities umzuwandeln und umgekehrt (mehr Infos im Wiki)
 
-        public ToDoService(/* Füge die benötigten Parameter hier ein */)
+        public ToDoService(ToDoDbContext dbContext, IMapper mapper, ILoggerManager logger) : base(dbContext, logger)
         {
-            /*_mapper = ??? Initialisiere das IMapper-Feld mit dem übergebenen Parameter */
-            /*_dbContext = ??? Initialisiere das ToDoDbContext-Feld mit dem übergebenen Parameter */
+            _mapper = mapper;
         }
 
         /*Beispielhafte Task:
@@ -26,13 +26,12 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          * Inhalt:
          * Beim Aufrufen des Endpunkt sollen alle ToDos geholt werden.
          */
-
-        // Füge die Implementierung für die Methode GetAllTodosAsync hier ein, Warum hat die Methode keinen Wert der übergeben wird? 
-        public async Task<List<ToDoDto>> GetAllTodosAsync() //Die Methode hat keinen Wert der übergeben wird, weil [...]	
+        public async Task<List<ToDoDto>> GetAllTodosAsync() //Die Methode hat keinen Wert der übergeben wird, es sollen alle Einträge aus des Datenbank zurückgegeben, eine Filterung ist nicht notwendig.
         {
-            // Implementiere die Logik zum Abrufen aller Todos hier
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
+            var toDoEntries = await _dbContext.ToDo.ToListAsync();
+            _logger.LogInfo($"ToDoService: GetAll has returned {toDoEntries.Count} entries");
+
+            return _mapper.Map<List<ToDoDto>>(toDoEntries);
         }
 
         /*
@@ -48,8 +47,19 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         //Diese Methode soll Dir als Beispiel für die Logik hinter den Implementierungen gelten
         public async Task<ToDoDto> AddTodoAsync(ToDoDto toDoDto)
         {
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
+            var idAlredyExsists = await _dbContext.ToDo.AnyAsync(entry => entry.Id == toDoDto.Id);
+            if (idAlredyExsists)
+            {
+                throw new ArgumentException($"Can not store the ToDo entry as the id {toDoDto.Id} already exsists");
+            }
+
+            var entry = _mapper.Map<ToDoEntry>(toDoDto);
+            await _dbContext.ToDo.AddAsync(entry);
+            await _dbContext.SaveChangesAsync();
+
+            _logger.LogInfo($"Added todo entry with the id {toDoDto.Id}");
+
+            return toDoDto;
         }
 
         /*Beispielhafte Task:
@@ -60,13 +70,19 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          * Merkmale:
          * Der Endpunkt bekommt eine {????} (Welcher Parameter muss übergeben werden?).
          */
-
-        // Füge die Implementierung für die Methode DeleteTodoAsync hier ein
-        public async Task DeleteTodoAsync(/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/)
+        public async Task DeleteTodoAsync(ToDoDto toDoDto)
         {
-            // Implementiere die Logik zum Löschen eines Todos hier
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
+            var idExsists = await _dbContext.ToDo.AnyAsync(entry => entry.Id == toDoDto.Id);
+            if (!idExsists)
+            {
+                throw new ArgumentException($"Can not delete an entry that is not present");
+            }
+
+            var entry = _mapper.Map<ToDoEntry>(toDoDto);
+            _dbContext.ToDo.Remove(entry);
+            await _dbContext.SaveChangesAsync();
+
+            _logger.LogInfo($"Marked to todo entry with the Id {toDoDto.Id} as deleted.");
         }
 
         /*Beispielhafte Task:
@@ -78,13 +94,21 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          * Ein ToDo wird geschickt
          * Als Antwort kommt ein ToDo zurück                                                
          */
-
-        // Füge die Implementierung für die Methode UpdateTodoAsync hier ein
-        public async Task<ToDoDto> UpdateTodoAsync(/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/)
+        public async Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto)
         {
-            // Implementiere die Logik zum Aktualisieren eines Todos hier
-            /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-            throw new NotImplementedException();
+            var idExsists = await _dbContext.ToDo.AnyAsync(entry => entry.Id == toDoDto.Id);
+            if (!idExsists)
+            {
+                throw new ArgumentException($"Can not update an entry that is not present");
+            }
+
+            var entry = _mapper.Map<ToDoEntry>(toDoDto);
+            _dbContext.Update(entry);
+            await _dbContext.SaveChangesAsync();
+
+            _logger.LogInfo($"Updated the todo entry with the Id {toDoDto.Id}.");
+
+            return toDoDto;
         }
     }
 }

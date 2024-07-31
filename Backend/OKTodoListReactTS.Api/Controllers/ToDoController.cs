@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,37 +21,61 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Adds a todo entry to the list of todo entries
         /// </summary>
         /// <param name="toDoDto"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Throws as the posted todoDto is null</exception>
+        /// <exception cref="NoNullAllowedException">Throws as the posted id of the todoDto is null</exception>
+        /// <returns>The posted todo entry</returns>
         [HttpPost(Name = nameof(AddToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ApplicationDto>> AddToDoAsync([FromBody] ToDoDto toDoDto)
         {
+            if (toDoDto == null)
+            {
+                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
+            }
+
+            if (toDoDto.Id == Guid.Empty)
+            {
+                throw new NoNullAllowedException("The id of a todo entry can not be null");
+            }
+
             return Ok(await _service.AddTodoAsync(toDoDto));
         }
 
         /// <summary>
-        /// 
+        /// Deletes a given todo entry from the list of todo entries
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
         [HttpDelete(Name = nameof(DeleteToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync(/*zu ergänzen*/)
+        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync([FromBody] ToDoDto toDoDto)
         {
-            await _service.DeleteTodoAsync(/*zu ergänzen*/);
+            if (toDoDto == null)
+            {
+                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
+            }
+
+            if (toDoDto.Id == Guid.Empty)
+            {
+                throw new NoNullAllowedException("The id of a todo entry can not be null");
+            }
+
+            await _service.DeleteTodoAsync(toDoDto);
             return Ok();
         }
 
         /// <summary>
-        /// 
+        /// Returns all todo entries
         /// </summary>
         /// <param name="toDoDto"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Throws as the posted todoDto is null</exception>
+        /// <exception cref="NoNullAllowedException">Throws as the posted id of the todoDto is null</exception>
+        /// <returns>A list of todo entires</returns>
         [HttpGet(Name = nameof(GetAllTodosAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -60,16 +85,28 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Updates a given todo entry
         /// </summary>
         /// <param name="toDoDto"></param>
-        /// <returns></returns>
-        [HttpPost(Name = nameof(UpdateTodoAsync))]
+        /// <exception cref="ArgumentNullException">Throws as the posted todoDto is null</exception>
+        /// <exception cref="NoNullAllowedException">Throws as the posted id of the todoDto is null</exception>
+        /// <returns>Returns the new state of the todo entry after the update</returns>
+        [HttpPut(Name = nameof(UpdateTodoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync(/*zu ergänzen*/)
+        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto)
         {
-            return Ok(await _service.UpdateTodoAsync(/*zu ergänzen*/));
+            if (toDoDto == null)
+            {
+                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
+            }
+
+            if (toDoDto.Id == Guid.Empty)
+            {
+                throw new NoNullAllowedException("The id of a todo entry can not be null");
+            }
+
+            return Ok(await _service.UpdateTodoAsync(toDoDto));
         }
     }
 }
