@@ -34,7 +34,6 @@ namespace OKTodoListReactTS.Api.Controllers
         public async Task<Result<ToDoDto>> AddToDoAsync([FromBody] ToDoDto toDoDto)
         {
             return await _service.AddTodoAsync(toDoDto);
-            // return Ok(await _service.AddTodoAsync(toDoDto));
         }
 
         /// <summary>
@@ -48,7 +47,6 @@ namespace OKTodoListReactTS.Api.Controllers
         public async Task<Result> DeleteToDoAsync([FromRoute] Guid id/*zu ergänzen*/)
         {
             return await _service.DeleteTodoAsync(id/*zu ergänzen*/);
-            // return Ok();
         }
 
         /// <summary>
@@ -61,7 +59,6 @@ namespace OKTodoListReactTS.Api.Controllers
         public async Task<Result<List<ToDoDto>>> GetAllTodosAsync()
         {
             return await _service.GetAllTodosAsync();
-            // return Ok(await _service.GetAllTodosAsync());
         }
 
         /// <summary>
@@ -75,7 +72,6 @@ namespace OKTodoListReactTS.Api.Controllers
         public async Task<Result<ToDoDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto/*zu ergänzen*/)
         {
             return await _service.UpdateTodoAsync(toDoDto);
-            // return Ok(await _service.UpdateTodoAsync(toDoDto/*zu ergänzen*/));
         }
 
         /// <summary>
@@ -88,7 +84,6 @@ namespace OKTodoListReactTS.Api.Controllers
         public async Task<Result<ToDoDto>> GetToDoByIdAsync([FromRoute] Guid id)
         {
             return await _service.GetTodoByIdAsync(id);
-            //return Ok(await _service.GetTodoByIdAsync(id));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using Ardalis.Result;
 using Moq;
 using OKTodoListReactTS.Api.Controllers;
 using OKTodoListReactTS.BusinessLayer.Dtos;
@@ -15,98 +16,53 @@ namespace OKTodoListReactTS.Api.Tests
         private ToDoController _toDoController;
 
         [Fact]
-        public async Task AddToDoAsync_ReturnsStatusCodeOk()
+        public async Task AddToDoAsync_ReturnsStatusCodeOkAndReturnsValidObject()
         {
             // Arrange
-            //_toDoServiceMock.Setup(x => x.AddTodoAsync(toDoDto)).ReturnsAsync(toDoDto);
             _toDoController = new ToDoController(_toDoServiceMock.Object);
-
-            var id = Guid.NewGuid();
-            var title = "Test";
-            var text = "Test";
-            var dueDate = DateTime.Now;
-            ToDoDto toDoDto = new ToDoDto()
-            {
-                Id = id,
-                Title = title,
-                Text = text,
-                DueDate = dueDate,
-                Completed = false
-            };
+            ToDoDto toDoDto = new ToDoDto();
+            _toDoServiceMock.Setup(x => x.AddTodoAsync(toDoDto)).ReturnsAsync(toDoDto);
 
             // Act
             var result = await _toDoController.AddToDoAsync(toDoDto);
 
-            // Assert
-            var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(200, okObjectResult.StatusCode);
-        }
-
-        [Fact]
-        public async Task AddToDoAsync_ReturnsValidObject()
-        {
-            // Arrange
-            //_toDoServiceMock.Setup(x => x.AddTodoAsync(toDoDto)).ReturnsAsync(toDoDto);
-            _toDoController = new ToDoController(_toDoServiceMock.Object);
-
-            var id = Guid.NewGuid();
-            var title = "Test";
-            var text = "Test";
-            var dueDate = DateTime.Now;
-            ToDoDto toDoDto = new ToDoDto()
-            {
-                Id = id,
-                Title = title,
-                Text = text,
-                DueDate = dueDate,
-                Completed = false
-            };
-
-            // Act
-            var result = await _toDoController.AddToDoAsync(toDoDto);
-
-            // Assert
+            // Assert     
             Assert.NotNull(result);
-            Assert.IsType<ActionResult<ApplicationDto>>(result);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+            Assert.Equal(toDoDto, result.Value);
+
+            _toDoServiceMock.Verify(s => s.AddTodoAsync(toDoDto), Times.Exactly(1));
         }
 
         // TODO: weitere Tests implementieren
 
         [Fact]
-        public async Task DeleteToDoAsync_ReturnsResultStatusOkAndReturnsApplicationDto()
+        public async Task DeleteToDoAsync_ReturnsResultStatusOkAndReturnsValidObject()
         {
             // Arrange
             var id = Guid.Parse("d50d4e5d-40a8-4c8b-a2aa-745f77c8b9d7");
+            var expectedResult = Result.Success();
             _toDoController = new ToDoController(_toDoServiceMock.Object);
+            _toDoServiceMock.Setup(s => s.DeleteTodoAsync(id)).ReturnsAsync(expectedResult);
 
             // Act
             var result = await _toDoController.DeleteToDoAsync(id);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.IsType<ActionResult<ApplicationDto>>(result);
-            var okResult = Assert.IsType<OkResult>(result.Result);
-            Assert.Equal(200, okResult.StatusCode);
+            Assert.Equal(expectedResult, result);
+            Assert.IsType<Result>(result);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+
+            _toDoServiceMock.Verify(s => s.DeleteTodoAsync(id), Times.Exactly(1));
         }
 
         [Fact]
-        public async Task UpdateToDoAsync_ReturnsResultStatusOkAndReturnsApplicationDto()
+        public async Task UpdateToDoAsync_ReturnsResultStatusOkAndReturnsValidObject()
         {
             // Arrange
-            var id = Guid.Parse("d50d4e5d-40a8-4c8b-a2aa-745f77c8b9d7");
-            var title = "Test";
-            var text = "Test";
-            var dueDate = DateTime.Now;
-            ToDoDto toDoDto = new ToDoDto()
-            {
-                Id = id,
-                Title = title,
-                Text = text,
-                DueDate = dueDate,
-                Completed = false
-            };
+            ToDoDto toDoDto = new ToDoDto();
 
-            //_toDoServiceMock.Setup(x => x.UpdateTodoAsync(toDoDto)).ReturnsAsync(toDoDto);
+            _toDoServiceMock.Setup(x => x.UpdateTodoAsync(toDoDto)).ReturnsAsync(toDoDto);
             _toDoController = new ToDoController(_toDoServiceMock.Object);
 
             // Act
@@ -114,16 +70,22 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<ActionResult<ApplicationDto>>(result);
-            var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(200, okObjectResult.StatusCode);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+            Assert.Equal(toDoDto, result.Value);
+
+            _toDoServiceMock.Verify(s => s.UpdateTodoAsync(toDoDto), Times.Exactly(1));
         }
 
         [Fact]
-        public async Task GetAllToDosAsync_ReturnsResultStatusOkAndReturnsApplicationDto()
+        public async Task GetAllToDosAsync_ReturnsResultStatusOkAndReturnsValidObject()
         {
             // Arrange
-            //_toDoServiceMock.Setup(x => x.GetAllTodosAsync()).ReturnsAsync();
+            List<ToDoDto> toDoDtos = new List<ToDoDto>()
+            {
+                new(),
+                new()
+            };
+            _toDoServiceMock.Setup(x => x.GetAllTodosAsync()).ReturnsAsync(toDoDtos);
             _toDoController = new ToDoController(_toDoServiceMock.Object);
 
             // Act
@@ -131,16 +93,19 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<ActionResult<ApplicationDto>>(result);
-            var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(200, okObjectResult.StatusCode);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+            Assert.Equal(toDoDtos, result.Value);
+
+            _toDoServiceMock.Verify(s => s.GetAllTodosAsync(), Times.Exactly(1));
         }
 
         [Fact]
-        public async Task GetToDoByIdAsync_ReturnsResultStatusOkAndReturnsApplicationDto()
+        public async Task GetToDoByIdAsync_ReturnsResultStatusOkAndReturnsValidObject()
         {
             // Arrange
             var id = Guid.Parse("d50d4e5d-40a8-4c8b-a2aa-745f77c8b9d7");
+            var toDoDto = new ToDoDto();
+            _toDoServiceMock.Setup(s => s.GetTodoByIdAsync(id)).ReturnsAsync(toDoDto);
             _toDoController = new ToDoController(_toDoServiceMock.Object);
 
             // Act
@@ -148,9 +113,10 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<ActionResult<ApplicationDto>>(result);
-            var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(200, okObjectResult.StatusCode);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+            Assert.Equal(toDoDto, result.Value);
+
+            _toDoServiceMock.Verify(s => s.GetTodoByIdAsync(id), Times.Exactly(1));
         }
     }
 }
