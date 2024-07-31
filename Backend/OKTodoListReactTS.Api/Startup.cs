@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +26,7 @@ using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.BusinessLayer.Mapping;
 using OKTodoListReactTS.BusinessLayer.Services;
 using OKTodoListReactTS.Common.Logging;
+using OKTodoListReactTS.DataLayer;
 
 namespace OKTodoListReactTS.Api
 {
@@ -189,6 +191,8 @@ namespace OKTodoListReactTS.Api
             //Hier werden die Services registriert
 
             services.AddSingleton<ILoggerManager, LoggerManager>();
+
+            services.AddDbContext<ToDoDbContext>(options => options.UseInMemoryDatabase("InMemoryDatabase"));
 
             services.AddTransient<IToDoService, ToDoService>();
 
