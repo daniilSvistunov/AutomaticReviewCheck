@@ -37,18 +37,6 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         // Füge die Implementierung für die Methode GetAllTodosAsync hier ein, Warum hat die Methode keinen Wert der übergeben wird? 
         public async Task<Result<List<ToDoDto>>> GetAllTodosAsync() //Die Methode hat keinen Wert der übergeben wird, weil [...]	
         {
-            /*
-            try
-            {
-                var toDoEntries = await _context.ToDo.ToListAsync();
-                var toDoDtos = _mapper.Map<List<ToDoDto>>(toDoEntries);
-                return Result<List<ToDoDto>>.Success(toDoDtos);
-                return toDoDtos;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message); // throw other exception for better code
-            }*/
             var toDoEntries = await _context.ToDo.ToListAsync();
             var toDoDtos = _mapper.Map<List<ToDoDto>>(toDoEntries);
             return Result<List<ToDoDto>>.Success(toDoDtos);
@@ -67,31 +55,6 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         //Diese Methode soll Dir als Beispiel für die Logik hinter den Implementierungen gelten
         public async Task<Result<ToDoDto>> AddTodoAsync(ToDoDto toDoDto)
         {
-            /*
-            try
-            {
-                var title = toDoDto.Title;
-                var dueDate = toDoDto.DueDate;
-                List<ToDoEntry> existingToDoEntries = await _context.ToDo.ToListAsync();
-                foreach (var entry in existingToDoEntries)
-                {
-                    if (entry.Title == title && DateTime.Equals(entry.TargetDate, dueDate))
-                    {
-                        // return Result<ToDoDto>.Invalid();
-                        throw new Exception(TodoAlreadyExists);
-                    }
-                }
-
-                var toDoEntry = _mapper.Map<ToDoEntry>(toDoDto);
-                await _context.AddAsync(toDoEntry);
-                await _context.SaveChangesAsync();
-                return toDoDto;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message); // throw other exception for better code
-            }*/
-
             var title = toDoDto.Title;
             var dueDate = toDoDto.DueDate;
             List<ToDoEntry> existingToDoEntries = await _context.ToDo.ToListAsync();
@@ -99,7 +62,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 if (entry.Title == title && DateTime.Equals(entry.TargetDate, dueDate))
                 {
-                    return Result<ToDoDto>.Error(TodoAlreadyExists); // todo already exists
+                    return Result<ToDoDto>.Error(TodoAlreadyExists);
                 }
             }
 
@@ -121,27 +84,10 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         // Füge die Implementierung für die Methode DeleteTodoAsync hier ein
         public async Task<Result> DeleteTodoAsync(Guid id/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/)
         {
-            /*
-            try
-            {
-                var toDoEntry = await _context.ToDo.FindAsync(id);
-                if (toDoEntry == null)
-                {
-                    throw new Exception(NoToDoFound); // Ardalis result
-                }
-
-                _context.Remove(toDoEntry);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message); // throw other exception for better code
-            }*/
-
             var toDoEntry = await _context.ToDo.FindAsync(id);
             if (toDoEntry == null)
             {
-                return Result.NotFound(NoToDoFound); // todo not found
+                return Result.NotFound(NoToDoFound);
             }
 
             _context.Remove(toDoEntry);
@@ -162,42 +108,6 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         // Füge die Implementierung für die Methode UpdateTodoAsync hier ein
         public async Task<Result<ToDoDto>> UpdateTodoAsync(ToDoDto updatedToDoDto/*Prüfe was der Methode übergeben werden soll und implementiere dies hier ebenfalls*/)
         {
-            /*
-            try
-            {
-                var title = updatedToDoDto.Title;
-                var dueDate = updatedToDoDto.DueDate;
-                var id = updatedToDoDto.Id;
-                var existingToDoEntry = await _context.ToDo.FindAsync(id);
-
-                if (existingToDoEntry == null)
-                {
-                    throw new Exception(NoToDoFound); // Ardalis result
-                }
-
-                List<ToDoEntry> existingToDoEntries = await _context.ToDo.ToListAsync();
-                foreach (var entry in existingToDoEntries)
-                {
-                    if (entry.Title == title && DateTime.Equals(entry.TargetDate, dueDate))
-                    {
-                        throw new Exception(TodoAlreadyExists);
-                    }
-                }
-
-                existingToDoEntry.Title = updatedToDoDto.Title;
-                existingToDoEntry.Text = updatedToDoDto.Text;
-                existingToDoEntry.Completed = updatedToDoDto.Completed;
-                existingToDoEntry.TargetDate = updatedToDoDto.DueDate;
-                
-                await _context.SaveChangesAsync();
-
-                return updatedToDoDto;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }*/
-
             var title = updatedToDoDto.Title;
             var dueDate = updatedToDoDto.DueDate;
             var id = updatedToDoDto.Id;
@@ -213,7 +123,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 if (entry.Title == title && DateTime.Equals(entry.TargetDate, dueDate))
                 {
-                    return Result<ToDoDto>.Error(TodoAlreadyExists); // todo already exists
+                    return Result<ToDoDto>.Error(TodoAlreadyExists);
                 }
             }
 
@@ -238,26 +148,10 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          */
         public async Task<Result<ToDoDto>> GetTodoByIdAsync(Guid id)
         {
-            /*
-            try
-            {
-                var toDoEntry = await _context.ToDo.FindAsync(id);
-                if (toDoEntry == null)
-                {
-                    throw new Exception(NoToDoFound); // Ardalis result?
-                }
-
-                return _mapper.Map<ToDoDto>(toDoEntry);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message); // throw other exception for better code
-            }*/
-
             var toDoEntry = await _context.ToDo.FindAsync(id);
             if (toDoEntry == null)
             {
-                return Result<ToDoDto>.NotFound(NoToDoFound); // todo not found
+                return Result<ToDoDto>.NotFound(NoToDoFound);
             }
 
             ToDoDto toDoDto = _mapper.Map<ToDoDto>(toDoEntry);
