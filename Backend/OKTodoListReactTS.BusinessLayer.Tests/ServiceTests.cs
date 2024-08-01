@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Moq;
 using OKTodoListReactTS.BusinessLayer.Mapping;
+using OKTodoListReactTS.Common.Logging;
 using OKTodoListReactTS.DataLayer;
 using OKTodoListReactTS.DataLayer.Entities;
 using Xunit;
@@ -15,6 +17,7 @@ namespace OKTemplate.BusinessLayer.Tests
     {
         protected ToDoDbContext Context { get; private set; } = null!;
         protected IMapper Mapper { get; private set; } = null!;
+        protected Mock<ILoggerManager> LoggerMock { get; private set; } = null!;
 
         public Task DisposeAsync()
         {
@@ -25,6 +28,7 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             CreateContext();
             CreateMapper();
+            CreateLogger();
         }
 
         private void CreateContext()
@@ -57,13 +61,17 @@ namespace OKTemplate.BusinessLayer.Tests
             Mapper = mapperConfig.CreateMapper();
         }
 
+        private void CreateLogger()
+        {
+            LoggerMock = new Mock<ILoggerManager>();
+        }
+
         // Seed-Methode für die InMemory-Datenbank
         // Hier werden die Daten für die Tests angelegt
         private void SeedData(ToDoDbContext dbContext)
         {
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
-
             var toDoEntries = new List<ToDoEntry>
             {
                 new ToDoEntry
