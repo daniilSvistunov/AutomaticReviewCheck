@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.BusinessLayer.Services;
+using OKTodoListReactTS.DataLayer.Entities;
 using Xunit;
 
 namespace OKTemplate.BusinessLayer.Tests
@@ -125,23 +127,42 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             // Arrange
             _toDoService = CreateToDoService();
-            var toDoDto = new ToDoDto
+
+            Guid id = Guid.NewGuid();
+            var text = "Test";
+            var dateTime = new DateTime(2024, 04, 30, 14, 20, 00, DateTimeKind.Utc);
+            var updatedText = "Updated";
+            var updatedDateTime = dateTime.AddDays(5);
+
+            ToDoEntry initialToDoEntry = new ToDoEntry()
             {
-                Id = Guid.NewGuid(),
-                Text = "ToDo 4",
-                DueDate = DateTime.UtcNow.AddDays(1),
+                Id = id,
+                Text = text,
+                TargetDate = dateTime,
                 Completed = false,
             };
 
+            await Context.ToDo.AddAsync(initialToDoEntry);
+            await Context.SaveChangesAsync();
+
+            ToDoDto expectedToDoDto = new ToDoDto()
+            {
+                Id = id,
+                Text = updatedText,
+                DueDate = updatedDateTime,
+                Completed = true,
+            };
+
             // Act
-            var todoBefore = await _toDoService.AddTodoAsync(toDoDto);
-            toDoDto.Completed = true;
-            var toDoAfter = await _toDoService.UpdateTodoAsync(toDoDto);
+            ToDoDto actualToDoDto = await _toDoService.UpdateTodoAsync(expectedToDoDto);
 
             // Assert
-            Assert.NotNull(todoBefore);
-            Assert.NotNull(toDoAfter);
-            Assert.NotEqual(todoBefore, toDoAfter);
+            Assert.NotNull(actualToDoDto);
+            Assert.NotNull(expectedToDoDto);
+            Assert.Equal(expectedToDoDto.Id, actualToDoDto.Id);
+            Assert.Equal(expectedToDoDto.Text, actualToDoDto.Text);
+            Assert.Equal(expectedToDoDto.DueDate, actualToDoDto.DueDate);
+            Assert.Equal(expectedToDoDto.Completed, actualToDoDto.Completed);
         }
 
         [Fact]
@@ -165,7 +186,7 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.NotNull(todoBefore);
 
             // Act / Assert
-            await Assert.ThrowsAsync<ArgumentException>(async () => await _toDoService.UpdateTodoAsync(toDoDto));
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _toDoService.UpdateTodoAsync(toDoDto));
         }
     }
 }

@@ -72,8 +72,12 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          */
         public async Task DeleteTodoAsync(ToDoDto toDoDto)
         {
-            var idExsists = await _dbContext.ToDo.AnyAsync(entry => entry.Id == toDoDto.Id);
-            if (!idExsists)
+            var existingEntity = await _dbContext.ToDo.FindAsync(toDoDto.Id);
+            if (existingEntity != null)
+            {
+                _dbContext.Entry(existingEntity).State = EntityState.Detached;
+            }
+            else
             {
                 throw new ArgumentException($"Can not delete an entry that is not present");
             }
@@ -96,10 +100,14 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          */
         public async Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto)
         {
-            var idExsists = await _dbContext.ToDo.AnyAsync(entry => entry.Id == toDoDto.Id);
-            if (!idExsists)
+            var existingEntity = await _dbContext.ToDo.FindAsync(toDoDto.Id);
+            if (existingEntity != null)
             {
-                throw new ArgumentException($"Can not update an entry that is not present");
+                _dbContext.Entry(existingEntity).State = EntityState.Detached;
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Can not update an entry that is not present");
             }
 
             var entry = _mapper.Map<ToDoEntry>(toDoDto);
