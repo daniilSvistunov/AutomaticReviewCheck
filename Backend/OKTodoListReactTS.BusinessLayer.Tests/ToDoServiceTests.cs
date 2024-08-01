@@ -188,5 +188,48 @@ namespace OKTemplate.BusinessLayer.Tests
             // Act / Assert
             await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _toDoService.UpdateTodoAsync(toDoDto));
         }
+
+        [Fact]
+        public async Task GetTodoByIdAsync_Success()
+        {
+            // Arrange
+            _toDoService = CreateToDoService();
+
+            var id = Guid.NewGuid();
+            var dateTime = new DateTime(2024, 05, 29, 14, 35, 00, DateTimeKind.Utc);
+            var text = "Test";
+            ToDoEntry toDoEntry = new ToDoEntry()
+            {
+                Id = id,
+                Text = text,
+                TargetDate = dateTime,
+                Completed = false,
+            };
+
+            ToDoDto expectedToDoDto = Mapper.Map<ToDoDto>(toDoEntry);
+            await Context.ToDo.AddAsync(toDoEntry);
+
+            // Act
+            ToDoDto actualToDoDto = await _toDoService.GetToDoByIdAsync(id);
+
+            // Assert
+            Assert.NotNull(actualToDoDto);
+            Assert.NotNull(expectedToDoDto);
+            Assert.Equal(expectedToDoDto.Id, actualToDoDto.Id);
+            Assert.Equal(expectedToDoDto.Text, actualToDoDto.Text);
+            Assert.Equal(expectedToDoDto.DueDate, actualToDoDto.DueDate);
+            Assert.Equal(expectedToDoDto.Completed, actualToDoDto.Completed);
+        }
+
+        [Fact]
+        public async Task GetTodoByIdAsync_ReturnsNotFound()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            _toDoService = CreateToDoService();
+
+            // Act / Assert
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _toDoService.GetToDoByIdAsync(id));
+        }
     }
 }
