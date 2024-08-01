@@ -28,7 +28,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          */
         public async Task<List<ToDoDto>> GetAllTodosAsync() //Die Methode hat keinen Wert der übergeben wird, es sollen alle Einträge aus des Datenbank zurückgegeben, eine Filterung ist nicht notwendig.
         {
-            var toDoEntries = await _dbContext.ToDo.ToListAsync();
+            var toDoEntries = await _dbContext.ToDo.AsNoTracking().ToListAsync();
             _logger.LogInfo($"ToDoService: GetAll has returned {toDoEntries.Count} entries");
 
             return _mapper.Map<List<ToDoDto>>(toDoEntries);
@@ -82,7 +82,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             _dbContext.ToDo.Remove(entry);
             await _dbContext.SaveChangesAsync();
 
-            _logger.LogInfo($"Marked to todo entry with the Id {toDoDto.Id} as deleted.");
+            _logger.LogInfo($"Marked todo entry with Id {toDoDto.Id} as deleted.");
         }
 
         /*Beispielhafte Task:
@@ -103,7 +103,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             }
 
             var entry = _mapper.Map<ToDoEntry>(toDoDto);
-            _dbContext.Update(entry);
+            _dbContext.ToDo.Update(entry);
             await _dbContext.SaveChangesAsync();
 
             _logger.LogInfo($"Updated the todo entry with the Id {toDoDto.Id}.");
