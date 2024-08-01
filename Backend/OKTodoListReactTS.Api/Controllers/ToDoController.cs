@@ -75,13 +75,32 @@ namespace OKTodoListReactTS.Api.Controllers
         /// <param name="toDoDto"></param>
         /// <exception cref="ArgumentNullException">Throws as the posted todoDto is null</exception>
         /// <exception cref="NoNullAllowedException">Throws as the posted id of the todoDto is null</exception>
-        /// <returns>A list of todo entires</returns>
+        /// <returns>A list of todo entries</returns>
         [HttpGet(Name = nameof(GetAllTodosAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ApplicationDto>> GetAllTodosAsync()
         {
             return Ok(await _service.GetAllTodosAsync());
+        }
+
+        /// <summary>
+        /// Returns a single todo entry by it's id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <exception cref="ArgumentNullException">Throws as the posted id is empty</exception>
+        /// <returns>The todo entry</returns>
+        [HttpGet("{id}", Name = nameof(GetToDoByIdAsync))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ApplicationDto>> GetToDoByIdAsync([FromRoute] Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new NoNullAllowedException("The id of a todo entry can not be null");
+            }
+
+            return Ok(await _service.GetToDoByIdAsync(id));
         }
 
         /// <summary>

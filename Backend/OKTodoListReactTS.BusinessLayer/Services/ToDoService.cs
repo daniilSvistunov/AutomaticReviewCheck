@@ -34,6 +34,23 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             return _mapper.Map<List<ToDoDto>>(toDoEntries);
         }
 
+        public async Task<ToDoDto> GetToDoByIdAsync(Guid id)
+        {
+            var entity = await _dbContext.ToDo.FindAsync(id);
+            if (entity != null)
+            {
+                _dbContext.Entry(entity).State = EntityState.Detached;
+            }
+            else
+            {
+                throw new KeyNotFoundException($"The given id {id} is not present");
+            }
+
+            _logger.LogInfo($"ToDoService: Get by id has returned entry with id {id}");
+
+            return _mapper.Map<ToDoDto>(entity);
+        }
+
         /*
          * Beispielhafte Task:
          * Hintergrund:
