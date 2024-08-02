@@ -70,6 +70,12 @@ namespace OKTodoListReactTS.BusinessLayer.Services
                 throw new ArgumentException($"Can not store the ToDo entry as the id {toDoDto.Id} already exsists");
             }
 
+            var hasDublicate = await _dbContext.ToDo.AnyAsync(e => e.Title.Equals(toDoDto.Title) && e.TargetDate == toDoDto.DueDate);
+            if (hasDublicate)
+            {
+                throw new ArgumentException($"A entry with the same title and duedate alredy exists.");
+            }
+
             var entry = _mapper.Map<ToDoEntry>(toDoDto);
             await _dbContext.ToDo.AddAsync(entry);
             await _dbContext.SaveChangesAsync();
@@ -127,7 +133,14 @@ namespace OKTodoListReactTS.BusinessLayer.Services
                 throw new KeyNotFoundException($"Can not update an entry that is not present");
             }
 
-            var entry = _mapper.Map<ToDoEntry>(toDoDto);
+            var hasDublicate = await _dbContext.ToDo.AsNoTracking()
+                .AnyAsync(e => e.Title == toDoDto.Title && e.TargetDate == toDoDto.DueDate && e.Id != toDoDto.Id);
+            if (hasDublicate)
+            {
+                throw new ArgumentException($"A entry with the same title and duedate alredy exists.");
+            }
+
+            var entry = _mapper.Map<ToDoEntry>(existingEntity);
             _dbContext.ToDo.Update(entry);
             await _dbContext.SaveChangesAsync();
 
