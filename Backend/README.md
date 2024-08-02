@@ -111,7 +111,7 @@ Anschließend kannst du die Duplikatsprüfung implementieren und die Tests erneu
 
 ## 7. Aufgabe (Controller-Tests)
 
-In der folgenden Aufgabe geht es nochmal um UnitTests, doch dieses Mal umd die Tests der ToDoController-Klasse.
+In der folgenden Aufgabe geht es nochmal um UnitTests, doch dieses Mal um die Tests der ToDoController-Klasse.
 Es ist hierbei ratsam, sich mit dem [Moq Framework](https://github.com/devlooped/moq) vertraut zu machen, um die Controller-Tests zu schreiben.
 Ein Grundgerüst der Test-Klasse exitsiert bereits, allerdings muss das Moq-Setup und Tests für die weiteren Methoden des Controllers hinzugefügt werden.
 Wie viele Test werden benötigt um den Code zu testen? Werden Negativtests benötigt? Tipp: kannst du velleicht die Verifizierung von Moq nutzen? (Verify)
