@@ -77,6 +77,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 new ToDoEntry
                 {
                     Id = Guid.NewGuid(),
+                    Title = "Title 1",
                     Text = "ToDo 1",
                     TargetDate = DateTime.UtcNow.AddDays(1),
                     CreatedOn = DateTime.UtcNow,
@@ -85,6 +86,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 new ToDoEntry
                 {
                     Id = Guid.NewGuid(),
+                    Title = "Title 2",
                     Text = "ToDo 2",
                     TargetDate = DateTime.UtcNow.AddDays(2),
                     CreatedOn = DateTime.UtcNow,
@@ -93,6 +95,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 new ToDoEntry
                 {
                     Id = Guid.NewGuid(),
+                    Title = "Title 3",
                     Text = "ToDo 3",
                     TargetDate = DateTime.UtcNow.AddDays(3),
                     CreatedOn = DateTime.UtcNow,
