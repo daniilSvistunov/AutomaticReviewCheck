@@ -123,6 +123,13 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          */
         public async Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto)
         {
+            var hasDublicate = await _dbContext.ToDo.AsNoTracking()
+                .AnyAsync(e => e.Title.Equals(toDoDto.Title) && e.TargetDate == toDoDto.DueDate && e.Id != toDoDto.Id);
+            if (hasDublicate)
+            {
+                throw new ArgumentException($"A entry with the same title and duedate alredy exists.");
+            }
+
             var existingEntity = await _dbContext.ToDo.FindAsync(toDoDto.Id);
             if (existingEntity != null)
             {
@@ -130,18 +137,10 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             }
             else
             {
-                throw new KeyNotFoundException($"Can not update an entry that is not present");
+                throw new KeyNotFoundException($"Can not update an entry that is not present, for id {toDoDto.Id}");
             }
 
-            var hasDublicate = await _dbContext.ToDo.AsNoTracking()
-                .AnyAsync(e => e.Title == toDoDto.Title && e.TargetDate == toDoDto.DueDate && e.Id != toDoDto.Id);
-            if (hasDublicate)
-            {
-                throw new ArgumentException($"A entry with the same title and duedate alredy exists.");
-            }
-
-            var entry = _mapper.Map<ToDoEntry>(existingEntity);
-            _dbContext.ToDo.Update(entry);
+            _dbContext.ToDo.Update(existingEntity);
             await _dbContext.SaveChangesAsync();
 
             _logger.LogInfo($"Updated the todo entry with the Id {toDoDto.Id}.");

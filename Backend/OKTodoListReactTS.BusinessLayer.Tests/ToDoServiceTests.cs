@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.BusinessLayer.Services;
@@ -40,18 +41,19 @@ namespace OKTemplate.BusinessLayer.Tests
             var toDoDto = new ToDoDto
             {
                 Id = Guid.NewGuid(),
+                Title = "Test Title",
                 Text = "ToDo 4",
                 DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = false,
             };
             _toDoService = CreateToDoService();
+            var before = await Context.ToDo.ToListAsync();
 
             // Act
-            var before = await _toDoService.GetAllTodosAsync();
             var todo = await _toDoService.AddTodoAsync(toDoDto);
-            var after = await _toDoService.GetAllTodosAsync();
 
             // Assert
+            var after = await Context.ToDo.ToListAsync();
             Assert.NotNull(before);
             Assert.NotNull(todo);
             Assert.NotNull(after);
@@ -65,6 +67,7 @@ namespace OKTemplate.BusinessLayer.Tests
             var toDoDto = new ToDoDto
             {
                 Id = Guid.NewGuid(),
+                Title = "Test Title",
                 Text = "ToDo 4",
                 DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = false,
@@ -86,17 +89,11 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             // Arrange
             _toDoService = CreateToDoService();
-            var toDoDto = new ToDoDto
-            {
-                Id = Guid.NewGuid(),
-                Text = "ToDo 4",
-                DueDate = DateTime.UtcNow.AddDays(1),
-                Completed = false,
-            };
+            var before = await Context.ToDo.ToListAsync();
+            var toDoDto = Mapper.Map<ToDoDto>(before[0]);
 
             // Act
-            var before = await _toDoService.GetAllTodosAsync();
-            await _toDoService.DeleteTodoAsync(before[0]);
+            await _toDoService.DeleteTodoAsync(toDoDto);
             var after = await _toDoService.GetAllTodosAsync();
 
             // Assert
@@ -172,22 +169,15 @@ namespace OKTemplate.BusinessLayer.Tests
         public async Task UpdateTodoAsync_ReturnsNotFound()
         {
             // Arrange
-            _toDoService = CreateToDoService();
             var toDoDto = new ToDoDto
             {
                 Id = Guid.NewGuid(),
-                Title = "Test title",
-                Text = "ToDo 4",
-                DueDate = DateTime.UtcNow.AddDays(1),
-                Completed = false,
+                Title = "Test title 2",
+                Text = "ToDo 4 test",
+                DueDate = DateTime.UtcNow.AddDays(5),
+                Completed = true,
             };
-
-            // Act
-            var todoBefore = await _toDoService.AddTodoAsync(toDoDto);
-            toDoDto.Id = Guid.NewGuid();
-
-            // Assert
-            Assert.NotNull(todoBefore);
+            _toDoService = CreateToDoService();
 
             // Act / Assert
             await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _toDoService.UpdateTodoAsync(toDoDto));
@@ -237,6 +227,119 @@ namespace OKTemplate.BusinessLayer.Tests
 
             // Act / Assert
             await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _toDoService.GetToDoByIdAsync(id));
+        }
+
+        [Fact]
+        public async Task AddToDoAsync_DuplicateDetection_Thrown()
+        {
+            // Arrange
+            var title = "Title";
+            var dueDate = DateTime.Now;
+            var firstToDoDto = new ToDoDto
+            {
+                Id = Guid.NewGuid(),
+                Title = title,
+                Text = "ToDo 4",
+                DueDate = dueDate,
+                Completed = false,
+            };
+
+            var secondToDoDto = new ToDoDto
+            {
+                Id = Guid.NewGuid(),
+                Title = title,
+                Text = "ToDo 5",
+                DueDate = dueDate,
+                Completed = true,
+            };
+
+            _toDoService = CreateToDoService();
+
+            // Act
+            var before = await _toDoService.GetAllTodosAsync();
+            var todo = await _toDoService.AddTodoAsync(firstToDoDto);
+
+            // Act / Assert
+            await Assert.ThrowsAsync<ArgumentException>(async () => await _toDoService.AddTodoAsync(secondToDoDto));
+
+            // Assert
+            Assert.NotNull(before);
+            Assert.NotNull(todo);
+        }
+
+        [Fact]
+        public async Task UpdateToDoAsync_DuplicateDetection_Success()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            var title = "Title";
+            var dueDate = DateTime.Now;
+            ToDoEntry toDoEntry = new ToDoEntry()
+            {
+                Id = id,
+                Title = title,
+                Text = "ToDo 4",
+                TargetDate = dueDate,
+                Completed = false,
+            };
+
+            var updatedToDoDto = new ToDoDto
+            {
+                Id = id,
+                Title = title,
+                Text = "ToDo 5",
+                DueDate = dueDate,
+                Completed = true,
+            };
+
+            _toDoService = CreateToDoService();
+            Context.Add(toDoEntry);
+            await Context.SaveChangesAsync();
+
+            // Act
+            var updatedTodo = await _toDoService.UpdateTodoAsync(updatedToDoDto);
+
+            // Assert
+            Assert.NotNull(updatedTodo);
+            Assert.Equal(id, updatedTodo.Id);
+            Assert.Equal(title, updatedTodo.Title);
+            Assert.Equal(dueDate, updatedTodo.DueDate);
+        }
+
+        [Fact]
+        public async Task UpdateToDoAsync_DuplicateDetection_Thrown()
+        {
+            // Arrange
+            var title = "Title";
+            var dueDate = DateTime.Now;
+            var firstToDoDto = new ToDoDto
+            {
+                Id = Guid.NewGuid(),
+                Title = title,
+                Text = "ToDo 4",
+                DueDate = dueDate,
+                Completed = false,
+            };
+
+            var secondToDoDto = new ToDoDto
+            {
+                Id = Guid.NewGuid(),
+                Title = title,
+                Text = "ToDo 5",
+                DueDate = dueDate,
+                Completed = true,
+            };
+
+            _toDoService = CreateToDoService();
+
+            // Act
+            var todo = await _toDoService.AddTodoAsync(firstToDoDto);
+
+            // Act / Assert
+            await Assert.ThrowsAsync<ArgumentException>(async () => await _toDoService.UpdateTodoAsync(secondToDoDto));
+
+            // Assert
+            Assert.NotNull(todo);
         }
     }
 }
