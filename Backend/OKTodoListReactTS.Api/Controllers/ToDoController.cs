@@ -39,7 +39,7 @@ namespace OKTodoListReactTS.Api.Controllers
 
             if (toDoDto.Id == Guid.Empty)
             {
-                throw new NoNullAllowedException("The id of a todo entry can not be null");
+                throw new NoNullAllowedException("The id of a todo entry can not be empty");
             }
 
             return Ok(await _service.AddTodoAsync(toDoDto));
@@ -62,7 +62,7 @@ namespace OKTodoListReactTS.Api.Controllers
 
             if (toDoDto.Id == Guid.Empty)
             {
-                throw new NoNullAllowedException("The id of a todo entry can not be null");
+                throw new NoNullAllowedException("The id of a todo entry can not be empty");
             }
 
             await _service.DeleteTodoAsync(toDoDto);
@@ -97,7 +97,7 @@ namespace OKTodoListReactTS.Api.Controllers
         {
             if (id == Guid.Empty)
             {
-                throw new NoNullAllowedException("The id of a todo entry can not be null");
+                throw new NoNullAllowedException("The id of a todo entry can not be empty");
             }
 
             return Ok(await _service.GetToDoByIdAsync(id));
@@ -122,7 +122,7 @@ namespace OKTodoListReactTS.Api.Controllers
 
             if (toDoDto.Id == Guid.Empty)
             {
-                throw new NoNullAllowedException("The id of a todo entry can not be null");
+                throw new NoNullAllowedException("The id of a todo entry can not be empty");
             }
 
             return Ok(await _service.UpdateTodoAsync(toDoDto));
