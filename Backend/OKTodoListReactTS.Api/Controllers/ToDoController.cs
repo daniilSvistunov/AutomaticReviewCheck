@@ -32,19 +32,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [HttpPost(Name = nameof(AddToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> AddToDoAsync([FromBody] ToDoDto toDoDto)
+        public async Task<Result<ToDoDto>> AddToDoAsync([FromBody] ToDoDto toDoDto)
         {
-            if (toDoDto == null)
-            {
-                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
-            }
-
-            if (toDoDto.Id == Guid.Empty)
-            {
-                throw new NoNullAllowedException("The id of a todo entry can not be empty");
-            }
-
-            return Ok(await _service.AddTodoAsync(toDoDto));
+            return await _service.AddTodoAsync(toDoDto);
         }
 
         /// <summary>
@@ -55,20 +45,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [HttpDelete(Name = nameof(DeleteToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync([FromBody] ToDoDto toDoDto)
+        public async Task<Result> DeleteToDoAsync([FromBody] ToDoDto toDoDto)
         {
-            if (toDoDto == null)
-            {
-                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
-            }
-
-            if (toDoDto.Id == Guid.Empty)
-            {
-                throw new NoNullAllowedException("The id of a todo entry can not be empty");
-            }
-
-            await _service.DeleteTodoAsync(toDoDto);
-            return Ok();
+            return await _service.DeleteTodoAsync(toDoDto);
         }
 
         /// <summary>
@@ -95,14 +74,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [HttpGet("{id}", Name = nameof(GetToDoByIdAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> GetToDoByIdAsync([FromRoute] Guid id)
+        public async Task<Result<ToDoDto>> GetToDoByIdAsync([FromRoute] Guid id)
         {
-            if (id == Guid.Empty)
-            {
-                throw new NoNullAllowedException("The id of a todo entry can not be empty");
-            }
-
-            return Ok(await _service.GetToDoByIdAsync(id));
+            return await _service.GetToDoByIdAsync(id);
         }
 
         /// <summary>
@@ -115,19 +89,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [HttpPut(Name = nameof(UpdateTodoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto)
+        public async Task<Result<ToDoDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto)
         {
-            if (toDoDto == null)
-            {
-                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
-            }
-
-            if (toDoDto.Id == Guid.Empty)
-            {
-                throw new NoNullAllowedException("The id of a todo entry can not be empty");
-            }
-
-            return Ok(await _service.UpdateTodoAsync(toDoDto));
+            return await _service.UpdateTodoAsync(toDoDto);
         }
     }
 }
