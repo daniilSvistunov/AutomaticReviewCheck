@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using AutoMapper;
@@ -32,15 +31,20 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             var toDoEntries = await _dbContext.ToDo.AsNoTracking().ToListAsync();
             _logger.LogInfo($"ToDoService: GetAll has returned {toDoEntries.Count} entries");
-
-            return Result<List<ToDoDto>>.Success(_mapper.Map<List<ToDoDto>>(toDoEntries));
+            var toDoDtos = _mapper.Map<List<ToDoDto>>(toDoEntries);
+            return Result<List<ToDoDto>>.Success(toDoDtos);
         }
 
         public async Task<Result<ToDoDto>> GetToDoByIdAsync(Guid id)
         {
             if (id == Guid.Empty)
             {
-                throw new NoNullAllowedException("The id of a todo entry can not be empty");
+                var validatorError = new ValidationError()
+                {
+                    ErrorMessage = "The id of a todo entry can not be empty",
+                    Severity = ValidationSeverity.Error,
+                };
+                return Result.Invalid(validatorError);
             }
 
             var entity = await _dbContext.ToDo.FindAsync(id);
@@ -50,12 +54,13 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             }
             else
             {
-                throw new KeyNotFoundException($"The given id {id} is not present");
+                return Result.NotFound("$The given id {id} is not present");
             }
 
             _logger.LogInfo($"ToDoService: Get by id has returned entry with id {id}");
 
-            return _mapper.Map<ToDoDto>(entity);
+            var doToDto = _mapper.Map<ToDoDto>(entity);
+            return Result.Success(doToDto);
         }
 
         /*
@@ -73,24 +78,34 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             if (toDoDto == null)
             {
-                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
+                var validatorError = new ValidationError()
+                {
+                    ErrorMessage = "The todo entry can not be null",
+                    Severity = ValidationSeverity.Error,
+                };
+                return Result.Invalid(validatorError);
             }
 
             if (toDoDto.Id == Guid.Empty)
             {
-                throw new NoNullAllowedException("The id of a todo entry can not be empty");
+                var validatorError = new ValidationError()
+                {
+                    ErrorMessage = "The id of a todo entry can not be empty",
+                    Severity = ValidationSeverity.Error,
+                };
+                return Result.Invalid(validatorError);
             }
 
             var idAlredyExsists = await _dbContext.ToDo.AnyAsync(entry => entry.Id == toDoDto.Id);
             if (idAlredyExsists)
             {
-                throw new ArgumentException($"Can not store the ToDo entry as the id {toDoDto.Id} already exsists");
+                return Result.Conflict($"Can not store the ToDo entry, as the id {toDoDto.Id} already exsists");
             }
 
             var hasDublicate = await _dbContext.ToDo.AnyAsync(e => e.Title.Equals(toDoDto.Title) && e.TargetDate == toDoDto.DueDate);
             if (hasDublicate)
             {
-                throw new ArgumentException($"A entry with the same title and duedate alredy exists.");
+                return Result.Conflict($"A entry with the same title and duedate alredy exists.");
             }
 
             var entry = _mapper.Map<ToDoEntry>(toDoDto);
@@ -99,7 +114,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
 
             _logger.LogInfo($"Added todo entry with the id {toDoDto.Id}");
 
-            return toDoDto;
+            return Result.Success(toDoDto);
         }
 
         /*Beispielhafte Task:
@@ -114,12 +129,22 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             if (toDoDto == null)
             {
-                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
+                var validatorError = new ValidationError()
+                {
+                    ErrorMessage = "The todo entry can not be null",
+                    Severity = ValidationSeverity.Error,
+                };
+                return Result.Invalid(validatorError);
             }
 
             if (toDoDto.Id == Guid.Empty)
             {
-                throw new NoNullAllowedException("The id of a todo entry can not be empty");
+                var validatorError = new ValidationError()
+                {
+                    ErrorMessage = "The id of a todo entry can not be empty",
+                    Severity = ValidationSeverity.Error,
+                };
+                return Result.Invalid(validatorError);
             }
 
             var existingEntity = await _dbContext.ToDo.FindAsync(toDoDto.Id);
@@ -129,14 +154,14 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             }
             else
             {
-                throw new ArgumentException($"Can not delete an entry that is not present");
+                return Result.NotFound("$Can not delete an entry that is not present");
             }
 
             var entry = _mapper.Map<ToDoEntry>(toDoDto);
             _dbContext.ToDo.Remove(entry);
             await _dbContext.SaveChangesAsync();
-
             _logger.LogInfo($"Marked todo entry with Id {toDoDto.Id} as deleted.");
+            return Result.Success();
         }
 
         /*Beispielhafte Task:
@@ -152,19 +177,29 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             if (toDoDto == null)
             {
-                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
+                var validatorError = new ValidationError()
+                {
+                    ErrorMessage = "The todo entry can not be null",
+                    Severity = ValidationSeverity.Error,
+                };
+                return Result.Invalid(validatorError);
             }
 
             if (toDoDto.Id == Guid.Empty)
             {
-                throw new NoNullAllowedException("The id of a todo entry can not be empty");
+                var validatorError = new ValidationError()
+                {
+                    ErrorMessage = "The id of a todo entry can not be empty",
+                    Severity = ValidationSeverity.Error,
+                };
+                return Result.Invalid(validatorError);
             }
 
             var hasDublicate = await _dbContext.ToDo.AsNoTracking()
                 .AnyAsync(e => e.Title.Equals(toDoDto.Title) && e.TargetDate == toDoDto.DueDate && e.Id != toDoDto.Id);
             if (hasDublicate)
             {
-                throw new ArgumentException($"A entry with the same title and duedate alredy exists.");
+                return Result.Conflict($"A entry with the same title and duedate alredy exists.");
             }
 
             var existingEntity = await _dbContext.ToDo.FindAsync(toDoDto.Id);
@@ -174,15 +209,13 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             }
             else
             {
-                throw new KeyNotFoundException($"Can not update an entry that is not present, for id {toDoDto.Id}");
+                return Result.NotFound($"Can not update an entry that is not present, for id {toDoDto.Id}");
             }
 
             _dbContext.ToDo.Update(existingEntity);
             await _dbContext.SaveChangesAsync();
-
             _logger.LogInfo($"Updated the todo entry with the Id {toDoDto.Id}.");
-
-            return toDoDto;
+            return Result.Success(toDoDto);
         }
     }
 }
