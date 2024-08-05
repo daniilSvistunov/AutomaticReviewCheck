@@ -40,16 +40,16 @@ namespace OKTodoListReactTS.Api.Tests
             _serviceMock.Setup(s => s.GetAllTodosAsync()).ReturnsAsync(_elements);
 
             // Act
-            var controllerResult = await _controller.GetAllTodosAsync();
+            var result = await _controller.GetAllTodosAsync();
 
             // Assert
-            Assert.NotNull(controllerResult);
+            Assert.NotNull(result);
 
-            var payload = controllerResult.Result;
+            var payload = result.Result;
             Assert.IsType<OkObjectResult>(payload);
 
             var value = (payload as OkObjectResult)?.Value;
-            var statusCode = (value as OkObjectResult)?.StatusCode;
+            var statusCode = (payload as OkObjectResult)?.StatusCode;
             Assert.NotNull(value);
             Assert.NotNull(statusCode);
             Assert.Equal(200, statusCode);
