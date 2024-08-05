@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using AutoMapper;
@@ -35,8 +36,13 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             return Result<List<ToDoDto>>.Success(_mapper.Map<List<ToDoDto>>(toDoEntries));
         }
 
-        public async Task<ToDoDto> GetToDoByIdAsync(Guid id)
+        public async Task<Result<ToDoDto>> GetToDoByIdAsync(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                throw new NoNullAllowedException("The id of a todo entry can not be empty");
+            }
+
             var entity = await _dbContext.ToDo.FindAsync(id);
             if (entity != null)
             {
@@ -63,8 +69,18 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          */
 
         //Diese Methode soll Dir als Beispiel für die Logik hinter den Implementierungen gelten
-        public async Task<ToDoDto> AddTodoAsync(ToDoDto toDoDto)
+        public async Task<Result<ToDoDto>> AddTodoAsync(ToDoDto toDoDto)
         {
+            if (toDoDto == null)
+            {
+                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
+            }
+
+            if (toDoDto.Id == Guid.Empty)
+            {
+                throw new NoNullAllowedException("The id of a todo entry can not be empty");
+            }
+
             var idAlredyExsists = await _dbContext.ToDo.AnyAsync(entry => entry.Id == toDoDto.Id);
             if (idAlredyExsists)
             {
@@ -94,8 +110,18 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          * Merkmale:
          * Der Endpunkt bekommt eine {????} (Welcher Parameter muss übergeben werden?).
          */
-        public async Task DeleteTodoAsync(ToDoDto toDoDto)
+        public async Task<Result> DeleteTodoAsync(ToDoDto toDoDto)
         {
+            if (toDoDto == null)
+            {
+                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
+            }
+
+            if (toDoDto.Id == Guid.Empty)
+            {
+                throw new NoNullAllowedException("The id of a todo entry can not be empty");
+            }
+
             var existingEntity = await _dbContext.ToDo.FindAsync(toDoDto.Id);
             if (existingEntity != null)
             {
@@ -122,8 +148,18 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          * Ein ToDo wird geschickt
          * Als Antwort kommt ein ToDo zurück                                                
          */
-        public async Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto)
+        public async Task<Result<ToDoDto>> UpdateTodoAsync(ToDoDto toDoDto)
         {
+            if (toDoDto == null)
+            {
+                throw new ArgumentNullException(nameof(toDoDto), "The todo entry can not be null");
+            }
+
+            if (toDoDto.Id == Guid.Empty)
+            {
+                throw new NoNullAllowedException("The id of a todo entry can not be empty");
+            }
+
             var hasDublicate = await _dbContext.ToDo.AsNoTracking()
                 .AnyAsync(e => e.Title.Equals(toDoDto.Title) && e.TargetDate == toDoDto.DueDate && e.Id != toDoDto.Id);
             if (hasDublicate)
