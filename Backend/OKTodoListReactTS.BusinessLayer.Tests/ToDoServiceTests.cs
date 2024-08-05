@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ardalis.Result;
 using Microsoft.EntityFrameworkCore;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
@@ -61,7 +61,7 @@ namespace OKTemplate.BusinessLayer.Tests
         }
 
         [Fact]
-        public async Task AddTodoAsync_SameId_Throws()
+        public async Task AddToDoAsync_SameId_Invalid()
         {
             // Arrange
             var toDoDto = new ToDoDto
@@ -75,13 +75,14 @@ namespace OKTemplate.BusinessLayer.Tests
             _toDoService = CreateToDoService();
 
             // Act
-            var toDo = await _toDoService.AddTodoAsync(toDoDto);
-
-            // Act / Assert
-            await Assert.ThrowsAsync<ArgumentException>(async () => await _toDoService.AddTodoAsync(toDoDto));
+            var firstResultToDo = await _toDoService.AddTodoAsync(toDoDto);
+            var secondResultToDo = await _toDoService.AddTodoAsync(toDoDto);
 
             // Assert
-            Assert.NotNull(toDo);
+            Assert.NotNull(firstResultToDo);
+            Assert.True(firstResultToDo.IsSuccess);
+            Assert.NotNull(secondResultToDo);
+            Assert.False(secondResultToDo.IsSuccess);
         }
 
         [Fact]
@@ -99,7 +100,7 @@ namespace OKTemplate.BusinessLayer.Tests
             // Assert
             Assert.NotNull(before);
             Assert.NotNull(after);
-            Assert.Equal(before.Count - 1, after.Count);
+            Assert.Equal(before.Count - 1, after.Value.Count);
         }
 
         [Fact]
@@ -115,8 +116,14 @@ namespace OKTemplate.BusinessLayer.Tests
             };
             _toDoService = CreateToDoService();
 
+            // Act
+            var resultToDo = await _toDoService.DeleteTodoAsync(toDoDto);
+
             // Act / Assert
-            await Assert.ThrowsAsync<ArgumentException>(async () => await _toDoService.DeleteTodoAsync(toDoDto));
+            Assert.NotNull(resultToDo);
+            Assert.False(resultToDo.IsSuccess);
+            Assert.True(resultToDo.IsNotFound());
+            Assert.Equal(ResultStatus.NotFound, resultToDo.Status);
         }
 
         [Fact]
@@ -180,7 +187,13 @@ namespace OKTemplate.BusinessLayer.Tests
             _toDoService = CreateToDoService();
 
             // Act / Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _toDoService.UpdateTodoAsync(toDoDto));
+            var resultToDo = await _toDoService.UpdateTodoAsync(toDoDto);
+
+            // Assert
+            Assert.NotNull(resultToDo);
+            Assert.False(resultToDo.IsSuccess);
+            Assert.True(resultToDo.IsNotFound());
+            Assert.Equal(ResultStatus.NotFound, resultToDo.Status);
         }
 
         [Fact]
@@ -225,26 +238,33 @@ namespace OKTemplate.BusinessLayer.Tests
             var id = Guid.NewGuid();
             _toDoService = CreateToDoService();
 
+            // Act
+            var resultToDo = await _toDoService.GetToDoByIdAsync(id);
+
             // Act / Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _toDoService.GetToDoByIdAsync(id));
+            Assert.NotNull(resultToDo);
+            Assert.False(resultToDo.IsSuccess);
+            Assert.True(resultToDo.IsNotFound());
+            Assert.Equal(ResultStatus.NotFound, resultToDo.Status);
         }
 
         [Fact]
-        public async Task AddToDoAsync_DuplicateDetection_Thrown()
+        public async Task AddToDoAsync_DuplicateDetection_Invalid()
         {
             // Arrange
             var title = "Title";
             var dueDate = DateTime.Now;
-            var firstToDoDto = new ToDoDto
+
+            ToDoEntry toDoEntry = new ToDoEntry()
             {
                 Id = Guid.NewGuid(),
                 Title = title,
                 Text = "ToDo 4",
-                DueDate = dueDate,
+                TargetDate = dueDate,
                 Completed = false,
             };
 
-            var secondToDoDto = new ToDoDto
+            var toDoDto = new ToDoDto
             {
                 Id = Guid.NewGuid(),
                 Title = title,
@@ -254,17 +274,15 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             _toDoService = CreateToDoService();
+            Context.Add(toDoEntry);
+            await Context.SaveChangesAsync();
 
             // Act
-            var before = await _toDoService.GetAllTodosAsync();
-            var todo = await _toDoService.AddTodoAsync(firstToDoDto);
-
-            // Act / Assert
-            await Assert.ThrowsAsync<ArgumentException>(async () => await _toDoService.AddTodoAsync(secondToDoDto));
+            var reslutToDo = await _toDoService.AddTodoAsync(toDoDto);
 
             // Assert
-            Assert.NotNull(before);
-            Assert.NotNull(todo);
+            Assert.NotNull(reslutToDo);
+            Assert.False(reslutToDo.IsSuccess);
         }
 
         [Fact]
@@ -301,27 +319,30 @@ namespace OKTemplate.BusinessLayer.Tests
 
             // Assert
             Assert.NotNull(updatedTodo);
-            Assert.Equal(id, updatedTodo.Id);
-            Assert.Equal(title, updatedTodo.Title);
-            Assert.Equal(dueDate, updatedTodo.DueDate);
+            Assert.True(updatedTodo.IsSuccess);
+            Assert.True(updatedTodo.IsOk());
+            var value = updatedTodo.Value;
+            Assert.Equal(id, value.Id);
+            Assert.Equal(title, value.Title);
+            Assert.Equal(dueDate, value.DueDate);
         }
 
         [Fact]
-        public async Task UpdateToDoAsync_DuplicateDetection_Thrown()
+        public async Task UpdateToDoAsync_DuplicateDetection_Invalid()
         {
             // Arrange
             var title = "Title";
             var dueDate = DateTime.Now;
-            var firstToDoDto = new ToDoDto
+            ToDoEntry toDoEntry = new ToDoEntry()
             {
                 Id = Guid.NewGuid(),
                 Title = title,
                 Text = "ToDo 4",
-                DueDate = dueDate,
+                TargetDate = dueDate,
                 Completed = false,
             };
 
-            var secondToDoDto = new ToDoDto
+            var toDoDto = new ToDoDto
             {
                 Id = Guid.NewGuid(),
                 Title = title,
@@ -331,15 +352,17 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             _toDoService = CreateToDoService();
+            Context.Add(toDoEntry);
+            await Context.SaveChangesAsync();
 
             // Act
-            var todo = await _toDoService.AddTodoAsync(firstToDoDto);
-
-            // Act / Assert
-            await Assert.ThrowsAsync<ArgumentException>(async () => await _toDoService.UpdateTodoAsync(secondToDoDto));
+            var resultToDo = await _toDoService.UpdateTodoAsync(toDoDto);
 
             // Assert
-            Assert.NotNull(todo);
+            Assert.NotNull(resultToDo);
+            Assert.False(resultToDo.IsSuccess);
+            Assert.True(resultToDo.IsConflict());
+            Assert.Equal(ResultStatus.Conflict, resultToDo.Status);
         }
     }
 }
