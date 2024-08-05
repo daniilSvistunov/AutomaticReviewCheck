@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Ardalis.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OKTodoListReactTS.BusinessLayer.Dtos;
@@ -79,9 +81,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [HttpGet(Name = nameof(GetAllTodosAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> GetAllTodosAsync()
+        public async Task<Result<List<ToDoDto>>> GetAllTodosAsync()
         {
-            return Ok(await _service.GetAllTodosAsync());
+            return await _service.GetAllTodosAsync();
         }
 
         /// <summary>

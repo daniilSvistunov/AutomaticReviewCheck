@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using Ardalis.Result;
 using Moq;
 using OKTodoListReactTS.Api.Controllers;
 using OKTodoListReactTS.BusinessLayer.Dtos;
@@ -45,14 +45,12 @@ namespace OKTodoListReactTS.Api.Tests
             // Assert
             Assert.NotNull(result);
 
-            var payload = result.Result;
-            Assert.IsType<OkObjectResult>(payload);
+            Assert.True(result.IsSuccess);
 
-            var value = (payload as OkObjectResult)?.Value;
-            var statusCode = (payload as OkObjectResult)?.StatusCode;
+            var value = result.Value;
+            var status = result.Status;
             Assert.NotNull(value);
-            Assert.NotNull(statusCode);
-            Assert.Equal(200, statusCode);
+            Assert.Equal(ResultStatus.Ok, status);
 
             _serviceMock.Verify(s => s.GetAllTodosAsync(), Times.Once);
         }

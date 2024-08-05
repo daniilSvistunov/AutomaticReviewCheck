@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ardalis.Result;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using OKTodoListReactTS.BusinessLayer.Dtos;
@@ -26,12 +27,12 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          * Inhalt:
          * Beim Aufrufen des Endpunkt sollen alle ToDos geholt werden.
          */
-        public async Task<List<ToDoDto>> GetAllTodosAsync() //Die Methode hat keinen Wert der übergeben wird, es sollen alle Einträge aus des Datenbank zurückgegeben, eine Filterung ist nicht notwendig.
+        public async Task<Result<List<ToDoDto>>> GetAllTodosAsync() //Die Methode hat keinen Wert der übergeben wird, es sollen alle Einträge aus des Datenbank zurückgegeben, eine Filterung ist nicht notwendig.
         {
             var toDoEntries = await _dbContext.ToDo.AsNoTracking().ToListAsync();
             _logger.LogInfo($"ToDoService: GetAll has returned {toDoEntries.Count} entries");
 
-            return _mapper.Map<List<ToDoDto>>(toDoEntries);
+            return Result<List<ToDoDto>>.Success(_mapper.Map<List<ToDoDto>>(toDoEntries));
         }
 
         public async Task<ToDoDto> GetToDoByIdAsync(Guid id)
