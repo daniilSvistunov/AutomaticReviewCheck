@@ -56,24 +56,111 @@ namespace OKTodoListReactTS.Api.Tests
         }
 
         [Fact]
-        public async Task AddToDoAsync_ReturnsStatusCodeOk()
+        public async Task AddToDoAsync_ReturnsStatusCodeOk_ReturnsValidObject()
         {
             // Arrange
-            // TODO: Setup
+            var id = Guid.NewGuid();
+            var title = "Title";
+            var text = "Text";
+            var dueDate = DateTime.Now;
+            var toDoDto = new ToDoDto
+            {
+                Id = id,
+                Title = title,
+                DueDate = dueDate,
+                Text = text,
+            };
+            _serviceMock.Setup(x => x.AddTodoAsync(It.IsAny<ToDoDto>())).ReturnsAsync(toDoDto);
 
             // Act
-            var result = await _controller.AddToDoAsync(null/* TODO */);
+            var result = await _controller.AddToDoAsync(toDoDto);
 
             // Assert
-            // TODO: add assertion
+            Assert.NotNull(result);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+            Assert.Equal(toDoDto, result.Value);
+            Assert.Equal(id, result.Value.Id);
+            Assert.Equal(title, result.Value.Title);
+            Assert.Equal(text, result.Value.Text);
+            Assert.Equal(dueDate, result.Value.DueDate);
+
+            _serviceMock.Verify(s => s.AddTodoAsync(toDoDto), Times.Once);
         }
 
         [Fact]
-        public async Task AddToDoAsync_ReturnsValidObject()
+        public async Task DeleteToDoAsync_ReturnsResultStatusOkAndReturnsValidObject()
         {
-            // TODO
+            // Arrange
+            int next = _random.Next(_elements.Count);
+            var element = _elements.GetRange(next, 1)[0];
+            var expectedResult = Result.Success();
+            var expectedResultStaus = ResultStatus.Ok;
+            _serviceMock.Setup(s => s.DeleteTodoAsync(It.IsAny<ToDoDto>())).ReturnsAsync(expectedResult);
+
+            // Act
+            var result = await _controller.DeleteToDoAsync(element);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+            Assert.IsType<Result>(result);
+            Assert.Equal(expectedResultStaus, result.Status);
+
+            _serviceMock.Verify(s => s.DeleteTodoAsync(It.IsAny<ToDoDto>()), Times.Once);
         }
 
-        // TODO: weitere Tests implementieren
+        [Fact]
+        public async Task UpdateToDoAsync_ReturnsResultStatusOkAndReturnsValidObject()
+        {
+            // Arrange
+            int next = _random.Next(_elements.Count);
+            var element = _elements.GetRange(next, 1)[0];
+            _serviceMock.Setup(x => x.UpdateTodoAsync(It.IsAny<ToDoDto>())).ReturnsAsync(element);
+
+            // Act
+            var result = await _controller.UpdateTodoAsync(element);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+            Assert.Equal(element, result.Value);
+
+            _serviceMock.Verify(s => s.UpdateTodoAsync(It.IsAny<ToDoDto>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetAllToDosAsync_ReturnsResultStatusOkAndReturnsValidObject()
+        {
+            // Arrange
+            _serviceMock.Setup(x => x.GetAllTodosAsync()).ReturnsAsync(_elements);
+
+            // Act
+            var result = await _controller.GetAllTodosAsync();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+            Assert.Equal(_elements, result.Value);
+
+            _serviceMock.Verify(s => s.GetAllTodosAsync(), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetToDoByIdAsync_ReturnsResultStatusOkAndReturnsValidObject()
+        {
+            // Arrange
+            int next = _random.Next(_elements.Count);
+            var element = _elements.GetRange(next, 1)[0];
+            _serviceMock.Setup(s => s.GetToDoByIdAsync(element.Id)).ReturnsAsync(element);
+
+            // Act
+            var result = await _controller.GetToDoByIdAsync(element.Id);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+            Assert.Equal(element, result.Value);
+
+            _serviceMock.Verify(s => s.GetToDoByIdAsync(It.IsAny<Guid>()), Times.Once);
+        }
     }
 }
