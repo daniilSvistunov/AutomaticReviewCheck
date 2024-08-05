@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Ardalis.Result.AspNetCore;
 using AutoMapper;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.NLogTarget;
@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +26,7 @@ using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.BusinessLayer.Mapping;
 using OKTodoListReactTS.BusinessLayer.Services;
 using OKTodoListReactTS.Common.Logging;
+using OKTodoListReactTS.DataLayer;
 
 namespace OKTodoListReactTS.Api
 {
@@ -72,6 +74,11 @@ namespace OKTodoListReactTS.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OKTemplate REST API", Version = "v1" });
+
+                // Link to docs: https://docs.telerik.com/reporting/knowledge-base/conflicting-actions-error-in-swagger-generation-net-core#swashbuckle
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                c.IgnoreObsoleteActions();
+                c.IgnoreObsoleteProperties();
 
                 var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -185,6 +192,8 @@ namespace OKTodoListReactTS.Api
             //Hier werden die Services registriert
 
             services.AddSingleton<ILoggerManager, LoggerManager>();
+
+            services.AddDbContext<ToDoDbContext>(options => options.UseInMemoryDatabase("InMemoryDatabase"));
 
             services.AddTransient<IToDoService, ToDoService>();
 
