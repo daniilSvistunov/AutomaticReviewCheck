@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
-using OKTodoListReactTS.BusinessLayer.Dtos;
-using OKTodoListReactTS.BusinessLayer.Interfaces;
 //Welche using-Anweisungen werden hier wieso gebraucht?
 
 namespace OKTodoListReactTS.BusinessLayer.Services
