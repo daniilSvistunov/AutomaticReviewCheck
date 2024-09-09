@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Ardalis.Result;
 using Microsoft.EntityFrameworkCore;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
@@ -82,12 +83,12 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             //Act
-            await _toDoService.AddTodoAsync(todoDto);
-
+            var before = await _toDoService.AddTodoAsync(todoDto);
+            var result = await _toDoService.AddTodoAsync(todoDto2);
             //Assert
-            var exception = await Assert.ThrowsAsync<Exception>(async () => await _toDoService.AddTodoAsync(todoDto2));
+            Assert.NotNull(result);
+            Assert.True(result.Errors[0].Equals("A ToDo Exists with the same Title and TargetDate"));
 
-            Assert.True(exception.Message.Equals("A ToDo Exists with the same Title and TargetDate"));
         }
 
         [Fact]
@@ -123,9 +124,12 @@ namespace OKTemplate.BusinessLayer.Tests
             _toDoService = CreateToDoService();
             var Id = Guid.NewGuid();
 
+            //Act
+            var result = await _toDoService.DeleteTodoAsync(Id);
             //Assert
-            var exception = await Assert.ThrowsAsync<Exception>(async () => await _toDoService.DeleteTodoAsync(Id));
-            Assert.True(exception.Message.Equals("Found no todo with given id"));
+            Assert.NotNull(result);
+            Assert.Equal(ResultStatus.NotFound, result.Status);
+
         }
 
         [Fact]
@@ -156,7 +160,7 @@ namespace OKTemplate.BusinessLayer.Tests
 
             //Act
 
-            var result = await _toDoService.UpdateTodoAsync(todoDtoUpdate);
+            ToDoDto result = await _toDoService.UpdateTodoAsync(todoDtoUpdate);
 
             //Assert
             Assert.NotNull(result);
@@ -181,10 +185,12 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             //Act
+            var result = await _toDoService.UpdateTodoAsync(todoDtoUpdate);
 
             //Assert
-            var exception = await Assert.ThrowsAsync<Exception>(async () => await _toDoService.UpdateTodoAsync(todoDtoUpdate));
-            Assert.True(exception.Message.Equals("Found no todo with given id"));
+            Assert.NotNull(result);
+            Assert.Equal(ResultStatus.NotFound, result.Status);
+
         }
         [Fact]
         public async Task UpdateToDoAsync_DuplicateError()
@@ -211,12 +217,14 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             //Act
-            await _toDoService.AddTodoAsync(todoDto);
+
+            var before = await _toDoService.AddTodoAsync(todoDto);
+            var result = await _toDoService.UpdateTodoAsync(todoDto2);
 
             //Assert
-            var exception = await Assert.ThrowsAsync<Exception>(async () => await _toDoService.UpdateTodoAsync(todoDto2));
+            Assert.NotNull(result);
+            Assert.True(result.Errors[0].Equals("A ToDo Exists with the same Title and TargetDate"));
 
-            Assert.True(exception.Message.Equals("A ToDo Exists with the same Title and TargetDate"));
         }
 
         [Fact]
@@ -236,7 +244,7 @@ namespace OKTemplate.BusinessLayer.Tests
             await _toDoService.AddTodoAsync(toDoDto);
 
             //Act
-            var result = await _toDoService.FindTodoByIdAsync(toDoDto.Id);
+            ToDoDto result = await _toDoService.FindTodoByIdAsync(toDoDto.Id);
 
             //Assert
             Assert.NotNull(result);
@@ -255,9 +263,10 @@ namespace OKTemplate.BusinessLayer.Tests
             Guid id = Guid.NewGuid();
 
             //Act
-
+            var result = await _toDoService.FindTodoByIdAsync(id);
             //Assert
-            await Assert.ThrowsAsync<Exception>(async () => await _toDoService.FindTodoByIdAsync(id));
+            Assert.NotNull(result);
+            Assert.Equal(ResultStatus.NotFound, result.Status);
         }
     }
 }
