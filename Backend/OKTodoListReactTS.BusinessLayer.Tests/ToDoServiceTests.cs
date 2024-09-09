@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph;
+using NuGet.Frameworks;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.BusinessLayer.Services;
@@ -126,7 +127,8 @@ namespace OKTemplate.BusinessLayer.Tests
             var Id = Guid.NewGuid();
 
             //Assert
-            await Assert.ThrowsAsync<Exception>(async () => await _toDoService.DeleteTodoAsync(Id));
+            var exception = await Assert.ThrowsAsync<Exception>(async () => await _toDoService.DeleteTodoAsync(Id));
+            Assert.True(exception.Message.Equals("Found no todo with given id"));
         }
 
         [Fact]
@@ -182,10 +184,10 @@ namespace OKTemplate.BusinessLayer.Tests
             };
 
             //Act
-            //var result = await _toDoService.UpdateTodoAsync(todoDtoUpdate);
 
             //Assert
-            await Assert.ThrowsAsync<Exception>(async () => await _toDoService.UpdateTodoAsync(todoDtoUpdate));
+            var exception = await Assert.ThrowsAsync<Exception>(async () => await _toDoService.UpdateTodoAsync(todoDtoUpdate));
+            Assert.True(exception.Message.Equals("Found no todo with given id"));
         }
         [Fact]
         public async Task UpdateToDoAsync_DuplicateError()
@@ -230,7 +232,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 Id = Guid.NewGuid(),
                 Text = "AddedToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.UtcNow.AddDays(3),
+                TargetDate = DateTime.Today.AddDays(3),
                 Completed = true
 
             };
@@ -244,6 +246,7 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.True(result.Completed);
             Assert.Equal(result.Text, toDoDto.Text);
             Assert.Equal(result.Id, toDoDto.Id);
+            Assert.Equal(result.TargetDate, toDoDto.TargetDate);
         }
 
         [Fact]

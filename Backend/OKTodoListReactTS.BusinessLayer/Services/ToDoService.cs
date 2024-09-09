@@ -20,8 +20,8 @@ namespace OKTodoListReactTS.BusinessLayer.Services
     {
         private readonly ToDoDbContext _dbContext;// Füge hier das benötigte Feld ToDoDbContext ein 
         private readonly IMapper _mapper; //Autmoapper wird benötigt um die DTOs in Entities umzuwandeln und umgekehrt (mehr Infos im Wiki)
-        public readonly String NotFoundExceptionText = "found no todo with given id";
-        public readonly String DuplicateExceptionText = "A ToDo Exists with the same Title and TargetDate";
+        public const string notFoundExceptionText = "Found no todo with given id";
+        public const string duplicateExceptionText = "A ToDo Exists with the same Title and TargetDate";
 
         public ToDoService(IMapper mapper, ToDoDbContext db)
         {
@@ -80,10 +80,10 @@ namespace OKTodoListReactTS.BusinessLayer.Services
                     select entry;
             if (x.Count() > 0)
             {
-                throw new Exception(DuplicateExceptionText);
+                throw new Exception(duplicateExceptionText);
             }
 
-            _dbContext.ToDo.Add(toDoEntry);
+            await _dbContext.ToDo.AddAsync(toDoEntry);
             await _dbContext.SaveChangesAsync();
             var addedToDo = _mapper.Map<ToDoDto>(toDoEntry);
             return addedToDo;
@@ -103,7 +103,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             try
             {
-                var toDoToDelete = await _dbContext.ToDo.FindAsync(id) ?? throw new Exception(NotFoundExceptionText);
+                var toDoToDelete = await _dbContext.ToDo.FindAsync(id) ?? throw new Exception(notFoundExceptionText);
                 var toDoEntry = _mapper.Map<ToDoEntry>(toDoToDelete);
                 _dbContext.ToDo.Remove(toDoEntry);
                 await _dbContext.SaveChangesAsync();
@@ -128,7 +128,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         public async Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto)
         {
 
-            var entity = await _dbContext.ToDo.FindAsync(toDoDto.Id) ?? throw new Exception(NotFoundExceptionText);
+            var entity = await _dbContext.ToDo.FindAsync(toDoDto.Id) ?? throw new Exception(notFoundExceptionText);
 
             var toDoEntryUpdate = _mapper.Map<ToDoEntry>(toDoDto);
             var toDoEntries = await _dbContext.ToDo.ToListAsync();
@@ -136,7 +136,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 if (entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate))
                 {
-                    throw new Exception(DuplicateExceptionText);
+                    throw new Exception(duplicateExceptionText);
                 }
             }
 
@@ -151,7 +151,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             try
             {
-                var foundToDo = await _dbContext.ToDo.FindAsync(id) ?? throw new Exception(NotFoundExceptionText);
+                var foundToDo = await _dbContext.ToDo.FindAsync(id) ?? throw new Exception(notFoundExceptionText);
                 return _mapper.Map<ToDoDto>(foundToDo);
             }
             catch (Exception ex)
