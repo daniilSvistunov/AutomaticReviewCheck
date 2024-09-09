@@ -1,12 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
+using OKTodoListReactTS.BusinessLayer.Dtos;
+using OKTodoListReactTS.BusinessLayer.Interfaces;
+
 //Welche using-Anweisungen werden hier wieso gebraucht?
+//wird benötgt um zugriff auf deren Methoden zu bekommen wie z.B. Consolenausgaben
+//Wird benötig um Listen verwenden zu können
+//wird benötig um Task erstellen zu können
+//wird benötig um AutoMapper nutzen zu können
+//wird benötigt um auf die eigenen Data Transfer Objekte zu zugreifen
+//wird benötigt um auf die selbst erstellten Interfaces zu zugreifen
 
 namespace OKTodoListReactTS.BusinessLayer.Services
 {
     public class ToDoService : IToDoService /*Wieso wird hier das Interface IToDoService geerbt*/
-
+    //Damit ToDoService als IToDoService definiert es und so bestimmte kriterien erfüllen muss
     {
         // Füge hier das benötigte Feld ToDoDbContext ein 
+        Task<List<ToDoDto>> ToDoDbContext();
         private readonly IMapper _mapper; //Autmoapper wird benötigt um die DTOs in Entities umzuwandeln und umgekehrt (mehr Infos im Wiki)
+
 
         public ToDoService(/* Füge die benötigten Parameter hier ein */)
         {
