@@ -70,6 +70,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 {
                     Id = Guid.NewGuid(),
                     Text = "ToDo 1",
+                    Titel = "Titel 1",
                     TargetDate = DateTime.UtcNow.AddDays(1),
                     CreatedOn = DateTime.UtcNow,
                     UpdatedOn = DateTime.UtcNow
@@ -78,6 +79,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 {
                     Id = Guid.NewGuid(),
                     Text = "ToDo 2",
+                    Titel = "Titel 2",
                     TargetDate = DateTime.UtcNow.AddDays(2),
                     CreatedOn = DateTime.UtcNow,
                     UpdatedOn = DateTime.UtcNow
@@ -86,6 +88,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 {
                     Id = Guid.NewGuid(),
                     Text = "ToDo 3",
+                    Titel = "Titel 3",
                     TargetDate = DateTime.UtcNow.AddDays(3),
                     CreatedOn = DateTime.UtcNow,
                     UpdatedOn = DateTime.UtcNow

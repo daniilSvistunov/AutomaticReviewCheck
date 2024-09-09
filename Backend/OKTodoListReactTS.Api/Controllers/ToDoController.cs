@@ -35,21 +35,20 @@ namespace OKTodoListReactTS.Api.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="toDoDto"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete(Name = nameof(DeleteToDoAsync))]
+        [HttpDelete("{id}", Name = nameof(DeleteToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync(/*zu ergänzen*/)
+        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync([FromRoute] Guid id)
         {
-            await _service.DeleteTodoAsync(/*zu ergänzen*/);
+            await _service.DeleteTodoAsync(id);
             return Ok();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="toDoDto"></param>
         /// <returns></returns>
         [HttpGet(Name = nameof(GetAllTodosAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -59,17 +58,25 @@ namespace OKTodoListReactTS.Api.Controllers
             return Ok(await _service.GetAllTodosAsync());
         }
 
+        [HttpGet("{id}", Name = nameof(FindTodoByIdAsync))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ApplicationDto>> FindTodoByIdAsync([FromRoute] Guid id)
+        {
+            return Ok(await _service.FindTodoByIdAsync(id));
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
-        [HttpPost(Name = nameof(UpdateTodoAsync))]
+        [HttpPut(Name = nameof(UpdateTodoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync(/*zu ergänzen*/)
+        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto)
         {
-            return Ok(await _service.UpdateTodoAsync(/*zu ergänzen*/));
+            return Ok(await _service.UpdateTodoAsync(toDoDto));
         }
     }
 }
