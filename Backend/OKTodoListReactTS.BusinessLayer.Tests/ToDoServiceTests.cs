@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph;
-using NuGet.Frameworks;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.BusinessLayer.Services;

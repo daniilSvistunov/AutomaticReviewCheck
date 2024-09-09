@@ -20,7 +20,7 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Methode zum Mappen der Erstellung eines neuen ToDos
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
@@ -33,7 +33,7 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Methode zum Mappen der Löschung eines ToDos anhand seiner Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -47,7 +47,7 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Methode zum Mappen der Abfrage aller vorhandenen ToDos
         /// </summary>
         /// <returns></returns>
         [HttpGet(Name = nameof(GetAllTodosAsync))]
@@ -58,6 +58,11 @@ namespace OKTodoListReactTS.Api.Controllers
             return Ok(await _service.GetAllTodosAsync());
         }
 
+        /// <summary>
+        /// Methode zum Mappen der Suche eines ToDos anhand dessen Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}", Name = nameof(FindTodoByIdAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -67,7 +72,7 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Methode zum verändern eines vorhandenen ToDos
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>

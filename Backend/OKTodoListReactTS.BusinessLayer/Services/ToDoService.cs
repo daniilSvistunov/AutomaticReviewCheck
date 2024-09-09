@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.Common.Exceptions;
@@ -65,28 +63,35 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         //Diese Methode soll Dir als Beispiel für die Logik hinter den Implementierungen gelten
         public async Task<ToDoDto> AddTodoAsync(ToDoDto toDoDto)
         {
-            var toDoEntry = _mapper.Map<ToDoEntry>(toDoDto);
-            var toDoEntries = await _dbContext.ToDo.ToListAsync();
-            //foreach (var entry in toDoEntries)
-            //{
-            //    if (entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate))
-            //    {
-            //        throw new Exception(DuplicateExceptionText);
-            //    }
-            //}
-
-            var x = from entry in toDoEntries
-                    where entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate)
-                    select entry;
-            if (x.Count() > 0)
+            try
             {
-                throw new Exception(duplicateExceptionText);
-            }
+                var toDoEntry = _mapper.Map<ToDoEntry>(toDoDto);
+                var toDoEntries = await _dbContext.ToDo.ToListAsync();
+                //foreach (var entry in toDoEntries)
+                //{
+                //    if (entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate))
+                //    {
+                //        throw new Exception(DuplicateExceptionText);
+                //    }
+                //}
 
-            await _dbContext.ToDo.AddAsync(toDoEntry);
-            await _dbContext.SaveChangesAsync();
-            var addedToDo = _mapper.Map<ToDoDto>(toDoEntry);
-            return addedToDo;
+                var x = from entry in toDoEntries
+                        where entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate)
+                        select entry;
+                if (x.Count() > 0)
+                {
+                    throw new Exception(duplicateExceptionText);
+                }
+
+                await _dbContext.ToDo.AddAsync(toDoEntry);
+                await _dbContext.SaveChangesAsync();
+                var addedToDo = _mapper.Map<ToDoDto>(toDoEntry);
+                return addedToDo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         /*Beispielhafte Task:
@@ -95,7 +100,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          * Inhalt:
          * Es muss die Möglichkeit geben die ToDos auch wieder aus der Datenbank zu löschen
          * Merkmale:
-         * Der Endpunkt bekommt eine {????} (Welcher Parameter muss übergeben werden?).
+         * Der Endpunkt bekommt eine {id} (Welcher Parameter muss übergeben werden?).
          */
 
         // Füge die Implementierung für die Methode DeleteTodoAsync hier ein
@@ -127,24 +132,30 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         // Füge die Implementierung für die Methode UpdateTodoAsync hier ein
         public async Task<ToDoDto> UpdateTodoAsync(ToDoDto toDoDto)
         {
-
-            var entity = await _dbContext.ToDo.FindAsync(toDoDto.Id) ?? throw new Exception(notFoundExceptionText);
-
-            var toDoEntryUpdate = _mapper.Map<ToDoEntry>(toDoDto);
-            var toDoEntries = await _dbContext.ToDo.ToListAsync();
-            foreach (var entry in toDoEntries)
+            try
             {
-                if (entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate))
-                {
-                    throw new Exception(duplicateExceptionText);
-                }
-            }
+                var entity = await _dbContext.ToDo.FindAsync(toDoDto.Id) ?? throw new Exception(notFoundExceptionText);
 
-            _dbContext.Entry(entity).State = EntityState.Detached;
-            _dbContext.ToDo.Update(toDoEntryUpdate);
-            await _dbContext.SaveChangesAsync();
-            var updatedDto = _mapper.Map<ToDoDto>(toDoEntryUpdate);
-            return updatedDto;
+                var toDoEntryUpdate = _mapper.Map<ToDoEntry>(toDoDto);
+                var toDoEntries = await _dbContext.ToDo.ToListAsync();
+                foreach (var entry in toDoEntries)
+                {
+                    if (entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate))
+                    {
+                        throw new Exception(duplicateExceptionText);
+                    }
+                }
+
+                _dbContext.Entry(entity).State = EntityState.Detached;
+                _dbContext.ToDo.Update(toDoEntryUpdate);
+                await _dbContext.SaveChangesAsync();
+                var updatedDto = _mapper.Map<ToDoDto>(toDoEntryUpdate);
+                return updatedDto;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<ToDoDto> FindTodoByIdAsync(Guid id)

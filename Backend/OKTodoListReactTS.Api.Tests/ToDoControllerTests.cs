@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Graph;
 using Moq;
 using OKTodoListReactTS.Api.Controllers;
 using OKTodoListReactTS.BusinessLayer.Dtos;
