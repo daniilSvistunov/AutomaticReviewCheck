@@ -1,5 +1,4 @@
-﻿using System.Xml.Schema;
-using AutoMapper;
+﻿using AutoMapper;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.DataLayer.Entities;
 
@@ -9,9 +8,7 @@ namespace OKTodoListReactTS.BusinessLayer.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<ToDoEntry, ToDoDto>()
-                .ForMember(ToDoDto.)
-                .ReverseMap();
+            CreateMap<ToDoEntry, ToDoDto>().ForMember(dto => dto.DueDate, model => model.MapFrom(m => m.TargetDate)).ReverseMap();
         }
     }
 }

@@ -10,6 +10,7 @@ namespace OKTodoListReactTS.DataLayer.Entities
     [Table("ToDo")]
     public partial class ToDoEntry : BaseEntity
     {
+        public string Title { get; set; }
         public string Text { get; set; }
 
         public DateTime TargetDate { get; set; }

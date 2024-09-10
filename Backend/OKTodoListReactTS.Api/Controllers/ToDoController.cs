@@ -20,7 +20,7 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Fügt ein Neues ToDo hinzu
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
@@ -33,21 +33,21 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Entfernt ein bestehendes ToDo
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
         [HttpDelete(Name = nameof(DeleteToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync(/*zu ergänzen*/)
+        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync(ToDoDto toDoDto)
         {
-            await _service.DeleteTodoAsync(/*zu ergänzen*/);
+            await _service.DeleteTodoAsync(toDoDto);
             return Ok();
         }
 
         /// <summary>
-        /// 
+        /// Gibt alle ToDos zurück
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
@@ -60,16 +60,29 @@ namespace OKTodoListReactTS.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Updated ein bestehendes ToDo
         /// </summary>
         /// <param name="toDoDto"></param>
         /// <returns></returns>
-        [HttpPost(Name = nameof(UpdateTodoAsync))]
+        [HttpPut(Name = nameof(UpdateTodoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync(/*zu ergänzen*/)
+        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync(ToDoDto toDoDto)
         {
-            return Ok(await _service.UpdateTodoAsync(/*zu ergänzen*/));
+            return Ok(await _service.UpdateTodoAsync(toDoDto));
+        }
+
+        /// <summary>
+        /// Suche nach einem ToDo über die ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}", Name = nameof(SearchTodoWithIdAsync))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ApplicationDto>> SearchTodoWithIdAsync([FromRoute] Guid id)
+        {
+            return Ok(await _service.SearchTodoWithIdAsync(id));
         }
     }
 }
