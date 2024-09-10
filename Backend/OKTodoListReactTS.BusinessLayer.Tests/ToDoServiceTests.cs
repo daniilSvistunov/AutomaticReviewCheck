@@ -132,12 +132,14 @@ namespace OKTemplate.BusinessLayer.Tests
             // Assert
             Assert.NotNull(exception);
             Assert.IsType<Exception>(exception);
+            Assert.Equal("ToDo nicht gefunden.", exception.Message);
         }
 
         [Fact]
         public async Task UpdateTodoAsync_Success()
         {
             // Arrange
+            var fixedDate = new DateTime(2024, 9, 10, 9, 58, 54, DateTimeKind.Local);
             var guid = Guid.NewGuid();
 
             // Erstelle das ursprüngliche ToDo
@@ -146,7 +148,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 Id = guid,
                 Title = "Tester",
                 Text = "test",
-                DueDate = DateTime.Now,
+                DueDate = fixedDate,
                 Completed = false,
             };
 
@@ -161,7 +163,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 Id = guid,
                 Title = "Tester", // Titel bleibt gleich, um keinen Konflikt zu verursachen
                 Text = "Updated",
-                DueDate = DateTime.Now,
+                DueDate = fixedDate,
                 Completed = true,
             };
 
@@ -198,11 +200,12 @@ namespace OKTemplate.BusinessLayer.Tests
             // Assert
             Assert.NotNull(exception);
             Assert.IsType<Exception>(exception);
+            Assert.Equal("ToDo nicht gefunden.", exception.Message);
         }
         // Neue Tests:
 
         [Fact]
-        public async Task AddTodoAsync_ValidationFails()
+        public async Task AddTodoAsync_ValidationFailsText()
         {
             // Arrange
             var toDo = new ToDoDto
@@ -221,9 +224,31 @@ namespace OKTemplate.BusinessLayer.Tests
             // Assert
             Assert.NotNull(exception);
             Assert.IsType<ArgumentException>(exception);
+            Assert.Equal("ToDo text kann nicht leer sein.", exception.Message);
         }
 
-        //In zwei Test umwandeln für title und text
+        [Fact]
+        public async Task AddTodoAsync_ValidationFailsTitle()
+        {
+            // Arrange
+            var toDo = new ToDoDto
+            {
+                Id = Guid.NewGuid(),
+                Title = "",
+                Text = "test",
+                DueDate = DateTime.Now,
+                Completed = false,
+            };
+            _toDoService = CreateToDoService();
+
+            // Act
+            var exception = await Record.ExceptionAsync(() => _toDoService.AddTodoAsync(toDo));
+
+            // Assert
+            Assert.NotNull(exception);
+            Assert.IsType<ArgumentException>(exception);
+            Assert.Equal("ToDo title kann nicht leer sein.", exception.Message);
+        }
 
         [Fact]
         public async Task AddTodoAsync_DuplicateIdThrowsException()
@@ -257,7 +282,7 @@ namespace OKTemplate.BusinessLayer.Tests
             // Assert
             Assert.NotNull(exception);
             Assert.IsType<Exception>(exception);
-            // Assert für Exception Message
+            Assert.Equal("Ein ToDo mit der selben ID existiert bereits!", exception.Message);
         }
 
         [Fact]
@@ -265,17 +290,18 @@ namespace OKTemplate.BusinessLayer.Tests
         public async Task SearchTodoWithIdAsync_Success()
         {
             // Arrange
+            var fixedDate = new DateTime(2024, 9, 10, 9, 58, 54, DateTimeKind.Local);
             var guid = Guid.NewGuid();
             var toDo = new ToDoEntry
             {
                 Id = guid,
                 Title = "Tester",
                 Text = "test",
-                TargetDate = DateTime.Now,
+                TargetDate = fixedDate,
                 Completed = false,
             };
-            _dbContext.Add(toDo);
-            _dbContext.SaveChanges();
+            _dbContext.AddAsync(toDo);
+            await _dbContext.SaveChangesAsync();
             _toDoService = CreateToDoService();
 
             // Act
@@ -284,13 +310,17 @@ namespace OKTemplate.BusinessLayer.Tests
             // Assert
             Assert.NotNull(result);
             Assert.IsType<ToDoDto>(result);
-            // Equal
+            Assert.Equal(toDo.Id, result.Id);
+            Assert.Equal(toDo.Title, result.Title);
+            Assert.Equal(toDo.Text, result.Text);
+            //Assert.Equal(toDo.TargetDate.ToString("yyyy-MM-dd HH:mm:ss"), result.DueDate.ToString("yyyy-MM-dd HH:mm:ss"));
+            Assert.Equal(toDo.Completed, result.Completed);
         }
 
         // Duplikationserkennung Tests
         [Fact]
         // Add Test
-        public async Task AddTodoAsync_DublicateProperties()
+        public async Task AddTodoAsync_DublicatePropertiesTitle()
         {
             // Arrage
             var guid = Guid.NewGuid();
@@ -299,7 +329,7 @@ namespace OKTemplate.BusinessLayer.Tests
                 Id = guid,
                 Title = "test",
                 Text = "test",
-                TargetDate = DateTime.MinValue,
+                TargetDate = DateTime.MaxValue,
                 Completed = false,
             };
             _dbContext.Add(toDo);
@@ -326,8 +356,92 @@ namespace OKTemplate.BusinessLayer.Tests
         }
 
         [Fact]
+        public async Task AddTodoAsync_DublicatePropertiesDate()
+        {
+            // Arrage
+            var guid = Guid.NewGuid();
+            var toDo = new ToDoEntry
+            {
+                Id = guid,
+                Title = "test2",
+                Text = "test",
+                TargetDate = DateTime.MinValue,
+                Completed = false,
+            };
+            _dbContext.Add(toDo);
+            _dbContext.SaveChanges();
+            _toDoService = CreateToDoService();
+
+            var newGuid = Guid.NewGuid();
+            var newToDo = new ToDoDto
+            {
+                Id = newGuid,
+                Title = "test",
+                Text = "test",
+                DueDate = DateTime.MinValue,
+                Completed = false,
+            };
+
+            // Act
+            var exception = await Record.ExceptionAsync(() => _toDoService.AddTodoAsync(newToDo));
+
+            // Assert
+            Assert.NotNull(exception);
+            Assert.IsType<Exception>(exception);
+            Assert.Equal("Ein ToDo mit diesem Datum existiert bereits!", exception.Message);
+        }
+
+        [Fact]
         // Update
-        public async Task UpdateTodoAsync_DublicateProperties()
+        public async Task UpdateTodoAsync_DublicatePropertiesTitle()
+        {
+            // Arrange
+            var guid1 = Guid.NewGuid();
+            var guid2 = Guid.NewGuid();
+
+            var existingToDo = new ToDoEntry
+            {
+                Id = guid1,
+                Title = "test",
+                Text = "test",
+                TargetDate = DateTime.MaxValue,
+                Completed = false,
+            };
+
+            var conflictingToDo = new ToDoEntry
+            {
+                Id = guid2,
+                Title = "conflict",
+                Text = "test",
+                TargetDate = DateTime.MinValue,
+                Completed = false,
+            };
+
+            _dbContext.Add(existingToDo);
+            _dbContext.Add(conflictingToDo);
+            await _dbContext.SaveChangesAsync();
+            _toDoService = CreateToDoService();
+
+            var updatedToDo = new ToDoDto
+            {
+                Id = guid1,
+                Title = "conflict",
+                Text = "Updated",
+                DueDate = DateTime.MaxValue,
+                Completed = true,
+            };
+
+            // Act
+            var exception = await Record.ExceptionAsync(() => _toDoService.UpdateTodoAsync(updatedToDo));
+
+            // Assert
+            Assert.NotNull(exception);
+            Assert.IsType<Exception>(exception);
+            Assert.Equal("Ein ToDo mit diesem Titel existiert bereits!", exception.Message);
+        }
+
+        [Fact]
+        public async Task UpdateTodoAsync_DublicatePropertiesDate()
         {
             // Arrange
             var guid1 = Guid.NewGuid();
@@ -359,7 +473,7 @@ namespace OKTemplate.BusinessLayer.Tests
             var updatedToDo = new ToDoDto
             {
                 Id = guid1,
-                Title = "conflict",
+                Title = "conflict2",
                 Text = "Updated",
                 DueDate = DateTime.MinValue,
                 Completed = true,
@@ -371,7 +485,7 @@ namespace OKTemplate.BusinessLayer.Tests
             // Assert
             Assert.NotNull(exception);
             Assert.IsType<Exception>(exception);
-            Assert.Equal("Ein ToDo mit diesem Titel existiert bereits!", exception.Message);
+            Assert.Equal("Ein ToDo mit diesem Datum existiert bereits!", exception.Message);
         }
     }
 }

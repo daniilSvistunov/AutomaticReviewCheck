@@ -81,9 +81,14 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             }
 
             // Überprüfe, ob der Text leer oder null ist
-            if (string.IsNullOrWhiteSpace(toDoDto.Text) || string.IsNullOrWhiteSpace(toDoDto.Title))
+            if (string.IsNullOrWhiteSpace(toDoDto.Text))
             {
                 throw new ArgumentException("ToDo text kann nicht leer sein.");
+            }
+
+            if (string.IsNullOrWhiteSpace(toDoDto.Title))
+            {
+                throw new ArgumentException("ToDo title kann nicht leer sein.");
             }
 
             // Überprüfe, ob ein ToDo mit der gleichen Id bereits existiert
@@ -104,7 +109,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             var existingDueDate = await _dbContext.ToDo.AnyAsync(t => t.TargetDate == toDoDto.DueDate);
             if (existingDueDate)
             {
-                throw new Exception("Ein ToDo mit dem Gleichem Datum existiert bereits!");
+                throw new Exception("Ein ToDo mit diesem Datum existiert bereits!");
             }
 
             // Mappe das DTO zu einer Datenbank-Entity
@@ -200,15 +205,20 @@ namespace OKTodoListReactTS.BusinessLayer.Services
                 .AnyAsync(t => t.TargetDate == toDoDto.DueDate && t.Id != toDoDto.Id);
             if (existingDueDate)
             {
-                throw new Exception("Ein ToDo mit dem gleichen Datum existiert bereits!");
+                throw new Exception("Ein ToDo mit diesem Datum existiert bereits!");
             }
 
             // Aktualisiere die Eigenschaften des gefundenen ToDoEntry mit den neuen Werten
             // Über Mapper aktualisieren
+
             findingToDo.Title = toDoDto.Title;
             findingToDo.Text = toDoDto.Text;
             findingToDo.TargetDate = toDoDto.DueDate;
             findingToDo.Completed = toDoDto.Completed;
+
+
+            // Wirft ein Equal fehler beim Date
+            //_mapper.Map(toDoDto, findingToDo);
 
             // Speichere die Änderungen in der Datenbank
             await _dbContext.SaveChangesAsync();

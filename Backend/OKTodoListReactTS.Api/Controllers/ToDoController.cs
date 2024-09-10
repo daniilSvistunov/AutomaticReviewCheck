@@ -82,7 +82,13 @@ namespace OKTodoListReactTS.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ApplicationDto>> SearchTodoWithIdAsync([FromRoute] Guid id)
         {
-            return Ok(await _service.SearchTodoWithIdAsync(id));
+            var todo = await _service.SearchTodoWithIdAsync(id);
+            if (todo == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(todo);
         }
     }
 }
