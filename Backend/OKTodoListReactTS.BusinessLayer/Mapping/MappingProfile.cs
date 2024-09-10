@@ -8,7 +8,7 @@ namespace OKTodoListReactTS.BusinessLayer.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<ToDoEntry, ToDoDto>().ReverseMap();
+            CreateMap<ToDoEntry, ToDoDto>().ForMember(dto => dto.DueDate, model => model.MapFrom((m) => m.TargetDate)).ReverseMap();
         }
     }
 }

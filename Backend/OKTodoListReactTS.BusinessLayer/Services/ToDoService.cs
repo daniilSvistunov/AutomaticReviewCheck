@@ -19,7 +19,8 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         private readonly ToDoDbContext _dbContext;// Füge hier das benötigte Feld ToDoDbContext ein 
         private readonly IMapper _mapper; //Autmoapper wird benötigt um die DTOs in Entities umzuwandeln und umgekehrt (mehr Infos im Wiki)
         public const string notFoundExceptionText = "Found no todo with given id";
-        public const string duplicateExceptionText = "A ToDo Exists with the same Title and TargetDate";
+        public const string duplicateExceptionText = "A ToDo Exists with the same Title and DueDate";
+        readonly ValidationError duplicateException = new ValidationError(duplicateExceptionText);
 
         public ToDoService(IMapper mapper, ToDoDbContext db)
         {
@@ -60,26 +61,19 @@ namespace OKTodoListReactTS.BusinessLayer.Services
 
             var toDoEntry = _mapper.Map<ToDoEntry>(toDoDto);
             var toDoEntries = await _dbContext.ToDo.ToListAsync();
-            //foreach (var entry in toDoEntries)
-            //{
-            //    if (entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate))
-            //    {
-            //        throw new Exception(DuplicateExceptionText);
-            //    }
-            //}
 
             var x = from entry in toDoEntries
-                    where entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate)
+                    where entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.DueDate)
                     select entry;
-            if (x.Count() > 0)
+            if (x.Any())
             {
-                return Result<ToDoDto>.Error(duplicateExceptionText);
+                return Result<ToDoDto>.Invalid(duplicateException);
             }
 
             await _dbContext.ToDo.AddAsync(toDoEntry);
             await _dbContext.SaveChangesAsync();
             var addedToDo = _mapper.Map<ToDoDto>(toDoEntry);
-            return addedToDo;
+            return Result<ToDoDto>.Success(addedToDo);
 
         }
 
@@ -131,14 +125,14 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 var entity = await _dbContext.ToDo.FindAsync(toDoDto.Id);
                 if (entity == null)
-                    return Result<ToDoDto>.NotFound();
+                    return Result<ToDoDto>.NotFound(notFoundExceptionText);
 
                 var toDoEntryUpdate = _mapper.Map<ToDoEntry>(toDoDto);
                 var toDoEntries = await _dbContext.ToDo.ToListAsync();
                 foreach (var entry in toDoEntries)
                 {
-                    if (entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.TargetDate))
-                        return Result<ToDoDto>.Error(duplicateExceptionText);
+                    if (entry.Titel.Equals(toDoDto.Titel) && entry.TargetDate.Equals(toDoDto.DueDate))
+                        return Result<ToDoDto>.Invalid(duplicateException);
 
                 }
 
@@ -160,7 +154,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
             {
                 var foundToDo = await _dbContext.ToDo.FindAsync(id);
                 if (foundToDo == null)
-                    return Result<ToDoDto>.NotFound();
+                    return Result<ToDoDto>.NotFound(notFoundExceptionText);
                 return Result<ToDoDto>.Success(_mapper.Map<ToDoDto>(foundToDo));
             }
             catch (Exception ex)

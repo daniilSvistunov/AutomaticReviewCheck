@@ -24,7 +24,7 @@ namespace OKTodoListReactTS.Api.Tests
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.UtcNow.AddDays(1),
+                DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = true
 
             };
@@ -51,7 +51,7 @@ namespace OKTodoListReactTS.Api.Tests
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.UtcNow.AddDays(1),
+                DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = true
 
             };
@@ -76,7 +76,7 @@ namespace OKTodoListReactTS.Api.Tests
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.UtcNow.AddDays(1),
+                DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = true
 
             };
@@ -87,7 +87,7 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<OkResult>(result.Result);
+            Assert.IsType<OkObjectResult>(result.Result);
             _toDoServiceMock.Verify(mock => mock.DeleteTodoAsync(_toDoDto.Id), Times.Once());
         }
         [Fact]
@@ -99,7 +99,7 @@ namespace OKTodoListReactTS.Api.Tests
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.UtcNow.AddDays(1),
+                DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = true
 
             };
@@ -108,7 +108,7 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Act
             var result = await _toDoController.DeleteToDoAsync(_toDoDto.Id);
-            OkResult okObject = (OkResult)result.Result;
+            OkObjectResult okObject = (OkObjectResult)result.Result;
 
             // Assert
             Assert.NotNull(result);
@@ -126,14 +126,14 @@ namespace OKTodoListReactTS.Api.Tests
                     Id = Guid.NewGuid(),
                     Text = "Text1",
                     Titel = "Titel1",
-                    TargetDate= DateTime.UtcNow.AddDays(1),
+                    DueDate= DateTime.UtcNow.AddDays(1),
                     Completed = false
                 },
                 new ToDoDto{
                     Id = Guid.NewGuid(),
                     Text = "Text2",
                     Titel = "Titel2",
-                    TargetDate= DateTime.UtcNow.AddDays(2),
+                    DueDate= DateTime.UtcNow.AddDays(2),
                     Completed = false
                 }
             };
@@ -160,7 +160,7 @@ namespace OKTodoListReactTS.Api.Tests
                 Id = Guid.NewGuid(),
                 Text = "Text1",
                 Titel = "Titel1",
-                TargetDate = DateTime.UtcNow.AddDays(1),
+                DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = false
             };
 
@@ -186,7 +186,7 @@ namespace OKTodoListReactTS.Api.Tests
                 Id = Guid.NewGuid(),
                 Text = "Text1",
                 Titel = "Titel1",
-                TargetDate = DateTime.UtcNow.AddDays(1),
+                DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = false
             };
 

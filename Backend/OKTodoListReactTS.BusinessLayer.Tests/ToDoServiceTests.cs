@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.BusinessLayer.Services;
+using OKTodoListReactTS.DataLayer.Entities;
 using Xunit;
 
 namespace OKTemplate.BusinessLayer.Tests
@@ -38,23 +39,23 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             //Arrange
             _toDoService = CreateToDoService();
-            ToDoDto todoDto = new()
+            ToDoDto toDoDto = new()
             {
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.UtcNow.AddDays(1),
+                DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = true
 
             };
 
             //Act
-            var result = await _toDoService.AddTodoAsync(todoDto);
+            var result = await _toDoService.AddTodoAsync(toDoDto);
             var after = await Context.ToDo.ToListAsync();
 
             //Assert
             Assert.NotNull(result);
-            Assert.Contains(after, a => a.Id == todoDto.Id);
+            Assert.Contains(after, a => a.Id == toDoDto.Id);
 
         }
 
@@ -63,31 +64,32 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             //Arrange
             _toDoService = CreateToDoService();
-            ToDoDto todoDto = new()
+            ToDoDto toDoDto = new()
             {
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.Today,
+                DueDate = DateTime.Today,
                 Completed = true
 
             };
-            ToDoDto todoDto2 = new()
+            ToDoDto toDoDto2 = new()
             {
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.Today,
+                DueDate = DateTime.Today,
                 Completed = true
 
             };
 
             //Act
-            var before = await _toDoService.AddTodoAsync(todoDto);
-            var result = await _toDoService.AddTodoAsync(todoDto2);
+            await Context.AddAsync(Mapper.Map<ToDoEntry>(toDoDto));
+            await Context.SaveChangesAsync();
+            var result = await _toDoService.AddTodoAsync(toDoDto2);
             //Assert
             Assert.NotNull(result);
-            Assert.True(result.Errors[0].Equals("A ToDo Exists with the same Title and TargetDate"));
+            Assert.True(result.ValidationErrors[0].ErrorMessage.Equals(ToDoService.duplicateExceptionText));
 
         }
 
@@ -96,25 +98,26 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             //Arrange
             _toDoService = CreateToDoService();
-            ToDoDto todoDto = new()
+            ToDoDto toDoDto = new()
             {
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.UtcNow.AddDays(1),
+                DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = true
 
             };
 
             //Act
-            await _toDoService.AddTodoAsync(todoDto);
+            await Context.AddAsync(Mapper.Map<ToDoEntry>(toDoDto));
+            await Context.SaveChangesAsync();
             var before = await Context.ToDo.ToListAsync();
-            await _toDoService.DeleteTodoAsync(todoDto.Id);
+            await _toDoService.DeleteTodoAsync(toDoDto.Id);
             var after = await Context.ToDo.ToListAsync();
 
             //Assert
-            Assert.Contains(before, b => b.Id == todoDto.Id);
-            Assert.DoesNotContain(after, a => a.Id == todoDto.Id);
+            Assert.Contains(before, b => b.Id == toDoDto.Id);
+            Assert.DoesNotContain(after, a => a.Id == toDoDto.Id);
         }
 
         [Fact]
@@ -129,6 +132,7 @@ namespace OKTemplate.BusinessLayer.Tests
             //Assert
             Assert.NotNull(result);
             Assert.Equal(ResultStatus.NotFound, result.Status);
+            Assert.True(result.Errors[0].Equals(ToDoService.notFoundExceptionText));
 
         }
 
@@ -137,35 +141,36 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             //Arrange
             _toDoService = CreateToDoService();
-            ToDoDto todoDto = new()
+            ToDoDto toDoDto = new()
             {
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel Updated",
-                TargetDate = DateTime.UtcNow.AddDays(1),
+                DueDate = DateTime.UtcNow.AddDays(1),
                 Completed = true
 
             };
-            await _toDoService.AddTodoAsync(todoDto);
 
-            ToDoDto todoDtoUpdate = new()
+            ToDoDto toDoDtoUpdate = new()
             {
-                Id = todoDto.Id,
+                Id = toDoDto.Id,
                 Text = "Updated",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.UtcNow.AddDays(3),
+                DueDate = DateTime.UtcNow.AddDays(3),
                 Completed = false
 
             };
 
             //Act
+            await Context.AddAsync(Mapper.Map<ToDoEntry>(toDoDto));
+            await Context.SaveChangesAsync();
 
-            ToDoDto result = await _toDoService.UpdateTodoAsync(todoDtoUpdate);
+            ToDoDto result = await _toDoService.UpdateTodoAsync(toDoDtoUpdate);
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(result.Text, todoDtoUpdate.Text);
-            Assert.Equal(result.Completed, todoDtoUpdate.Completed);
+            Assert.Equal(result.Text, toDoDtoUpdate.Text);
+            Assert.Equal(result.Completed, toDoDtoUpdate.Completed);
         }
 
         [Fact]
@@ -174,22 +179,23 @@ namespace OKTemplate.BusinessLayer.Tests
             //Arrange
             _toDoService = CreateToDoService();
 
-            ToDoDto todoDtoUpdate = new()
+            ToDoDto toDoDtoUpdate = new()
             {
                 Id = Guid.NewGuid(),
                 Text = "Updated",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.UtcNow.AddDays(3),
+                DueDate = DateTime.UtcNow.AddDays(3),
                 Completed = false
 
             };
 
             //Act
-            var result = await _toDoService.UpdateTodoAsync(todoDtoUpdate);
+            var result = await _toDoService.UpdateTodoAsync(toDoDtoUpdate);
 
             //Assert
             Assert.NotNull(result);
             Assert.Equal(ResultStatus.NotFound, result.Status);
+            Assert.True(result.Errors[0].Equals(ToDoService.notFoundExceptionText));
 
         }
         [Fact]
@@ -197,33 +203,34 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             //Arrange
             _toDoService = CreateToDoService();
-            ToDoDto todoDto = new()
+            ToDoDto toDoDto = new()
             {
                 Id = Guid.NewGuid(),
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.Today,
+                DueDate = DateTime.Today,
                 Completed = true
 
             };
-            ToDoDto todoDto2 = new()
+            ToDoDto toDoDto2 = new()
             {
-                Id = todoDto.Id,
+                Id = toDoDto.Id,
                 Text = "Test ToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.Today,
+                DueDate = DateTime.Today,
                 Completed = true
 
             };
 
             //Act
+            await Context.AddAsync(Mapper.Map<ToDoEntry>(toDoDto));
+            await Context.SaveChangesAsync();
 
-            var before = await _toDoService.AddTodoAsync(todoDto);
-            var result = await _toDoService.UpdateTodoAsync(todoDto2);
+            var result = await _toDoService.UpdateTodoAsync(toDoDto2);
 
             //Assert
             Assert.NotNull(result);
-            Assert.True(result.Errors[0].Equals("A ToDo Exists with the same Title and TargetDate"));
+            Assert.True(result.ValidationErrors[0].ErrorMessage.Equals(ToDoService.duplicateExceptionText));
 
         }
 
@@ -237,13 +244,14 @@ namespace OKTemplate.BusinessLayer.Tests
                 Id = Guid.NewGuid(),
                 Text = "AddedToDo",
                 Titel = "Todo Titel",
-                TargetDate = DateTime.Today.AddDays(3),
+                DueDate = DateTime.Today.AddDays(3),
                 Completed = true
 
             };
-            await _toDoService.AddTodoAsync(toDoDto);
 
             //Act
+            await Context.AddAsync(Mapper.Map<ToDoEntry>(toDoDto));
+            await Context.SaveChangesAsync();
             ToDoDto result = await _toDoService.FindTodoByIdAsync(toDoDto.Id);
 
             //Assert
@@ -251,7 +259,7 @@ namespace OKTemplate.BusinessLayer.Tests
             Assert.True(result.Completed);
             Assert.Equal(result.Text, toDoDto.Text);
             Assert.Equal(result.Id, toDoDto.Id);
-            Assert.Equal(result.TargetDate, toDoDto.TargetDate);
+            Assert.Equal(result.DueDate, toDoDto.DueDate);
         }
 
         [Fact]
@@ -259,14 +267,15 @@ namespace OKTemplate.BusinessLayer.Tests
         {
             //Arrange
             _toDoService = CreateToDoService();
-
             Guid id = Guid.NewGuid();
 
             //Act
             var result = await _toDoService.FindTodoByIdAsync(id);
+
             //Assert
             Assert.NotNull(result);
             Assert.Equal(ResultStatus.NotFound, result.Status);
+            Assert.True(result.Errors[0].Equals(ToDoService.notFoundExceptionText));
         }
     }
 }
