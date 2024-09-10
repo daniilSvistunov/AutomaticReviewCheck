@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,7 @@ namespace OKTodoListReactTS.Api.Controllers
     /// </summary>
     [Route("api/todos")]
     [ApiController]
+    [TranslateResultToActionResult]
     public class ToDoController : BaseServiceController<IToDoService>
     {
         public ToDoController(IToDoService toDoService)
@@ -28,10 +31,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [HttpPost(Name = nameof(AddToDoAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [TranslateResultToActionResult]
-        public async Task<ActionResult<ApplicationDto>> AddToDoAsync([FromBody] ToDoDto toDoDto)
+        public async Task<Result<ToDoDto>> AddToDoAsync([FromBody] ToDoDto toDoDto)
         {
-            return Ok(await _service.AddTodoAsync(toDoDto));
+            return await _service.AddTodoAsync(toDoDto);
         }
 
         /// <summary>
@@ -43,11 +45,10 @@ namespace OKTodoListReactTS.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [TranslateResultToActionResult]
-        public async Task<ActionResult<ApplicationDto>> DeleteToDoAsync([FromRoute] Guid id)
+        public async Task<Result<ToDoDto>> DeleteToDoAsync([FromRoute] Guid id)
         {
 
-            return Ok(await _service.DeleteTodoAsync(id));
+            return await _service.DeleteTodoAsync(id);
         }
 
         /// <summary>
@@ -57,10 +58,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [HttpGet(Name = nameof(GetAllTodosAsync))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [TranslateResultToActionResult]
-        public async Task<ActionResult<ApplicationDto>> GetAllTodosAsync()
+        public async Task<Result<List<ToDoDto>>> GetAllTodosAsync()
         {
-            return Ok(await _service.GetAllTodosAsync());
+            return await _service.GetAllTodosAsync();
         }
 
         /// <summary>
@@ -72,10 +72,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [TranslateResultToActionResult]
-        public async Task<ActionResult<ApplicationDto>> FindTodoByIdAsync([FromRoute] Guid id)
+        public async Task<Result<ToDoDto>> FindTodoByIdAsync([FromRoute] Guid id)
         {
-            return Ok(await _service.FindTodoByIdAsync(id));
+            return await _service.FindTodoByIdAsync(id);
         }
 
         /// <summary>
@@ -87,10 +86,9 @@ namespace OKTodoListReactTS.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [TranslateResultToActionResult]
-        public async Task<ActionResult<ApplicationDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto)
+        public async Task<Result<ToDoDto>> UpdateTodoAsync([FromBody] ToDoDto toDoDto)
         {
-            return Ok(await _service.UpdateTodoAsync(toDoDto));
+            return await _service.UpdateTodoAsync(toDoDto);
         }
     }
 }

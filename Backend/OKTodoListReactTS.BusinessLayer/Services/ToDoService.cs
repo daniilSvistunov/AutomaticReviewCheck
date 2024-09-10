@@ -20,7 +20,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         private readonly IMapper _mapper; //Autmoapper wird benötigt um die DTOs in Entities umzuwandeln und umgekehrt (mehr Infos im Wiki)
         public const string notFoundExceptionText = "Found no todo with given id";
         public const string duplicateExceptionText = "A ToDo Exists with the same Title and DueDate";
-        readonly ValidationError duplicateException = new ValidationError(duplicateExceptionText);
+        readonly ValidationError duplicateException = new ValidationError("duplicate", duplicateExceptionText, "404", ValidationSeverity.Error);
 
         public ToDoService(IMapper mapper, ToDoDbContext db)
         {

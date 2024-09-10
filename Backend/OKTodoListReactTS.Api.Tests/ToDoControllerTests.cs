@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using Ardalis.Result;
 using Moq;
 using OKTodoListReactTS.Api.Controllers;
 using OKTodoListReactTS.BusinessLayer.Dtos;
@@ -34,11 +34,11 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Act
             var result = await _toDoController.AddToDoAsync(_toDoDto);
-            OkObjectResult okObject = (OkObjectResult)result.Result;
 
             // Assert
-            Assert.NotNull(okObject);
-            Assert.Equal(200, okObject.StatusCode);
+            Assert.NotNull(result);
+            Assert.IsType<ToDoDto>(result.Value);
+            Assert.Equal(Ardalis.Result.ResultStatus.Ok, result.Status);
             _toDoServiceMock.Verify(mock => mock.AddTodoAsync(_toDoDto), Times.Once());
         }
 
@@ -64,7 +64,7 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<OkObjectResult>(result.Result);
+            Assert.IsType<ToDoDto>(result.Value);
             _toDoServiceMock.Verify(mock => mock.AddTodoAsync(_toDoDto), Times.Once());
         }
         [Fact]
@@ -80,6 +80,7 @@ namespace OKTodoListReactTS.Api.Tests
                 Completed = true
 
             };
+            _toDoServiceMock.Setup(service => service.DeleteTodoAsync(_toDoDto.Id)).ReturnsAsync(_toDoDto);
             _toDoController = new ToDoController(_toDoServiceMock.Object);
 
             // Act
@@ -87,7 +88,7 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<OkObjectResult>(result.Result);
+            Assert.IsType<ToDoDto>(result.Value);
             _toDoServiceMock.Verify(mock => mock.DeleteTodoAsync(_toDoDto.Id), Times.Once());
         }
         [Fact]
@@ -103,16 +104,16 @@ namespace OKTodoListReactTS.Api.Tests
                 Completed = true
 
             };
-
+            _toDoServiceMock.Setup(service => service.DeleteTodoAsync(_toDoDto.Id)).ReturnsAsync(_toDoDto);
             _toDoController = new ToDoController(_toDoServiceMock.Object);
 
             // Act
             var result = await _toDoController.DeleteToDoAsync(_toDoDto.Id);
-            OkObjectResult okObject = (OkObjectResult)result.Result;
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(200, okObject.StatusCode);
+            Assert.IsType<ToDoDto>(result.Value);
+            Assert.Equal(ResultStatus.Ok, result.Status);
             _toDoServiceMock.Verify(mock => mock.DeleteTodoAsync(_toDoDto.Id), Times.Once());
         }
 
@@ -146,8 +147,8 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Assert
             Assert.NotNull(result);
-            var okObject = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(200, okObject.StatusCode);
+            Assert.IsType<List<ToDoDto>>(result.Value);
+            Assert.Equal(ResultStatus.Ok, result.Status);
             _toDoServiceMock.Verify(mock => mock.GetAllTodosAsync(), Times.Once());
         }
 
@@ -172,8 +173,8 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Assert
             Assert.NotNull(result);
-            var okObject = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(200, okObject.StatusCode);
+            Assert.IsType<ToDoDto>(result.Value);
+            Assert.Equal(ResultStatus.Ok, result.Status);
             _toDoServiceMock.Verify(mock => mock.FindTodoByIdAsync(toDoDto.Id), Times.Once());
         }
 
@@ -181,7 +182,7 @@ namespace OKTodoListReactTS.Api.Tests
         public async Task UpdateToDo_ReturnsStatusCodeOk_IsCorrectObject()
         {
             // Arrange
-            var toDoDto1 = new ToDoDto
+            var toDoDto = new ToDoDto
             {
                 Id = Guid.NewGuid(),
                 Text = "Text1",
@@ -190,17 +191,17 @@ namespace OKTodoListReactTS.Api.Tests
                 Completed = false
             };
 
-            _toDoServiceMock.Setup(service => service.UpdateTodoAsync(toDoDto1)).ReturnsAsync(toDoDto1);
+            _toDoServiceMock.Setup(service => service.UpdateTodoAsync(toDoDto)).ReturnsAsync(toDoDto);
             _toDoController = new ToDoController(_toDoServiceMock.Object);
 
             // Act
-            var result = await _toDoController.UpdateTodoAsync(toDoDto1);
+            var result = await _toDoController.UpdateTodoAsync(toDoDto);
 
             // Assert
             Assert.NotNull(result);
-            var okObject = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(200, okObject.StatusCode);
-            _toDoServiceMock.Verify(mock => mock.UpdateTodoAsync(toDoDto1), Times.Once());
+            Assert.IsType<ToDoDto>(result.Value);
+            Assert.Equal(ResultStatus.Ok, result.Status);
+            _toDoServiceMock.Verify(mock => mock.UpdateTodoAsync(toDoDto), Times.Once());
         }
     }
 }
