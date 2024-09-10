@@ -31,6 +31,7 @@ namespace OKTemplate.BusinessLayer.Tests
 
             // Assert
             Assert.NotNull(result);
+            Assert.True(result.Value.Count == 3);
         }
 
         //Die weiteren Tests musst Du selbst implementieren
@@ -165,12 +166,12 @@ namespace OKTemplate.BusinessLayer.Tests
             await Context.AddAsync(Mapper.Map<ToDoEntry>(toDoDto));
             await Context.SaveChangesAsync();
 
-            ToDoDto result = await _toDoService.UpdateTodoAsync(toDoDtoUpdate);
+            var result = await _toDoService.UpdateTodoAsync(toDoDtoUpdate);
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(result.Text, toDoDtoUpdate.Text);
-            Assert.Equal(result.Completed, toDoDtoUpdate.Completed);
+            Assert.Equal(result.Value.Text, toDoDtoUpdate.Text);
+            Assert.Equal(result.Value.Completed, toDoDtoUpdate.Completed);
         }
 
         [Fact]
@@ -252,14 +253,14 @@ namespace OKTemplate.BusinessLayer.Tests
             //Act
             await Context.AddAsync(Mapper.Map<ToDoEntry>(toDoDto));
             await Context.SaveChangesAsync();
-            ToDoDto result = await _toDoService.FindTodoByIdAsync(toDoDto.Id);
+            var result = await _toDoService.FindTodoByIdAsync(toDoDto.Id);
 
             //Assert
             Assert.NotNull(result);
-            Assert.True(result.Completed);
-            Assert.Equal(result.Text, toDoDto.Text);
-            Assert.Equal(result.Id, toDoDto.Id);
-            Assert.Equal(result.DueDate, toDoDto.DueDate);
+            Assert.True(result.Value.Completed);
+            Assert.Equal(result.Value.Text, toDoDto.Text);
+            Assert.Equal(result.Value.Id, toDoDto.Id);
+            Assert.Equal(result.Value.DueDate, toDoDto.DueDate);
         }
 
         [Fact]

@@ -45,9 +45,8 @@ namespace OKTodoListReactTS.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<Result<ToDoDto>> DeleteToDoAsync([FromRoute] Guid id)
+        public async Task<Result> DeleteToDoAsync([FromRoute] Guid id)
         {
-
             return await _service.DeleteTodoAsync(id);
         }
 

@@ -10,7 +10,7 @@ namespace OKTodoListReactTS.BusinessLayer.Interfaces
     {
         Task<Result<List<ToDoDto>>> GetAllTodosAsync();
         Task<Result<ToDoDto>> AddTodoAsync(ToDoDto toDoDto);
-        Task<Result<ToDoDto>> DeleteTodoAsync(Guid id);
+        Task<Result> DeleteTodoAsync(Guid id);
         Task<Result<ToDoDto>> UpdateTodoAsync(ToDoDto toDoDto);
         Task<Result<ToDoDto>> FindTodoByIdAsync(Guid id);
     }

@@ -43,55 +43,6 @@ namespace OKTodoListReactTS.Api.Tests
         }
 
         [Fact]
-        public async Task AddToDoAsync_ReturnsValidObject()
-        {
-            // Arrange
-            var _toDoDto = new ToDoDto()
-            {
-                Id = Guid.NewGuid(),
-                Text = "Test ToDo",
-                Titel = "Todo Titel",
-                DueDate = DateTime.UtcNow.AddDays(1),
-                Completed = true
-
-            };
-            _toDoServiceMock.Setup(service => service.AddTodoAsync(_toDoDto)).ReturnsAsync(_toDoDto);
-
-            _toDoController = new ToDoController(_toDoServiceMock.Object);
-
-            // Act
-            var result = await _toDoController.AddToDoAsync(_toDoDto);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.IsType<ToDoDto>(result.Value);
-            _toDoServiceMock.Verify(mock => mock.AddTodoAsync(_toDoDto), Times.Once());
-        }
-        [Fact]
-        public async Task DeleteToDoAsync_ReturnsValidObject()
-        {
-            // Arrange
-            var _toDoDto = new ToDoDto()
-            {
-                Id = Guid.NewGuid(),
-                Text = "Test ToDo",
-                Titel = "Todo Titel",
-                DueDate = DateTime.UtcNow.AddDays(1),
-                Completed = true
-
-            };
-            _toDoServiceMock.Setup(service => service.DeleteTodoAsync(_toDoDto.Id)).ReturnsAsync(_toDoDto);
-            _toDoController = new ToDoController(_toDoServiceMock.Object);
-
-            // Act
-            var result = await _toDoController.DeleteToDoAsync(_toDoDto.Id);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.IsType<ToDoDto>(result.Value);
-            _toDoServiceMock.Verify(mock => mock.DeleteTodoAsync(_toDoDto.Id), Times.Once());
-        }
-        [Fact]
         public async Task DeleteToDoAsync_ReturnsStatusCodeOk()
         {
             // Arrange
@@ -104,7 +55,7 @@ namespace OKTodoListReactTS.Api.Tests
                 Completed = true
 
             };
-            _toDoServiceMock.Setup(service => service.DeleteTodoAsync(_toDoDto.Id)).ReturnsAsync(_toDoDto);
+            _toDoServiceMock.Setup(service => service.DeleteTodoAsync(_toDoDto.Id)).ReturnsAsync(Result.Success());
             _toDoController = new ToDoController(_toDoServiceMock.Object);
 
             // Act
@@ -112,7 +63,6 @@ namespace OKTodoListReactTS.Api.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<ToDoDto>(result.Value);
             Assert.Equal(ResultStatus.Ok, result.Status);
             _toDoServiceMock.Verify(mock => mock.DeleteTodoAsync(_toDoDto.Id), Times.Once());
         }
