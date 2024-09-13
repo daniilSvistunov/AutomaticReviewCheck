@@ -1,4 +1,3 @@
-import { AccountInfo } from '@azure/msal-browser';
 import { useAccount, useMsal } from '@azure/msal-react';
 import { createContext, useEffect, useMemo, useState } from 'react';
 
@@ -20,12 +19,10 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const MsalAuth = ({ children }: AuthProviderProps) => {
   const { instance, inProgress, accounts } = useMsal();
-  const urlParamAccount = new URLSearchParams(window.location.search).get('account');
-  const iframeAccount: AccountInfo = urlParamAccount ? JSON.parse(urlParamAccount) : undefined;
 
-  const account = useAccount(iframeAccount ?? accounts[0] ?? {});
+  const account = useAccount(accounts[0] || {});
 
-  const [accessToken, setAccessToken] = useState<null | string>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const initialState: AuthStateType = {
     isAuthenticated: false,
@@ -34,24 +31,22 @@ export const MsalAuth = ({ children }: AuthProviderProps) => {
 
   const [state, setState] = useState(initialState);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getAccessToken = async (scopes: string[], account: AccountInfo) => {
-    return instance.acquireTokenSilent({ ...loginRequest, account }).then((response) => {
-      setAccessToken(response.accessToken);
-      // Set http client authorization header
-      axiosInstance.interceptors.request.use(async (config) => {
-        config.headers.Authorization = `Bearer ${response.accessToken}`;
-        return config;
-      });
-    });
-  };
-
-  useEffect(() => {
+  axiosInstance.interceptors.request.use(async (config) => {
     if (!account) {
-      return;
+      return config;
     }
-    getAccessToken(loginRequest.scopes, account);
-  }, [account, getAccessToken, instance]);
+    const token = await instance
+      .acquireTokenSilent({ ...loginRequest, account })
+      .then((response) => {
+        return response.accessToken;
+      });
+    if (token) {
+      // Set http client authorization header
+    }
+    config.headers.Authorization = `Bearer ${token}`;
+    setAccessToken(token);
+    return config;
+  });
 
   useEffect(() => {
     setState({
