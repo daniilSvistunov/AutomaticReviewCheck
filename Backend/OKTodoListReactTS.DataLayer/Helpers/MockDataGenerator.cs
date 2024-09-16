@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using OKTemplate.DataLayer.Entities;
+using Objk.Plattform.Database.Entities.Application;
+using Objk.Plattform.Database.Entities.Plattform;
 
 namespace OKTemplate.DataLayer.Helpers
 {
@@ -54,74 +56,83 @@ namespace OKTemplate.DataLayer.Helpers
             if (dropData)
             {
                 const string query = @"                   
-                            DELETE FROM[dbo].[Application];
-                            DELETE FROM[dbo].[Event];
+                            DELETE FROM[dbo].[ApplicationPage];
+                            DELETE FROM[dbo].[ApplicationGroup];
                             DELETE FROM[dbo].[EventType];
                 ";
 
                 await _context.Database.ExecuteSqlRawAsync(query);
             }
 
-            await GenerateApplicationsAsync();
+            await GenerateNewApplicationGroupsAsync();
+            await GenerateNewApplicationPagesAsync();
             await GenerateEventTypeAsync();
         }
 
-        private async Task GenerateApplicationsAsync()
+        private async Task GenerateNewApplicationGroupsAsync()
         {
-            List<Application> data = new()
+            List<ApplicationGroup> data = new() { new() { Name = "HR", }, new() { Name = "ERP", }, };
+
+            _context.ApplicationGroup.AddRange(data);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task GenerateNewApplicationPagesAsync()
+        {
+            var applicationGroups = await _context.ApplicationGroup.ToListAsync();
+
+            List<ApplicationPage> data = new()
             {
                 new()
                 {
-                    AppName = "PQC"
+                    Title = "Rechnungen",
+                    Caption = "Auflistung von Rechnungen",
+                    Url = "https://buchhaltung.objektkultur.de",
+                    IsInternal = true,
+                    SvgIcon = "IchBinEinIcon",
+                    GroupId = applicationGroups.First().Id,
+                    InternalName = "Rechnungen",
                 },
-
                 new()
                 {
-                    AppName = "OKAbrechnung"
+                    Title = "Teams",
+                    Caption = "Das alte PQC",
+                    Url = "https://teams.objektkultur.de",
+                    IsInternal = true,
+                    SvgIcon = "IchBinEinIcon",
+                    GroupId = applicationGroups.Last().Id,
+                    InternalName = "Teams",
                 },
-
-                new()
-                {
-                    AppName = "OKZeit"
-                }
             };
 
-            _context.Application.AddRange(data);
+            _context.ApplicationPage.AddRange(data);
             await _context.SaveChangesAsync();
         }
 
         private async Task GenerateEventTypeAsync()
         {
             List<EventType> data = new();
-            var applications = await _context.Application.AsNoTracking().ToListAsync();
+            var applicationPages = await _context.ApplicationPage.AsNoTracking().ToListAsync();
             data.Add(new()
             {
-                EventTypeName = "PL Commitment zurück gezogen",
-                ApplicationId = applications[0].Id,
+                EventTypeName = "PL Commitment wurde zurückgezogen",
+                ApplicationPageId = applicationPages[0].Id,
             });
+
+            data.Add(new() { EventTypeName = "PL Commitment wurde abgegeben", ApplicationPageId = applicationPages[0].Id, });
 
             data.Add(new()
             {
-                EventTypeName = "PL Commitment abgegeben",
-                ApplicationId = applications[0].Id,
+                EventTypeName = "KAM Commitment wurde zurückgezogen",
+                ApplicationPageId = applicationPages[0].Id,
             });
 
-            data.Add(new()
-            {
-                EventTypeName = "BU Commitment zurückgezogen",
-                ApplicationId = applications[0].Id,
-            });
-
-            data.Add(new()
-            {
-                EventTypeName = "BU Commitment abgegeben",
-                ApplicationId = applications[0].Id,
-            });
+            data.Add(new() { EventTypeName = "KAM Commitment wurde abgegeben", ApplicationPageId = applicationPages[0].Id, });
 
             data.Add(new()
             {
                 EventTypeName = "Projektziel geändert und dadurch PL Commitment zurückgezogen",
-                ApplicationId = applications[0].Id,
+                ApplicationPageId = applicationPages[0].Id,
             });
 
             _context.EventType.AddRange(data);
