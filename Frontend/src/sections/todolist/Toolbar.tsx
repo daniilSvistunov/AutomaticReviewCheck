@@ -33,7 +33,7 @@ export default function ToolBar({ setEmployeeToSearch }: Props) {
           <StyledFilterStack direction={'row'} justifyContent={'start'} gap={1}>
             <ToolbarGlobalSearch />
             <FilterButton>
-              <Icon fontSize="small">
+              <Icon fontSize="small" sx={{ display: 'flex' }}>
                 <FilterList />
               </Icon>
               <Typography>Filtern</Typography>

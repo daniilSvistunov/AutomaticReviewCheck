@@ -5,27 +5,19 @@ import { useState } from 'react';
 import { StyledCard, StyledSearchFormControl, StyledToolbarStack } from './styles';
 
 export default function FilterValueMenu() {
-  const filterValue = new Map<number, string>();
-  filterValue.set(1, 'Filter Value');
-  filterValue.set(2, 'Filter Value');
-  filterValue.set(3, 'Filter Value');
-  filterValue.set(4, 'Filter Value');
-  filterValue.set(5, 'Filter Value');
-
-  const [iconClicked, setIconClicked] = useState(false);
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [checkedItems, setCheckedItems] = useState<number[]>([]);
-
-  const handleToggle = (value: number) => {
-    setCheckedItems((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+  const [filterValues, setFilterValues] = useState([
+    { name: 'Filter Value', checked: false },
+    { name: 'Filter Value', checked: false },
+    { name: 'Filter Value', checked: false },
+    { name: 'Filter Value', checked: false },
+    { name: 'Filter Value', checked: false },
+  ]);
+  const toggleCheckbox = (index: number) => {
+    setFilterValues((prevValues) =>
+      prevValues.map((item, i) => (i === index ? { ...item, checked: !item.checked } : item))
     );
   };
-  //const checked = checkedItems.includes(value);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchor(event.currentTarget);
-    alert('working');
-  };
+
   return (
     <StyledCard sx={{ width: '15rem', height: 'auto', justifyContent: 'start' }}>
       <StyledToolbarStack padding={2}>
@@ -56,9 +48,10 @@ export default function FilterValueMenu() {
           />
         </StyledSearchFormControl>
         <StyledToolbarStack justifyContent={'space-between'} alignItems={'start'}>
-          {filterValue.forEach((key, value) => {<StyledToolbarStack
-              onClick={() => handleToggle(key)}
-              key={value}
+          {filterValues.map((filter, index) => (
+            <StyledToolbarStack
+              onClick={() => toggleCheckbox(index)}
+              key={index}
               direction={'row'}
               marginLeft={1}
               marginBottom={1}
@@ -66,16 +59,12 @@ export default function FilterValueMenu() {
               justifyContent={'center'}
               alignItems={'center'}
             >
-              <Icon fontSize="medium" sx={{ cursor: 'pointer' }}>
-                {checked ? <CheckBox /> : <CheckBoxOutlineBlankRounded />}
-                {/* <CheckBoxOutlineBlankRounded /> */}
+              <Icon fontSize="medium" sx={{ cursor: 'pointer', display: 'flex' }}>
+                {filter.checked ? <CheckBox /> : <CheckBoxOutlineBlankRounded />}
+                <CheckBoxOutlineBlankRounded />
               </Icon>
-              <Typography marginLeft={2}>{value}</Typography>
-            </StyledToolbarStack>})}
-          
-          
-          {filterValue.map((value: string, key: number) => (
-            
+              <Typography marginLeft={2}>{filter.name}</Typography>
+            </StyledToolbarStack>
           ))}
         </StyledToolbarStack>
       </StyledToolbarStack>

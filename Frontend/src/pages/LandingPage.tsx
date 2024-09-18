@@ -1,8 +1,6 @@
 import { MotionContainer } from '@components/animate';
-import OKPlattformLayout from '@layouts/OKPlattform';
 import { Container, styled, Typography } from '@mui/material';
 import AddTaskCard from '@sections/todolist/AddTaskCard';
-import FilterValueMenu from '@sections/todolist/FilterValueMenu';
 import Header from '@sections/todolist/Header';
 import TaskListCard from '@sections/todolist/TaskListCard';
 import ToolBar from '@sections/todolist/Toolbar';
@@ -37,6 +35,7 @@ export default function ToDoPage() {
           />
           <AddTaskCard />
           <TaskListCard />
+          {/* <DatePicker /> */}
         </MotionContainer>
       </StyledContainer>
     </>

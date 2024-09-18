@@ -8,7 +8,7 @@ import {
   Person,
   PriorityHigh,
 } from '@mui/icons-material';
-import { Icon, Input, InputAdornment, Popover } from '@mui/material';
+import { Icon, Input, InputAdornment, Popover, Typography } from '@mui/material';
 import { useState } from 'react';
 
 import FilterValueMenu from './FilterValueMenu';
@@ -22,24 +22,31 @@ import {
 } from './styles';
 
 export default function AddTaskCard() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+  //   const CalenderPicker = () => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleFilter = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchor(event.currentTarget);
+  };
+  const handleCalender = () => {
+    setIsOpen(!isOpen);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchor(null);
   };
 
-  const open = Boolean(anchorEl);
+  const open = Boolean(anchor);
   const id = open ? 'simple-popover' : undefined;
 
   return (
-    <StyledCard>
+    <StyledCard sx={{ marginBottom: '20px' }}>
       <StyledToolbarStack margin={'0px 30px 0px 30px'}>
         <Input
           sx={{
-            width: '30vh',
-            height: '50px',
+            width: '549px',
+            height: '40px',
             border: '1px solid grey',
             borderRadius: '10px',
             paddingLeft: '15px',
@@ -62,21 +69,32 @@ export default function AddTaskCard() {
         />
         <StyledFilterStack direction={'row'}>
           <StyledFilterStack direction={'row'} justifyContent={'start'} gap={'10px'}>
+            <FilterChips onClick={handleCalender}>
+              <Icon fontSize="small" sx={{ display: 'flex' }}>
+                <CalendarToday />
+              </Icon>
+              <Typography>Fällig bis</Typography>
+            </FilterChips>
+
             {[
-              { icon: <CalendarToday />, label: 'Fällig bis' },
               { icon: <Notifications />, label: 'Erinnerung', dropdown: true },
               { icon: <PriorityHigh />, label: 'Priorität', dropdown: true },
               { icon: <Bookmark />, label: 'Bucket', dropdown: true },
               { icon: <Group />, label: 'Termin', dropdown: true },
               { icon: <Person />, label: 'Zuweisen an', dropdown: true },
             ].map(({ icon, label, dropdown }) => (
-              <FilterChips key={label} onClick={handleClick}>
-                <Icon fontSize="small" sx={{ marginRight: '8px' }}>
+              <FilterChips key={label} onClick={handleFilter}>
+                <Icon fontSize="small" sx={{ display: 'flex' }}>
                   {icon}
                 </Icon>
-                <p>{label}</p>
+                <Typography>{label}</Typography>
                 {dropdown && (
-                  <Icon fontSize="small">
+                  <Icon
+                    fontSize="small"
+                    sx={{
+                      display: 'flex',
+                    }}
+                  >
                     <ArrowDropDown />
                   </Icon>
                 )}
@@ -85,22 +103,28 @@ export default function AddTaskCard() {
             <Popover
               id={id}
               open={open}
-              anchorEl={anchorEl}
+              anchorEl={anchor}
               onClose={handleClose}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
               }}
             >
-              {/* <FilterValueMenu /> */}
+              <FilterValueMenu />
             </Popover>
           </StyledFilterStack>
           <StyledFilterStack direction={'row'} justifyContent={'end'}>
             <ButtonGroupAdd>
-              <Icon fontSize="small">
+              <Icon
+                fontSize="small"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                }}
+              >
                 <Add />
               </Icon>
-              <p>Hinzufügen</p>
+              <Typography>Hinzufügen</Typography>
             </ButtonGroupAdd>
           </StyledFilterStack>
         </StyledFilterStack>

@@ -59,36 +59,32 @@ const StyledSearchFormControl = styled(FormControl)(() => ({
 
 const ButtonGroupDate = styled(Button)(({ theme }) => ({
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '2rem',
+  height: '36pxm',
+  width: '87px',
   color: theme.palette.grey[800],
   border: '1px solid lightgrey',
-  padding: '8px 16px',
   textTransform: 'none',
 }));
 
 const FilterChips = styled(Button)(({ theme }) => ({
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '2rem',
-  width: '10rem',
+  justifyContent: 'space-around',
+  height: '32px',
+  width: '148px',
   color: theme.palette.grey[800],
   border: '1px solid lightgrey',
-  padding: '8px 16px',
+  //padding: '8px 16px',
   textTransform: 'none',
 }));
 
 const ButtonGroupAdd = styled(Button)(({ theme }) => ({
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '2rem',
-  width: '8rem',
+  justifyContent: 'space-around',
+  height: '30px',
+  width: '118px',
   backgroundColor: 'rgba(0, 171, 85, 1)',
   color: 'white',
-  padding: '8px 16px',
+  //padding: '8px 16px',
   textTransform: 'none',
 }));
 
@@ -107,21 +103,27 @@ const FilterChipsValue = styled(Button)(({ theme }) => ({
 
 const FilterButton = styled(Button)(({ theme }) => ({
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '2rem',
-  width: '8rem',
+  height: '36px',
+  width: '124px',
+  justifyContent: 'space-around',
   color: theme.palette.grey[800],
   border: '1px solid lightgrey',
   textTransform: 'none',
 }));
 
+const StyledButtons = styled(Button)(({ theme }) => ({
+  width: 150,
+  height: 'auto',
+  backgroundColor: 'orange',
+  display: 'flex',
+}));
 export {
   ButtonGroupAdd,
   ButtonGroupDate,
   FilterButton,
   FilterChips,
   FilterChipsValue,
+  StyledButtons,
   StyledCard,
   StyledFilterStack,
   StyledSearchFormControl,
