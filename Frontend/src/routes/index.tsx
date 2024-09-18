@@ -15,7 +15,8 @@ const Loadable = (Component: ElementType) => (props: any) =>
 
 // Lazy loaded pages
 // ----------------------------------------------------------------------------
-const SamplePage = Loadable(lazy(() => import('@pages/SamplePage')));
+// const SamplePage = Loadable(lazy(() => import('@pages/SamplePage')));
+const ToDoPage = Loadable(lazy(() => import('@pages/LandingPage')));
 const Page404 = Loadable(lazy(() => import('@pages/errors/Page404')));
 
 // Router
@@ -31,7 +32,7 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <SamplePage />,
+        element: <ToDoPage />,
       },
       // TODO: further paths can be added here
     ],
