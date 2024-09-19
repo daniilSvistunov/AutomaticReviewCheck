@@ -1,11 +1,19 @@
-import { StyledCard } from '@components/settings/styles';
 import {
   Close as CloseIcon,
   ReportProblemRounded,
   Search as SearchIcon,
+  SearchRounded,
 } from '@mui/icons-material';
-import { Icon, IconButton, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
-import { width } from '@mui/system';
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  IconButton,
+  Input,
+  InputAdornment,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 
 import { StyledSearchFormControl, StyledToolbarStack } from './styles';
@@ -21,48 +29,42 @@ export default function ToolbarGlobalSearch() {
         </IconButton>
       )}
       {toggleSearch && (
-        <StyledCard selected={true} sx={{ width: 'auto', height: 'auto', padding: 1 }}>
-          <StyledToolbarStack alignItems={'center'} justifyContent={'start'} gap={2}>
-            <StyledSearchFormControl variant="standard">
-              <SearchIcon sx={{ position: 'absolute', top: 11, left: 10 }} />
-              <Input
-                sx={{
-                  border: '1px solid lightgrey',
-                  borderRadius: 1,
-                  height: 45,
-                  minWidth: 300,
-                  paddingLeft: 5,
-                }}
-                aria-label="searchEmployee"
-                id="searchEmployee"
-                //onChange={handleSearchBarToggle}
-                autoFocus
-                placeholder={`Suche`}
-                endAdornment={
-                  <InputAdornment
-                    position="end"
-                    sx={{
-                      '&:hover': {
-                        cursor: 'pointer',
-                      },
-                    }}
-                  >
-                    <CloseIcon
-                      onClick={() => {
-                        setToggleSearch(false);
-                        //setEmployeeToSearch('');
-                      }}
-                    />
-                  </InputAdornment>
-                }
-              />
-            </StyledSearchFormControl>
-            <Icon fontSize="small">
-              <ReportProblemRounded />
-            </Icon>
-            <Typography>Keine Suchergebnisse</Typography>
-          </StyledToolbarStack>
-        </StyledCard>
+        <Card>
+          <CardActionArea>
+            <CardContent>
+              <Stack alignItems={'center'} gap={2}>
+                <Input
+                  sx={{
+                    border: '1px solid lightgrey',
+                    borderRadius: 1,
+                    height: 45,
+                    minWidth: 300,
+                    paddingLeft: 5,
+                  }}
+                  aria-label="searchEmployee"
+                  id="searchEmployee"
+                  //onChange={handleSearchBarToggle}
+                  autoFocus
+                  placeholder={`Suche`}
+                  endAdornment={
+                    <InputAdornment position="start">
+                      <SearchRounded />
+                      <CloseIcon
+                        onClick={() => {
+                          setToggleSearch(false);
+                          //setEmployeeToSearch('');
+                        }}
+                      />
+                    </InputAdornment>
+                  }
+                />
+
+                <ReportProblemRounded />
+                <Typography>Keine Suchergebnisse</Typography>
+              </Stack>
+            </CardContent>
+          </CardActionArea>
+        </Card>
       )}
     </>
   );

@@ -1,5 +1,4 @@
 import { Box, Button, Card, FormControl, Stack, styled } from '@mui/material';
-import { color } from '@mui/system';
 
 const StyledCard = styled(Card)(() => ({
   height: '150px',

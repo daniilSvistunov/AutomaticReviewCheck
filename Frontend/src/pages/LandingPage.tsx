@@ -1,43 +1,34 @@
-import { MotionContainer } from '@components/animate';
-import { Container, styled, Typography } from '@mui/material';
-import AddTaskCard from '@sections/todolist/AddTaskCard';
-import Header from '@sections/todolist/Header';
-import TaskListCard from '@sections/todolist/TaskListCard';
-import ToolBar from '@sections/todolist/Toolbar';
+import { Container, Stack } from '@mui/material';
+import { AddTaskCard } from '@sections/add-task-card';
+import { Header } from '@sections/header';
+import TaskListCard from '@sections/task-list-card/TaskListCard';
+import Toolbar from '@sections/toolbar/Toolbar';
 import { Helmet } from 'react-helmet-async';
 
 // ----------------------------------------------------------------------
 
-const StyledContainer = styled(Container)(() => ({
-  display: 'flex',
-  textAlign: 'center',
-  justifyContent: 'center',
-  alignItems: 'start',
-  minHeight: '100vh',
-  width: '100vh',
-  margin: 'auto',
-}));
-
-export default function ToDoPage() {
+export default function LandingPage() {
   return (
     <>
       <Helmet>
-        <title>{`Sample page`}</title>
+        <title>ToDo Liste</title>
       </Helmet>
-      {/* <OKPlattformLayout /> */}
-      <StyledContainer>
-        <MotionContainer>
+
+      <Container>
+        <Stack gap={2}>
           <Header />
-          <ToolBar
+
+          <Toolbar
             setEmployeeToSearch={function (arg: string): void {
               throw new Error('Function not implemented.');
             }}
           />
+
           <AddTaskCard />
+
           <TaskListCard />
-          {/* <DatePicker /> */}
-        </MotionContainer>
-      </StyledContainer>
+        </Stack>
+      </Container>
     </>
   );
 }
