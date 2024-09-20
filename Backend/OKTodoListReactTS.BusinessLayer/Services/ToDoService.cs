@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
+using OKTodoListReactTS.DataLayer;
 //Welche using-Anweisungen werden hier wieso gebraucht?
 
 namespace OKTodoListReactTS.BusinessLayer.Services
@@ -12,12 +14,16 @@ namespace OKTodoListReactTS.BusinessLayer.Services
 
     {
         // Füge hier das benötigte Feld ToDoDbContext ein 
+        private readonly ToDoDbContext _dbContext;
         private readonly IMapper _mapper; //Autmoapper wird benötigt um die DTOs in Entities umzuwandeln und umgekehrt (mehr Infos im Wiki)
 
-        public ToDoService(/* Füge die benötigten Parameter hier ein */)
+        public ToDoService(IMapper mapper, ToDoDbContext dbContext)
         {
             /*_mapper = ??? Initialisiere das IMapper-Feld mit dem übergebenen Parameter */
             /*_dbContext = ??? Initialisiere das ToDoDbContext-Feld mit dem übergebenen Parameter */
+
+            _mapper = mapper;
+            _dbContext = dbContext;
         }
 
         /*Beispielhafte Task:
@@ -32,6 +38,12 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             // Implementiere die Logik zum Abrufen aller Todos hier
             /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
+
+            var todos = _dbContext.ToDo.ToListAsync();
+            var todoDtos = _mapper.Map<List<ToDoDto>>(todos);
+
+            return todoDtos;
+
             throw new NotImplementedException();
         }
 

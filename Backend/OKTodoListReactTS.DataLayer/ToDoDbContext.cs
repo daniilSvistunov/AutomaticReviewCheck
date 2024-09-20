@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Threading;
-using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OKTodoListReactTS.DataLayer.Entities;
@@ -16,17 +16,17 @@ namespace OKTodoListReactTS.DataLayer
         protected IHttpContextAccessor? HttpContextAccessor { get; }
 
         // Konstruktor für Dependency Injection
-        public ToDoDbContext(DbContextOptions<ToDoDbContext> options) 
+        public ToDoDbContext(DbContextOptions<ToDoDbContext> options)
             : base(options)
         {
         }
-        
+
         /// <summary>
-         /// Constructor used for dependency injection.
-         /// </summary>
-         /// <param name="options"></param>
-         /// <param name="httpContextAccessor"></param>
-        public ToDoDbContext(DbContextOptions<ToDoDbContext> options, IHttpContextAccessor httpContextAccessor) 
+        /// Constructor used for dependency injection.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="httpContextAccessor"></param>
+        public ToDoDbContext(DbContextOptions<ToDoDbContext> options, IHttpContextAccessor httpContextAccessor)
             : base(options)
         {
             HttpContextAccessor = httpContextAccessor;
