@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using OKTodoListReactTS.BusinessLayer.Dtos;
 using OKTodoListReactTS.BusinessLayer.Interfaces;
 using OKTodoListReactTS.DataLayer;
+using OKTodoListReactTS.DataLayer.Entities;
 //Welche using-Anweisungen werden hier wieso gebraucht?
 
 namespace OKTodoListReactTS.BusinessLayer.Services
@@ -66,7 +67,28 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         {
             /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
 
-            throw new NotImplementedException();
+            try
+            {
+
+                // Ensure that necessary fields are not null or empty
+
+                var todo = _mapper.Map<ToDoEntry>(toDoDto);
+
+                await _dbContext.ToDo.AddAsync(todo);
+
+                await _dbContext.SaveChangesAsync();
+
+                var createdTodoDto = _mapper.Map<ToDoDto>(todo);
+
+                return createdTodoDto;
+            }
+            catch (Exception ex)
+            {
+                // Log the full exception message to the console or to your logging system
+                Console.WriteLine("Exception: " + ex.Message);
+                Console.WriteLine("Stack Trace: " + ex.StackTrace);
+                throw new Exception("Failed Adding new ToDo", ex);
+            }
         }
 
         /*Beispielhafte Task:
