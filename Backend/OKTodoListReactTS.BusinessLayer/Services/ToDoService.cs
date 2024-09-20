@@ -34,17 +34,21 @@ namespace OKTodoListReactTS.BusinessLayer.Services
          */
 
         // Füge die Implementierung für die Methode GetAllTodosAsync hier ein, Warum hat die Methode keinen Wert der übergeben wird? 
-        public async Task<List<ToDoDto>> GetAllTodosAsync() //Die Methode hat keinen Wert der übergeben wird, weil [...]	
+        public async Task<List<ToDoDto>> GetAllTodosAsync() //Die Methode hat keinen Wert der übergeben wird, weil [Eine Liste von allen Entitäten zurückgeben wird]	
         {
             // Implementiere die Logik zum Abrufen aller Todos hier
             /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
-
-            var todos = _dbContext.ToDo.ToListAsync();
-            var todoDtos = _mapper.Map<List<ToDoDto>>(todos);
-
-            return todoDtos;
-
-            throw new NotImplementedException();
+            try
+            {
+                var todos = await _dbContext.ToDo.ToListAsync();
+                var todoDtos = _mapper.Map<List<ToDoDto>>(todos);
+                return todoDtos;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (if logging is configured) and return a 500 status with more details
+                throw new Exception("An error occurred while retrieving todos", ex);
+            }
         }
 
         /*
@@ -61,6 +65,7 @@ namespace OKTodoListReactTS.BusinessLayer.Services
         public async Task<ToDoDto> AddTodoAsync(ToDoDto toDoDto)
         {
             /* Falls es nicht implementiert wurde dann diesen Command ausführen*/
+
             throw new NotImplementedException();
         }
 
